@@ -1,114 +1,152 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
+import Image from "next/image";
+import Link from "next/link";
 import {
   FaFacebookF,
   FaInstagram,
   FaTwitter,
   FaLinkedinIn,
   FaTelegramPlane,
-  FaPhone,
-  FaEnvelope,
   FaMapMarkerAlt,
-} from 'react-icons/fa';
+  FaEnvelope,
+} from "react-icons/fa";
+import appstore from "../../../public/images/app-store-apple.png";
+import playstore from "../../../public/images/google-store.png";
+import whatsapp from "../../../public/images/whats.webp";
+
+// Define menu links as objects
+const quickLinks = [
+  { name: "Off Market Annexure", url: "/off-market-annexure" },
+  { name: "PAN of Unlisted Shares", url: "/pan-unlisted-shares" },
+  { name: "SEBI Guidelines", url: "/sebi-guidelines" },
+  { name: "Frequently Asked Questions", url: "/faqs" },
+  { name: "Knowledge Center", url: "/knowledge-center" },
+  { name: "Blog", url: "/blog" },
+];
+
+const unlistedZoneLinks = [
+  { name: "About Us", url: "/about-us" },
+  { name: "Contact Us", url: "/contact-us" },
+  { name: "Privacy Policy", url: "/privacy-policy" },
+  { name: "Terms of Use", url: "/terms" },
+  { name: "Disclaimer", url: "/disclaimer" },
+  { name: "Banking Alert", url: "/banking-alert", badge: true },
+];
+
+const socialIcons = [
+  { icon: FaFacebookF, url: "#" },
+  { icon: FaTwitter, url: "#" },
+  { icon: FaLinkedinIn, url: "#" },
+  { icon: FaTelegramPlane, url: "#" },
+  { icon: FaInstagram, url: "#" },
+];
 
 const Footer = () => {
   return (
-    <footer className="bg-black text-white px-4 md:px-10 pt-10 pb-5 text-sm">
-      {/* Top Quote */}
-      <div className="text-center text-white font-light italic mb-10 text-4xl">
-        <span className="font-bold text-white">❝ </span>
-        The biggest risk of all is not taking one — <span className="font-serif">Mellody Hobson</span>
-        <span className="font-bold text-white">❞</span>
-      </div>
-
-      {/* Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-10 max-w-7xl mx-auto">
-
-        {/* Logo & Highlights */}
+    <footer className="bg-[#000] text-white py-20 px-4 md:px-10">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+        {/* Brand & Apps */}
         <div>
-          <h2 className="text-2xl font-bold mb-4">
-            Qed <span className="text-yellow-400">Edu</span>
-          </h2>
-          <div className="space-y-3">
-            <div className="bg-[#111] p-3 rounded border-b border-white">
-              <strong className="text-blue-500 block mb-1">🎯 Attractive Pricing</strong>
-              <p className="text-gray-300">Get best quotes prevailing in the market</p>
+          {/* Logo */}
+          <Link href="/" className="flex items-center space-x-2 pb-3">
+            <div className="text-white font-bold text-2xl flex items-center">
+              <span className="text-blue-700 text-3xl font-extrabold">Q</span>
+              <span className="text-yellow-400 text-3xl font-extrabold">E</span>
+              <span className="text-green-400 text-3xl font-extrabold">D</span>
+              <span className="ml-2 text-white">Edu</span>
             </div>
-            <div className="bg-[#111] p-3 rounded border-b border-white">
-              <strong className="text-blue-500 block mb-1">⚡ Fastest Delivery</strong>
-              <p className="text-gray-300">Get shares in your demat in few hours only!</p>
-            </div>
-            <div className="bg-[#111] p-3 rounded border-b border-white">
-              <strong className="text-blue-500 block mb-1">🔒 Secure Payments</strong>
-              <p className="text-gray-300">Hassle-free payments via NEFT, IMPS & UPI</p>
-            </div>
+          </Link>
+          <p className="text-sm mb-4">
+            India’s No.1 Platform for Buying and Selling Unlisted Shares.
+          </p>
+
+          <div className="flex gap-2 mb-4 flex-wrap">
+             <Link href="/"><Image src={appstore} alt="App Store" width={140} height={60} /></Link>
+             <Link href="/"><Image src={playstore} alt="Google Play" width={140} height={60} /></Link>
           </div>
+
+          <Link href="/">
+            <Image
+              src={whatsapp}
+              alt="Join WhatsApp Channel"
+              width={300}
+              height={70}
+              className="rounded-md w-full max-w-xs"
+            />
+          </Link>
         </div>
 
-        {/* Social Media */}
+        {/* Unlisted Zone Info */}
         <div>
-          <h3 className="text-lg font-semibold mb-3">Join us at-</h3>
-          <div className="flex gap-4 text-blue-400 text-lg mb-4">
-            <FaFacebookF className="hover:text-white cursor-pointer" />
-            <FaInstagram className="hover:text-white cursor-pointer" />
-            <FaTwitter className="hover:text-white cursor-pointer" />
-            <FaLinkedinIn className="hover:text-white cursor-pointer" />
-            <FaTelegramPlane className="hover:text-white cursor-pointer" />
-          </div>
-          <a
-            href="https://wa.me/919512101210"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block bg-teal-600 hover:bg-teal-700 px-5 py-2 rounded-full text-white font-medium transition"
-          >
-            💬 Join WhatsApp Community
-          </a>
+          <h4 className="font-semibold text-lg mb-4">Unlisted Zone</h4>
+          <ul className="space-y-2 text-sm">
+            {unlistedZoneLinks.map((link) => (
+              <li key={link.name} className="flex items-center gap-2">
+                <Link
+                  href={link.url}
+                  className="hover:text-[#00e676] transition"
+                >
+                  {link.name}
+                </Link>
+                {link.badge && (
+                  <span className="bg-green-500 text-xs px-1.5 py-0.5 rounded text-white">
+                    New
+                  </span>
+                )}
+              </li>
+            ))}
+          </ul>
         </div>
 
-        {/* Important Links */}
+        {/* Quick Links */}
         <div>
-          <h3 className="text-lg font-semibold mb-3">Important Links</h3>
-          <ul className="space-y-2 text-blue-400">
-            <li><Link href="/blog">› Blog</Link></li>
-            <li><Link href="/about">› About Us</Link></li>
-            <li><Link href="/faq">› FAQ</Link></li>
-            <li><Link href="/legal">› Legal</Link></li>
-            <li><Link href="/process">› Process</Link></li>
-            <li><Link href="/media">› In Media</Link></li>
-            <li><Link href="/resources">› Investor Resources</Link></li>
-            <li><Link href="/client-master">› Get Client Master List</Link></li>
-            <li><Link href="/pan-isin">› PAN & ISIN of Unlisted Shares</Link></li>
+          <h4 className="font-semibold text-lg mb-4">Quick Links</h4>
+          <ul className="space-y-2 text-sm">
+            {quickLinks.map((link) => (
+              <li key={link.name}>
+                <Link
+                  href={link.url}
+                  className="hover:text-[#00e676] transition"
+                >
+                  {link.name}
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
 
         {/* Contact Info */}
         <div>
-          <h3 className="text-lg font-semibold mb-3">Get in Touch</h3>
-          <ul className="space-y-3 text-white">
-            <li className="flex items-center gap-3">
-              <FaPhone /> <span>9512101210</span>
-            </li>
-            <li className="flex items-center gap-3">
-              <FaPhone /> <span>9601860011</span>
-            </li>
-            <li className="flex items-center gap-3">
-              <FaEnvelope /> <span>info@qededu.com</span>
-            </li>
-            <li className="flex items-start gap-3">
-              <FaMapMarkerAlt className="mt-1" />
-              <span>
-                120-B, Behind Vaishali Enclave, <br />
-                Anjar-Kutch, Gujarat
-              </span>
-            </li>
-          </ul>
+          <h4 className="font-semibold text-lg mb-4">Our Office</h4>
+          <div className="flex items-start gap-2 mb-3 text-sm">
+            <FaMapMarkerAlt className="mt-1" />
+            <p>SCO-44, Sector 5-MDC, Panchkula, Haryana</p>
+          </div>
+          <div className="flex items-center gap-2 mb-3 text-sm">
+            <FaEnvelope />
+            <span>sales@qededu.com</span>
+          </div>
+
+          {/* Social Icons */}
+          <div className="flex gap-3 mt-4 text-white text-lg">
+            {socialIcons.map(({ icon: Icon, url }, idx) => (
+              <Link
+                href={url}
+                key={idx}
+                className="hover:text-[#00e676] transition"
+              >
+                <Icon />
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* Bottom */}
-      <div className="text-center text-gray-400 text-xs mt-10 border-t border-gray-700 pt-4">
-        © 2022 Qed Edu. All rights reserved.
+      {/* Copyright */}
+      <div className="border-t border-white/10 mt-10 pt-4 text-center text-sm text-gray-400">
+        © 2018–2025 <span className="text-white">QED edu</span>. All Rights
+        Reserved.
       </div>
     </footer>
   );

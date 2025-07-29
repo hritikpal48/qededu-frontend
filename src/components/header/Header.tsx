@@ -10,7 +10,7 @@ const Header = () => {
 
   const navItems = [
     { name: "Home", href: "/" },
-    { name: "About Us", href: "/about" },
+    { name: "About Us", href: "/about-us" },
     { name: "Unlisted Shares List", href: "/unlisted-shares" },
     { name: "Process", href: "/process" },
     { name: "FAQ", href: "/faq" },
@@ -38,7 +38,7 @@ const Header = () => {
             <Link
               key={name}
               href={href}
-              className="hover:text-blue-500 uppercase text-sm font-semibold"
+              className="hover:text-green-600 uppercase text-sm font-semibold"
             >
               {name}
             </Link>
@@ -48,12 +48,12 @@ const Header = () => {
         {/* Right Side: Login & Signup */}
         <div className="flex items-center space-x-4">
           <Link href="/login">
-            <button className="border border-white text-white px-4 py-1 rounded hover:bg-white hover:text-black transition">
+            <button className="border border-white text-white px-4 py-1 rounded hover:bg-white hover:text-black transition cursor-pointer">
               Login
             </button>
           </Link>
           <Link href="/signup">
-            <button className="bg-blue-600 px-4 py-1 rounded text-white hover:bg-blue-500 transition">
+            <button className="bg-green-600 px-4 py-1 rounded text-white hover:bg-green-700 transition cursor-pointer">
               Sign Up
             </button>
           </Link>

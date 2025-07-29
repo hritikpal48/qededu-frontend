@@ -1,17 +1,21 @@
+import BlogCard from "../blogcard/BlogCard";
+import PastIpoTable from "../pastIpoTable/PastIpoTable";
 import ExploreInvest from "./ExploreInvest";
 import HeroBanner from "./HeroBanner";
 import InfoSection from "./InfoSection";
+import ProcessSteps from "./ProcessSteps";
 import SharesList from "./SharesList";
-import WhyUnlistedArena from "./WhyUnlistedArena";
 
 const Home = () => {
   return (
     <>
       <HeroBanner />
-      <InfoSection/>
-      <SharesList/>
-      <ExploreInvest/>
-      <WhyUnlistedArena/>
+      <InfoSection />
+      <SharesList />
+      <ExploreInvest />
+      <ProcessSteps />
+      <PastIpoTable />
+      <BlogCard />
     </>
   );
 };
