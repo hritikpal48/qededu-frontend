@@ -1,6 +1,6 @@
 import React from "react";
-import PastIpoTable from "@/components/pastIpoTable/PastIpoTable";
-import BlogCard from "@/components/blogcard/BlogCard";
+import PastIpoTable from "@/components/ui/pastIpoTable/PastIpoTable";
+import BlogCard from "@/components/page/blogcard/BlogCard";
 import Image from "next/image";
 import shareBanner from "../../../public/images/shareBanner.png";
 

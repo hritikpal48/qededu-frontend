@@ -1,4 +1,4 @@
-import BlogCard from '@/components/blogcard/BlogCard'
+import BlogCard from '@/components/page/blogcard/BlogCard'
 import React from 'react'
 
 const page = () => {
