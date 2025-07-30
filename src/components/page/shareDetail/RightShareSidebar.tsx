@@ -94,7 +94,7 @@ export const ValuationMeter = () => {
     }, 2000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, []); 
 
   const getRotation = () => {
     switch (position) {
