@@ -1,4 +1,15 @@
-
+import comlist1 from "../../../../public/images/companylist/comlist1.png";
+import comlist2 from "../../../../public/images/companylist/comlist2.png";
+import comlist3 from "../../../../public/images/companylist/comlist3.png";
+import comlist4 from "../../../../public/images/companylist/comlist4.png";
+import comlist5 from "../../../../public/images/companylist/comlist5.jpeg";
+import comlist6 from "../../../../public/images/companylist/comlist6.jpeg";
+import comlist7 from "../../../../public/images/companylist/comlist7.jpeg";
+import comlist8 from "../../../../public/images/companylist/comlist8.png";
+import comlist9 from "../../../../public/images/companylist/comlist9.jpeg";
+import comlist10 from "../../../../public/images/companylist/comlist10.png";
+import comlist11 from "../../../../public/images/companylist/comlist11.png";
+import comlist12 from "../../../../public/images/companylist/comlist12.png";
 const AppImages = {
     blogImg: {
         blog1: "/images/blogImg/blog1.jpg",
@@ -20,7 +31,7 @@ const AppImages = {
         share6: "/images/sharelist/share6.png",
         share7: "/images/sharelist/share7.png",
         share8: "/images/sharelist/share8.png",
-        shareBanner:"/images/shareBanner.png"
+        shareBanner: "/images/shareBanner.png"
     },
     about: {
         aboutImg: "/images/about.png",
@@ -32,12 +43,26 @@ const AppImages = {
         media3: "/images/media/media3.png",
         lifeCompany: "/images/media/lifeCompany.webp"
     },
-    faq:{
-       faqBanner:"/images/faqBanner.jpg"
+    faq: {
+        faqBanner: "/images/faqBanner.jpg"
     },
-    process:{
-        processBg:"/images/processBg.jpg",
-        processTerm:"/processTerm.jpg"
+    process: {
+        processBg: "/images/processBg.jpg",
+        processTerm: "/processTerm.jpg"
+    },
+    coins: {
+        comlist1: "/images/companylist/comlist1.png",
+        comlist2: "/images/companylist/comlist2.png",
+        comlist3: "/images/companylist/comlist3.png",
+        comlist4: "/images/companylist/comlist4.png",
+        comlist5: "/images/companylist/comlist5.jpeg",
+        comlist6: "/images/companylist/comlist6.jpeg",
+        comlist7: "/images/companylist/comlist7.jpeg",
+        comlist8: "/images/companylist/comlist8.png",
+        comlist9: "/images/companylist/comlist9.jpeg",
+        comlist10: "/images/companylist/comlist10.png",
+        comlist11: "/images/companylist/comlist11.png",
+        comlist12: "/images/companylist/comlist12.png",
     }
 };
 
