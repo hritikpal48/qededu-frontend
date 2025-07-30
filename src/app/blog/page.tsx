@@ -1,9 +1,9 @@
-import BlogCard from '@/components/page/blogcard/BlogCard'
+import BlogPage from '@/components/page/blog'
 import React from 'react'
 
 const page = () => {
   return (
-    <BlogCard />
+    <BlogPage />
   )
 }
 

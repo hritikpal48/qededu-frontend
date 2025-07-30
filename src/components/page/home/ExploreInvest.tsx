@@ -1,32 +1,28 @@
 "use client";
 
-import Image from "next/image";
-import explore1 from "../../../../public/images/explore/explore1.png"
-import explore2 from "../../../../public/images/explore/explore2.png"
-import explore3 from "../../../../public/images/explore/explore3.png"
-import explore4 from "../../../../public/images/explore/explore4.png"
-
+import Image from "@/components/ui/Image";
+import AppImages from "@/config/constant/app.images";
 const exploreCards = [
   {
-    image: explore1,
+    image: AppImages.explore.explore1,
     title: "Track Unlisted Shares/Pre IPO Shares Details",
     description:
       "All the details regarding Unlisted Shares/Pre IPO Shares at your fingertips.",
   },
   {
-    image: explore2,
+    image: AppImages.explore.explore2,
     title: "Sectoral Analysis of Unlisted & Pre IPO Companies",
     description:
       "In-depth view of sector-wise grouping across unlisted & Pre IPO Companies.",
   },
   {
-    image: explore3,
+    image: AppImages.explore.explore3,
     title: "Price Chart of Unlisted Shares/Pre IPO Shares",
     description:
       "Analyse multiple charts & historical data to track unlisted & Pre IPO Share price movement.",
   },
   {
-    image: explore4,
+    image: AppImages.explore.explore4,
     title: "Shareholding Pattern of Unlisted & Pre IPO Companies",
     description:
       "Study the shareholding pattern & understand key stakeholders in Unlisted/Pre IPO Companies.",
@@ -37,12 +33,12 @@ const ExploreInvest = () => {
   return (
     <section className="bg-black text-white py-25 px-4 text-center">
       <div className="mb-15">
-      <h2 className="font-bold text-5xl mb-3">
-        Explore | <span className="text-green-500"> Analyse | Invest</span>
-      </h2>
-      <p className="text-white mx-auto text-4xl">
-        <i>Unlisted Arena simplifies your investments in Unlisted Shares</i>
-      </p>
+        <h2 className="font-bold text-5xl mb-3">
+          Explore | <span className="text-green-500"> Analyse | Invest</span>
+        </h2>
+        <p className="text-white mx-auto text-4xl">
+          <i>Unlisted Arena simplifies your investments in Unlisted Shares</i>
+        </p>
 
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto mb-10">
