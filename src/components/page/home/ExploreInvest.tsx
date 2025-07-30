@@ -15,18 +15,18 @@ const exploreCards = [
     description:
       "In-depth view of sector-wise grouping across unlisted & Pre IPO Companies.",
   },
-  {
-    image: AppImages.explore.explore3,
-    title: "Price Chart of Unlisted Shares/Pre IPO Shares",
-    description:
-      "Analyse multiple charts & historical data to track unlisted & Pre IPO Share price movement.",
-  },
-  {
-    image: AppImages.explore.explore4,
-    title: "Shareholding Pattern of Unlisted & Pre IPO Companies",
-    description:
-      "Study the shareholding pattern & understand key stakeholders in Unlisted/Pre IPO Companies.",
-  },
+  // {
+  //   image: explore3,
+  //   title: "Price Chart of Unlisted Shares/Pre IPO Shares",
+  //   description:
+  //     "Analyse multiple charts & historical data to track unlisted & Pre IPO Share price movement.",
+  // },
+  // {
+  //   image: explore4,
+  //   title: "Shareholding Pattern of Unlisted & Pre IPO Companies",
+  //   description:
+  //     "Study the shareholding pattern & understand key stakeholders in Unlisted/Pre IPO Companies.",
+  // },
 ];
 
 const ExploreInvest = () => {
@@ -41,7 +41,7 @@ const ExploreInvest = () => {
         </p>
 
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto mb-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-7xl mx-auto mb-10">
         {exploreCards.map((card, idx) => (
           <div
             key={idx}

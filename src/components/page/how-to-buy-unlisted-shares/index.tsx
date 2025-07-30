@@ -81,7 +81,7 @@ const HowToBuyUnlistedSharesPage = () => {
       </section>
 
       <section className="bg-black text-white py-16 px-4">
-        <div className="max-w-6xl mx-auto text-center">
+        <div className="max-w-7xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-2">
             PROCESS OF BUYING UNLISTED SHARES
           </h2>
@@ -120,7 +120,7 @@ const HowToBuyUnlistedSharesPage = () => {
       </section>
 
       <section className="bg-white py-16 px-4">
-        <div className="max-w-6xl mx-auto ">
+        <div className="max-w-7xl mx-auto ">
           {/* Image Section */}
           <div className="w-full flex justify-center mb-10">
             <Image
@@ -240,7 +240,6 @@ const HowToBuyUnlistedSharesPage = () => {
                 Get in Touch
               </Link>
             </div>
-
           </div>
         </div>
       </section>

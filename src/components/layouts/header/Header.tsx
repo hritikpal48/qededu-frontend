@@ -14,7 +14,7 @@ const Header = () => {
     { name: "Unlisted Shares List", href: "/unlisted-shares" },
     { name: "Process", href: "/how-to-buy-unlisted-shares" },
     { name: "FAQ", href: "/faq" },
-    { name: "In Media", href: "/media" },
+    { name: "In Media", href: "/in-media" },
     { name: "Blog", href: "/blog" },
     { name: "Contact Us", href: "/contact-us" },
   ];

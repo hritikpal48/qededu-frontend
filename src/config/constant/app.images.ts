@@ -1,15 +1,4 @@
-import comlist1 from "../../../../public/images/companylist/comlist1.png";
-import comlist2 from "../../../../public/images/companylist/comlist2.png";
-import comlist3 from "../../../../public/images/companylist/comlist3.png";
-import comlist4 from "../../../../public/images/companylist/comlist4.png";
-import comlist5 from "../../../../public/images/companylist/comlist5.jpeg";
-import comlist6 from "../../../../public/images/companylist/comlist6.jpeg";
-import comlist7 from "../../../../public/images/companylist/comlist7.jpeg";
-import comlist8 from "../../../../public/images/companylist/comlist8.png";
-import comlist9 from "../../../../public/images/companylist/comlist9.jpeg";
-import comlist10 from "../../../../public/images/companylist/comlist10.png";
-import comlist11 from "../../../../public/images/companylist/comlist11.png";
-import comlist12 from "../../../../public/images/companylist/comlist12.png";
+
 const AppImages = {
     blogImg: {
         blog1: "/images/blogImg/blog1.jpg",
