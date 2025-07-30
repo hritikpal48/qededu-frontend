@@ -12,7 +12,7 @@ const Header = () => {
     { name: "Home", href: "/" },
     { name: "About Us", href: "/about-us" },
     { name: "Unlisted Shares List", href: "/unlisted-shares" },
-    { name: "Process", href: "/process" },
+    { name: "Process", href: "/how-to-buy-unlisted-shares" },
     { name: "FAQ", href: "/faq" },
     { name: "In Media", href: "/media" },
     { name: "Blog", href: "/blog" },
