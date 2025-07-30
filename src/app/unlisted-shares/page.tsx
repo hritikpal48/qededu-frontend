@@ -1,13 +1,12 @@
 import React from "react";
-import HomeLayout from "@/components/layouts/homelayout/HomeLayout";
-import PastIpoTable from "@/components/pastIpoTable/PastIpoTable";
-import BlogCard from "@/components/blogcard/BlogCard";
+import PastIpoTable from "@/components/ui/pastIpoTable/PastIpoTable";
+import BlogCard from "@/components/page/blogcard/BlogCard";
 import Image from "next/image";
 import shareBanner from "../../../public/images/shareBanner.png";
 
 const page = () => {
   return (
-    <HomeLayout>
+    <>
       <section className="max-w-7xl mx-auto pt-10 pb-3 bg-white text-gray-800">
         <div className="text-center">
           <h1 className="text-[30px] mb-3 text-4xl font-bold text-center ">
@@ -39,7 +38,7 @@ const page = () => {
       </section>
       <PastIpoTable />
       <BlogCard />
-    </HomeLayout>
+    </>
   );
 };
 

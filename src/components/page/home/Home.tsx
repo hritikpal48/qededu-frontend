@@ -1,5 +1,5 @@
 import BlogCard from "../blogcard/BlogCard";
-import PastIpoTable from "../pastIpoTable/PastIpoTable";
+import PastIpoTable from "../../ui/pastIpoTable/PastIpoTable";
 import ExploreInvest from "./ExploreInvest";
 import HeroBanner from "./HeroBanner";
 import InfoSection from "./InfoSection";
