@@ -81,7 +81,7 @@ const cashFlowStatement = [
 const FinancialTable = ({ data }: { data: string[][] }) => (
   <div className="overflow-x-auto mt-4">
     <table className="min-w-full text-left text-sm">
-      <thead className="bg-gray-100 font-medium">
+      <thead className="bg-[#d5d5d5] font-medium">
         <tr>
           {data[0].map((heading, idx) => (
             <th key={idx} className="px-3 py-2 text-gray-600">
@@ -114,15 +114,15 @@ export const FinancialTabs = () => {
 
   return (
     <div className="mt-10">
-      <h2 className="text-lg font-semibold mb-4">
+      <h2 className="text-[20px] font-semibold mb-4">
         Financials <span className="text-sm text-gray-400">(Figures in ₹k)</span>
       </h2>
-      <div className="flex space-x-6 border-b mb-4">
+      <div className="flex space-x-6 mb-4">
         {tabs.map((tab) => (
           <button
             key={tab}
-            className={`pb-2 border-b-2 transition text-sm font-medium ${
-              activeTab === tab ? 'border-green-500 text-green-600' : 'border-transparent text-gray-500'
+            className={`pb-2 border-b-2 transition cursor-pointer text-[16px] font-[500] ${
+              activeTab === tab ? 'border-green-600 text-green-600' : 'border-transparent text-gray-500'
             }`}
             onClick={() => setActiveTab(tab)}
           >
@@ -130,7 +130,7 @@ export const FinancialTabs = () => {
           </button>
         ))}
       </div>
-      <div className="bg-gray-50 border rounded-md p-6 text-sm text-gray-700">
+      <div className="bg-[#F7F7F7] border border-[#e8e8e8] rounded-[15px] p-6 text-gray-700">
         {activeTab === 'Income Statement' && (
           <>
             <h3 className="text-base font-semibold text-gray-800 mb-2">P&amp;L Statement</h3>

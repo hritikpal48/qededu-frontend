@@ -1,6 +1,6 @@
 
 const fundamentalsLeft = [
-  { label: 'A V Thomas & Co.', value: '₹ 12500', sub: 'Per Equity Share' },
+  { label: 'A V Thomas & Co. Limited Unlisted Shares Price', value: '₹ 12500' },
   { label: 'Lot Size', value: '10 Shares' },
   { label: '52 Week High', value: '₹ **' },
   { label: '52 Week Low', value: '₹ **' },
@@ -23,25 +23,27 @@ const fundamentalsRight = [
 ];
 
 export const FundamentalsCard = () => (
-  <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-gray-900">
+  <>
+  <h4 className="font-bold text-[20px] mt-5">Fundamentals</h4>
+  <div className="pt-4 grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-gray-900">
     <div className="space-y-3">
       {fundamentalsLeft.map((item, i) => (
-        <div key={i} className="flex justify-between">
+        <div key={i} className="flex justify-between text-[16px]">
           <span className="font-medium">{item.label}</span>
-          <span className="text-right">
+          <span className="text-right font-bold">
             {item.value}
-            {item.sub && <div className="text-xs text-gray-500">{item.sub}</div>}
           </span>
         </div>
       ))}
     </div>
     <div className="space-y-3">
       {fundamentalsRight.map((item, i) => (
-        <div key={i} className="flex justify-between">
+        <div key={i} className="flex justify-between text-[16px]">
           <span className="font-medium">{item.label}</span>
-          <span>{item.value}</span>
+          <span className="font-bold">{item.value}</span>
         </div>
       ))}
     </div>
   </div>
+  </>
 );
