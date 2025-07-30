@@ -1,7 +1,6 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import HomeLayout from "@/components/layouts/homelayout/HomeLayout";
 import {
   FaUserFriends,
   FaHandshake,
@@ -60,7 +59,7 @@ const steps: Step[] = [
 
 const page = () => {
   return (
-    <HomeLayout>
+    <>
       <section className="bg-white py-5">
         <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between">
           {/* Left content */}
@@ -247,7 +246,7 @@ const page = () => {
           </div>
         </div>
       </section>
-    </HomeLayout>
+    </>
   );
 };
 

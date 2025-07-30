@@ -1,10 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import explore1 from "../../../public/images/explore/explore1.png"
-import explore2 from "../../../public/images/explore/explore2.png"
-import explore3 from "../../../public/images/explore/explore3.png"
-import explore4 from "../../../public/images/explore/explore4.png"
+import explore1 from "../../../../public/images/explore/explore1.png"
+import explore2 from "../../../../public/images/explore/explore2.png"
+import explore3 from "../../../../public/images/explore/explore3.png"
+import explore4 from "../../../../public/images/explore/explore4.png"
 
 const exploreCards = [
   {

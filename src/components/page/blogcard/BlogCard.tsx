@@ -1,8 +1,8 @@
 import Image from "next/image";
 import React from "react";
-import blog1 from "../../../public/images/blogImg/blog1.jpg";
-import blog2 from "../../../public/images/blogImg/blog2.jpg";
-import blog3 from "../../../public/images/blogImg/blog3.jpg";
+import blog1 from "../../../../public/images/blogImg/blog1.jpg";
+import blog2 from "../../../../public/images/blogImg/blog2.jpg";
+import blog3 from "../../../../public/images/blogImg/blog3.jpg";
 import { SiSpreadshirt } from "react-icons/si";
 import { FaRegHeart } from "react-icons/fa";
 import Link from "next/link";

@@ -11,9 +11,9 @@ import {
   FaMapMarkerAlt,
   FaEnvelope,
 } from "react-icons/fa";
-import appstore from "../../../public/images/app-store-apple.png";
-import playstore from "../../../public/images/google-store.png";
-import whatsapp from "../../../public/images/whats.webp";
+import appstore from "../../../../public/images/app-store-apple.png";
+import playstore from "../../../../public/images/google-store.png";
+import whatsapp from "../../../../public/images/whats.webp";
 
 // Define menu links as objects
 const quickLinks = [

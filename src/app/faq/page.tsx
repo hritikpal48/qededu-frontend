@@ -1,11 +1,10 @@
-import HomeLayout from "@/components/layouts/homelayout/HomeLayout";
 import Image from "next/image";
 import React from "react";
 import faqBanner from "../../../public/images/faqBanner.jpg";
 
 const page = () => {
   return (
-    <HomeLayout>
+    <>
       <section className="bg-white py-16 px-4">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-10">
           {/* Left Text */}
@@ -29,7 +28,7 @@ const page = () => {
           </div>
         </div>
       </section>
-    </HomeLayout>
+    </>
   );
 };
 

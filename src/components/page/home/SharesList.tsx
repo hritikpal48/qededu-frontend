@@ -2,14 +2,14 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import share1 from "../../../public/images/sharelist/share1.jpg";
-import share2 from "../../../public/images/sharelist/share2.png";
-import share3 from "../../../public/images/sharelist/share3.png";
-import share4 from "../../../public/images/sharelist/share4.png";
-import share5 from "../../../public/images/sharelist/share5.png";
-import share6 from "../../../public/images/sharelist/share6.png";
-import share7 from "../../../public/images/sharelist/share7.png";
-import share8 from "../../../public/images/sharelist/share8.png";
+import share1 from "../../../../public/images/sharelist/share1.jpg";
+import share2 from "../../../../public/images/sharelist/share2.png";
+import share3 from "../../../../public/images/sharelist/share3.png";
+import share4 from "../../../../public/images/sharelist/share4.png";
+import share5 from "../../../../public/images/sharelist/share5.png";
+import share6 from "../../../../public/images/sharelist/share6.png";
+import share7 from "../../../../public/images/sharelist/share7.png";
+import share8 from "../../../../public/images/sharelist/share8.png";
 
 const latestShares = {
   all: [
