@@ -1,11 +1,10 @@
 import BlogCard from "../blog";
-import PastIpoTable from "../../ui/pastIpoTable/PastIpoTable";
 import ExploreInvest from "./ExploreInvest";
 import HeroBanner from "./HeroBanner";
 import InfoSection from "./InfoSection";
 import ProcessSteps from "./ProcessSteps";
 import SharesList from "./SharesList";
-
+import StockList from "./StockList";
 const Home = () => {
   return (
     <>
@@ -14,7 +13,7 @@ const Home = () => {
       <SharesList />
       <ExploreInvest />
       <ProcessSteps />
-      <PastIpoTable />
+      <StockList />
       <BlogCard />
     </>
   );
