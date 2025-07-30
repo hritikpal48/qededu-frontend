@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import Image from "@/components/ui/Image";
 import { useState } from "react";
 import { FaCircleArrowDown, FaCircleArrowUp } from "react-icons/fa6";
 import comlist1 from "../../../../public/images/companylist/comlist1.png";

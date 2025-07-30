@@ -1,4 +1,4 @@
-import BlogCard from "../blogcard/BlogCard";
+import BlogCard from "../blog";
 import PastIpoTable from "../../ui/pastIpoTable/PastIpoTable";
 import ExploreInvest from "./ExploreInvest";
 import HeroBanner from "./HeroBanner";

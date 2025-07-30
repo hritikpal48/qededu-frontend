@@ -1,29 +1,16 @@
-import Image from "next/image";
+import Image from "@/components/ui/Image";
 import React from "react";
-import blog1 from "../../../../public/images/blogImg/blog1.jpg";
-import blog2 from "../../../../public/images/blogImg/blog2.jpg";
-import blog3 from "../../../../public/images/blogImg/blog3.jpg";
 import { SiSpreadshirt } from "react-icons/si";
 import { FaRegHeart } from "react-icons/fa";
 import Link from "next/link";
-
-interface BlogPost {
-  id: string;
-  category: string;
-  date: string;
-  title: string;
-  excerpt: string;
-  content: string;
-  altblog: string;
-  blogImg: string;
-  url: string;
-}
-
-const BlogCard = () => {
-  const blogPosts: BlogPost[] = [
+import AppImages from "@/config/constant/app.images";
+import { BlogPostType } from "@/types/blog";
+import BlogCard from "@/components/ui/card/Blogcard";
+const BlogPage = () => {
+  const blogPosts: BlogPostType[] = [
     {
       id: "1",
-      blogImg: blog1,
+      blogImg: AppImages.blogImg.blog1,
       altblog: "blog1",
       url: "",
       category: "CLOUD KITCHEN",
@@ -36,7 +23,7 @@ const BlogCard = () => {
     },
     {
       id: "2",
-      blogImg: blog2,
+      blogImg: AppImages.blogImg.blog2,
       altblog: "blog2",
       url: "",
       category: "HDFC SECURITIES",
@@ -49,7 +36,7 @@ const BlogCard = () => {
     },
     {
       id: "3",
-      blogImg: blog3,
+      blogImg: AppImages.blogImg.blog3,
       altblog: "blog3",
       url: "",
       category: "Apollo Green",
@@ -70,37 +57,7 @@ const BlogCard = () => {
         </h2>
         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
           {blogPosts.map((post) => (
-            <div key={post.id} className="border-b border-gray-200 pb-8">
-              <div className="h-[250px] overflow-hidden rounded-2xl mb-4">
-                <Image
-                  src={post.blogImg}
-                  alt={post.altblog}
-                  className="img-fluid hover:scale-110 transition"
-                />
-              </div>
-              <div className="flex justify-between">
-                <div className="text-[12px] font-semibold text-gray-800">
-                  {post.category}
-                </div>
-                <div className="flex gap-2 align-center">
-                  <div className="flex align-center gap-1 bg-gray-200 px-2 py-1 rounded-2xl">
-                    <SiSpreadshirt />
-                    <span className="text-xs">123</span>
-                  </div>
-                  <div className="flex align-center gap-1 bg-gray-200 px-2 py-1 rounded-2xl text-sm cursor-pointer">
-                    <FaRegHeart />
-                    <span className="text-xs">1</span>
-                  </div>
-                </div>
-              </div>
-              <div className="text-sm text-gray-500">{post.date}</div>
-              <Link href={post.url}>
-                <h2 className="text-xl font-bold mt-4 mb-2 line-clamp-2 hover:text-green-600 cursor-pointer">
-                  {post.title}
-                </h2>
-              </Link>
-              <p className="text-gray-700 line-clamp-3">{post.excerpt}</p>
-            </div>
+            <BlogCard blogData={post} />
           ))}
         </div>
 
@@ -116,4 +73,4 @@ const BlogCard = () => {
   );
 };
 
-export default BlogCard;
+export default BlogPage;
