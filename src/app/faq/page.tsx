@@ -52,7 +52,7 @@ const page = () => {
   return (
     <>
       <section className="bg-white py-16 px-4">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-10">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-10">
           {/* Left Text */}
           <div className="w-full md:w-1.5/3">
             <h2 className="text-3xl md:text-[60px] font-bold text-gray-900 leading-tight">
@@ -76,7 +76,7 @@ const page = () => {
       </section>
 
       <section className="bg-[#F7F7F7] py-16 px-4" id="faq-section">
-        <div className="max-w-6xl mx-auto  flex flex-col md:flex-row gap-10">
+        <div className="max-w-7xl mx-auto  flex flex-col md:flex-row gap-10">
           {/* Sidebar */}
           <aside className="md:w-1/4">
             <div className="sticky top-24 space-y-4">
