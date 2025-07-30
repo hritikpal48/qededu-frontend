@@ -1,8 +1,9 @@
 import React from "react";
-import PastIpoTable from "@/components/ui/pastIpoTable/PastIpoTable";
+
 import BlogCard from "@/components/page/blog";
 import Image from "@/components/ui/Image";
 import AppImages from "@/config/constant/app.images";
+import StockList from "../home/StockList";
 const UnlistedSharesPage = () => {
     return (
         <>
@@ -35,7 +36,7 @@ const UnlistedSharesPage = () => {
                     </div>
                 </div>
             </section>
-            <PastIpoTable />
+            <StockList />
             <BlogCard />
         </>
     );

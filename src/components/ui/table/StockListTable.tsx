@@ -9,17 +9,7 @@ import {
     FaArrowLeft,
     FaArrowRight,
 } from "react-icons/fa6";
-
-type Stock = {
-    name: string;
-    logo: string;
-    unlistedPrice: string;
-    ipoPrice: string;
-    cmp: string;
-    gainLoss: number;
-    nameLink: string;
-};
-
+import { Stock } from "@/types/stock";
 type Props = {
     data: Stock[];
 };
