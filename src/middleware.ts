@@ -9,7 +9,7 @@ export function middleware(request: NextRequest) {
     const isProtectedPath = request.nextUrl.pathname.startsWith("/user");
 
     if (isProtectedPath && !isAuth) {
-        const loginUrl = new URL("/", request.url);
+        const loginUrl = new URL("/auth/login", request.url);
         return NextResponse.redirect(loginUrl);
     }
 

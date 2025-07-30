@@ -47,12 +47,12 @@ const Header = () => {
 
         {/* Right Side: Login & Signup */}
         <div className="flex items-center space-x-4">
-          <Link href="/login">
+          <Link href="/auth/login">
             <button className="border border-white text-white px-4 py-1 rounded hover:bg-white hover:text-black transition cursor-pointer">
               Login
             </button>
           </Link>
-          <Link href="/signup">
+          <Link href="/auth/signup">
             <button className="bg-green-600 px-4 py-1 rounded text-white hover:bg-green-700 transition cursor-pointer">
               Sign Up
             </button>
