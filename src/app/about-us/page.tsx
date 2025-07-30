@@ -3,7 +3,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { FaLinkedinIn } from "react-icons/fa";
-import HomeLayout from "@/components/layouts/homelayout/HomeLayout";
 import aboutImg from "../../../public/images/about.png";
 import team1 from "../../../public/images/team/team-1.webp";
 import team2 from "../../../public/images/team/team-2.webp";
@@ -64,12 +63,12 @@ const stats = [
 
 const page = () => {
   return (
-    <HomeLayout>
+    <>
       <section className="max-w-7xl mx-auto py-10 bg-white text-gray-800">
-      <div className="">
-        <h1 className="text-[30px] font-bold mb-3">About Us</h1>
-        <p className="pb-10">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam excepturi dolores id tenetur dolorem dolore et sapiente eligendi! In possimus impedit cupiditate commodi! Magnam dignissimos placeat architecto quo voluptate harum?</p>
-      </div>
+        <div className="">
+          <h1 className="text-[30px] font-bold mb-3">About Us</h1>
+          <p className="pb-10">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam excepturi dolores id tenetur dolorem dolore et sapiente eligendi! In possimus impedit cupiditate commodi! Magnam dignissimos placeat architecto quo voluptate harum?</p>
+        </div>
 
         <div className="bg-green-50 p-6 md:p-10 rounded-lg">
           <div className="grid md:grid-cols-2 gap-8 items-center">
@@ -179,13 +178,13 @@ const page = () => {
                 className="border border-[#d2d2d2] rounded-lg px-8 text-center py-10 hover:shadow-md transition"
               >
                 <div className=" flex justify-center align-center mb-3">
-                <Image
-                  src={item.logo}
-                  alt={item.source}
-                  width={40}
-                  height={40}
-                  className="mb-3"
-                />
+                  <Image
+                    src={item.logo}
+                    alt={item.source}
+                    width={40}
+                    height={40}
+                    className="mb-3"
+                  />
                 </div>
                 <h4 className="font-semibold text-base mb-1">{item.source}</h4>
                 <p className="text-sm text-gray-600">{item.description}</p>
@@ -231,7 +230,7 @@ const page = () => {
           </div>
         </div>
       </section>
-    </HomeLayout>
+    </>
   );
 };
 
