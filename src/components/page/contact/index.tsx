@@ -10,102 +10,102 @@ import {
 
 const Contactpage = () => {
   return (
-    <section className="bg-white py-12 px-4 md:px-10 max-w-7xl mx-auto">
+    <section className="py-16 px-4 md:px-8 max-w-7xl mx-auto">
       {/* Heading */}
-      <div className="text-center mb-10">
-        <h2 className="text-3xl md:text-4xl font-bold">Contact Us</h2>
-        <p className="text-green-700 font-semibold mt-2">— Say Hello —</p>
-        <p className="text-lg font-medium mt-4">
-          Always there to have a conversation
+      <div className="text-center mb-12">
+        <h2 className="text-4xl font-bold text-gray-800">Let’s Talk</h2>
+        <p className="text-green-600 font-medium mt-2 text-lg">— Get in Touch —</p>
+        <p className="mt-4 text-gray-600">
+          We’re here to answer any questions you may have.
         </p>
       </div>
 
-      {/* Form and Info Section */}
-      <div className="bg-white shadow-md rounded-lg grid md:grid-cols-3 gap-6 p-6 md:p-10">
-        {/* Form */}
-        <div className="md:col-span-2">
-          <h3 className="text-lg font-semibold mb-2">Reach out to us</h3>
-          <p className="text-sm text-gray-600 mb-4">
-            Contact us 24/7. Just let us know your query. Don’t like filling
-            up forms? Mail us at{" "}
-            <a
-              href="mailto:info@qededu.com"
-              className="text-green-600 underline"
-            >
+      {/* Form & Info Grid */}
+      <div className="grid md:grid-cols-3 gap-10 bg-white shadow-lg rounded-2xl overflow-hidden">
+        {/* Contact Form */}
+        <div className="md:col-span-2 p-8">
+          <h3 className="text-xl font-semibold text-gray-800 mb-3">
+            Send Us a Message
+          </h3>
+          <p className="text-sm text-gray-500 mb-6">
+            Have a question or feedback? Fill out the form and we’ll get back to you.
+            Or drop an email at{" "}
+            <a href="mailto:info@qededu.com" className="text-green-600 underline">
               info@qededu.com
             </a>
           </p>
-          <form className="space-y-4">
-            <input
-              type="text"
-              placeholder="Name"
-              className="w-full border px-4 py-2 rounded"
-            />
-            <input
-              type="email"
-              placeholder="Email"
-              className="w-full border px-4 py-2 rounded"
-            />
+
+          <form className="space-y-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <input
+                type="text"
+                placeholder="Full Name"
+                className="w-full border border-gray-300 px-4 py-3 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+              />
+              <input
+                type="email"
+                placeholder="Email Address"
+                className="w-full border border-gray-300 px-4 py-3 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+              />
+            </div>
             <input
               type="tel"
               placeholder="Mobile Number (WhatsApp)"
-              className="w-full border px-4 py-2 rounded"
+              className="w-full border border-gray-300 px-4 py-3 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
             />
             <input
               type="text"
               placeholder="Subject"
-              className="w-full border px-4 py-2 rounded"
+              className="w-full border border-gray-300 px-4 py-3 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
             />
             <textarea
-              placeholder="Message"
-              rows={4}
-              className="w-full border px-4 py-2 rounded resize-none"
-            ></textarea>
+              placeholder="Your Message"
+              rows={5}
+              className="w-full border border-gray-300 px-4 py-3 rounded-md shadow-sm resize-none focus:outline-none focus:ring-2 focus:ring-green-500"
+            />
             <button
               type="submit"
-              className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition"
+              className="bg-green-600 hover:bg-green-700 transition text-white font-medium py-3 px-6 rounded-md shadow-lg w-full sm:w-auto"
             >
-              Submit
+              Send Message
             </button>
           </form>
         </div>
 
         {/* Contact Info */}
-        <div className="bg-gray-50 p-6 rounded-lg">
-          <h4 className="text-lg font-semibold mb-4">Contact Information</h4>
-          <div className="space-y-4 text-sm text-gray-700">
-            <div className="flex items-start gap-3">
-              <FaPhoneAlt className="mt-1 text-green-500" />
+        <div className="bg-green-50 p-8 flex flex-col justify-center">
+          <h4 className="text-xl font-semibold text-gray-800 mb-6">Contact Info</h4>
+          <div className="space-y-6 text-sm text-gray-700">
+            <div className="flex items-start gap-4">
+              <FaPhoneAlt className="text-green-500 mt-1" />
               <div>
-                <p className="font-medium">Call us</p>
+                <p className="font-medium">Phone</p>
                 <p>+91 9999999999</p>
               </div>
             </div>
-            <div className="flex items-start gap-3">
-              <FaEnvelope className="mt-1 text-green-500" />
+            <div className="flex items-start gap-4">
+              <FaEnvelope className="text-green-500 mt-1" />
               <div>
                 <p className="font-medium">Email</p>
                 <p>info@qededu.com</p>
               </div>
             </div>
-            <div className="flex items-start gap-3">
-              <FaMapMarkerAlt className="mt-1 text-green-500" />
+            <div className="flex items-start gap-4">
+              <FaMapMarkerAlt className="text-green-500 mt-1" />
               <div>
-                <p className="font-medium">Location</p>
-                <p>
-                  1036, Behind Vidhikendra, Adipur-Kutch – 370205, Gujarat
-                </p>
+                <p className="font-medium">Address</p>
+                <p>1036, Behind Vidhikendra, Adipur-Kutch – 370205, Gujarat</p>
               </div>
             </div>
-            <div className="flex items-start gap-3">
-              <FaWhatsapp className="mt-1 text-green-600" />
+            <div className="flex items-start gap-4">
+              <FaWhatsapp className="text-green-600 mt-1" />
               <div>
                 <p className="font-medium">WhatsApp Group</p>
                 <a
                   href="#"
-                  className="text-green-700 underline"
                   target="_blank"
                   rel="noopener noreferrer"
+                  className="text-green-700 underline"
                 >
                   Join QedEdu's WhatsApp Group
                 </a>
