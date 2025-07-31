@@ -17,21 +17,21 @@ import whatsapp from "../../../../public/images/whats.webp";
 
 // Define menu links as objects
 const quickLinks = [
-  { name: "Off Market Annexure", url: "/off-market-annexure" },
-  { name: "PAN of Unlisted Shares", url: "/pan-unlisted-shares" },
-  { name: "SEBI Guidelines", url: "/sebi-guidelines" },
-  { name: "Frequently Asked Questions", url: "/faqs" },
-  { name: "Knowledge Center", url: "/knowledge-center" },
+  { name: "Login", url: "/auth/login" },
+  { name: "Signup", url: "/auth/signup" },
   { name: "Blog", url: "/blog" },
+  { name: "Investor Resources", url: "/investor-resources" },
+  { name: "PAN & ISIN of Unlisted Shares", url: "/investor-resources/pan-isin-unlisted-shares/" },
+  { name: "How to get Client Master List from different brokers", url: "/investor-resources/how-to-get-client-master-list-from-different-brokers" },
 ];
 
 const unlistedZoneLinks = [
   { name: "About Us", url: "/about-us" },
-  { name: "Contact Us", url: "/contact-us" },
-  { name: "Privacy Policy", url: "/privacy-policy" },
-  { name: "Terms of Use", url: "/terms" },
-  { name: "Disclaimer", url: "/disclaimer" },
-  { name: "Banking Alert", url: "/banking-alert", badge: true },
+  { name: "Shares List", url: "/unlisted-shares" },
+  { name: "Process", url: "/how-to-buy-unlisted-shares" },
+  { name: "FAQ", url: "/faq" },
+  { name: "In Media", url: "/in-media" },
+  { name: "Contact us", url: "/contact-us"},
 ];
 
 const socialIcons = [
