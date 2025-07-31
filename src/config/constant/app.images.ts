@@ -52,7 +52,10 @@ const AppImages = {
         comlist10: "/images/companylist/comlist10.png",
         comlist11: "/images/companylist/comlist11.png",
         comlist12: "/images/companylist/comlist12.png",
-    }
+    },
+    team: {
+        team1: "/images/team/team-1.webp"
+    },
 };
 
 export default AppImages;
