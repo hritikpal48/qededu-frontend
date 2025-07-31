@@ -1,6 +1,8 @@
 import axios, { AxiosInstance, AxiosHeaderValue } from "axios";
 import { environmentVariables } from "@/config/app.config";
-import { getTokenServerSide } from "@/utils/authTokensServer"
+console.log('envirmn fhff' , environmentVariables);
+
+// import { getTokenServerSide } from "@/utils/authTokensServer"
 interface RawAxiosHeaders {
     [key: string]: AxiosHeaderValue
 }
@@ -38,7 +40,7 @@ export const createHttpService = (params: CreateHttpServiceParams): AxiosInstanc
     axiosInstance.interceptors.request.use(
         async (config) => {
             if (params?.sendAuthToken) {
-                const token = await getTokenServerSide();
+                const token = '';
                 if (token) {
                     config.headers.Authorization = `Bearer ${token}`;
                 }

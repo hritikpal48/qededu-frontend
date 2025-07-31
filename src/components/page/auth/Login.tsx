@@ -21,16 +21,6 @@ export default function LoginForm() {
   };
 
   return (
-    // <form
-    //     onSubmit={handleSubmit(onSubmit)}
-    //     className="max-w-sm mx-auto p-6 bg-white shadow-lg rounded-lg space-y-4"
-    // >
-    //     <h2 className="text-2xl font-bold text-center">Login</h2>
-    //     <TextInput label="Email" name="email" error={errors?.email} register={register} />
-    //     <PasswordInputField label="Password" name="password" error={errors?.password} register={register} />
-    //     <LoaderButton text="Login" type="submit" loading={isSubmitting} className="w-full" />
-    // </form>
-
     <form
       onSubmit={handleSubmit(onSubmit)}
       className="min-h-screen flex items-center justify-center bg-[#F7F7F7] px-4 sm:px-6 md:px-8"

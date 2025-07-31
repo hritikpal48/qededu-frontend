@@ -9,70 +9,60 @@ import { LoaderButton } from "@/components/ui/button";
 import Link from "next/link";
 
 export default function LoginForm() {
-    const {
-        register,
-        handleSubmit,
-        formState: { errors, isSubmitting },
-    } = useForm<LoginSchemaType>({
-        resolver: zodResolver(loginSchema),
-    });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<LoginSchemaType>({
+    resolver: zodResolver(loginSchema),
+  });
 
-    const onSubmit = async (data: LoginSchemaType) => {
-        console.log("Validated Data", data);
-    };
+  const onSubmit = async (data: LoginSchemaType) => {
+    console.log("Validated Data", data);
+  };
 
-    return (
-        // <form
-        //     onSubmit={handleSubmit(onSubmit)}
-        //     className="max-w-sm mx-auto p-6 bg-white shadow-lg rounded-lg space-y-4"
-        // >
-        //     <h2 className="text-2xl font-bold text-center">Signup</h2>
-        //     <TextInput label="Email" name="email" error={errors?.email} register={register} />
-        //     <PasswordInputField label="Password" name="password" error={errors?.password} register={register} />
-        //     <LoaderButton text="Login" type="submit" loading={isSubmitting} className="w-full" />
-        // </form>
+  return (
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="min-h-screen flex items-center justify-center bg-[#F7F7F7] px-4"
+    >
+      <div className="w-full max-w-md bg-white shadow-xl rounded-2xl p-8 space-y-6">
+        <h2 className="text-3xl font-semibold text-center text-gray-800 mb-2">
+          Create Account
+        </h2>
+        <p className="text-sm text-center text-gray-500">
+          Join us and get started!
+        </p>
 
-        <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="min-h-screen flex items-center justify-center bg-[#F7F7F7] px-4"
-      >
-        <div className="w-full max-w-md bg-white shadow-xl rounded-2xl p-8 space-y-6">
-          <h2 className="text-3xl font-semibold text-center text-gray-800 mb-2">
-            Create Account
-          </h2>
-          <p className="text-sm text-center text-gray-500">
-            Join us and get started!
-          </p>
-  
-          <div className="space-y-4">
-            <TextInput
-              label="Email"
-              name="email"
-              register={register}
-              error={errors?.email}
-            />
-            <PasswordInputField
-              label="Password"
-              name="password"
-              register={register}
-              error={errors?.password}
-            />
-          </div>
-  
-          <LoaderButton
-            text="Sign Up"
-            type="submit"
-            loading={isSubmitting}
-            className="w-full bg-green-600 text-white hover:bg-green-700 transition duration-300"
+        <div className="space-y-4">
+          <TextInput
+            label="Email"
+            name="email"
+            register={register}
+            error={errors?.email}
           />
-  
-          <p className="text-sm text-center text-gray-500">
-            Already have an account?{" "}
-            <Link href="/auth/login" className="text-green-600 hover:underline font-medium">
-              Login
-            </Link>
-          </p>
+          <PasswordInputField
+            label="Password"
+            name="password"
+            register={register}
+            error={errors?.password}
+          />
         </div>
-      </form>
-    );
+
+        <LoaderButton
+          text="Sign Up"
+          type="submit"
+          loading={isSubmitting}
+          className="w-full bg-green-600 text-white hover:bg-green-700 transition duration-300"
+        />
+
+        <p className="text-sm text-center text-gray-500">
+          Already have an account?{" "}
+          <Link href="/auth/login" className="text-green-600 hover:underline font-medium">
+            Login
+          </Link>
+        </p>
+      </div>
+    </form>
+  );
 }
