@@ -8,10 +8,10 @@ export function middleware(request: NextRequest) {
     const isAuth = !!token;
     const isProtectedPath = request.nextUrl.pathname.startsWith("/user");
 
-    if (isProtectedPath && !isAuth) {
-        const loginUrl = new URL("/auth/login", request.url);
-        return NextResponse.redirect(loginUrl);
-    }
+    // if (isProtectedPath && !isAuth) {
+    //     const loginUrl = new URL("/auth/login", request.url);
+    //     return NextResponse.redirect(loginUrl);
+    // }
 
     return NextResponse.next();
 }
