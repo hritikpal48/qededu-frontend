@@ -111,7 +111,7 @@ const AboutPage = () => {
           ))}
         </div>
 
-        <div className="mt-14">
+        {/* <div className="mt-14">
           <h2 className="text-2xl md:text-3xl font-semibold text-center mb-8">
             Our Founders
           </h2>
@@ -147,7 +147,7 @@ const AboutPage = () => {
               </div>
             ))}
           </div>
-        </div>
+        </div> */}
       </section>
 
       <section className="bg-white text-gray-800">
