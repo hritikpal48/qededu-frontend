@@ -4,22 +4,43 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, LoginSchemaType } from "@/validations/auth";
 import TextInput from "@/components/ui/input/TextInput";
-import PasswordInputField from "@/components/ui/input/PasswordInput";
 import { LoaderButton } from "@/components/ui/button";
 import Link from "next/link";
+import { useLogin, useSendOtp } from "@/services/auth.service";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 export default function LoginForm() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
+    getValues,
+    setError,
   } = useForm<LoginSchemaType>({
     resolver: zodResolver(loginSchema),
   });
-
-  const onSubmit = async (data: LoginSchemaType) => {
-    console.log("Validated Data", data);
-  };
-
+  const router = useRouter();
+  const [otpStatus, setOtpStatus] = useState(false);
+  const { mutate: loginMutate, isPending: isLoginPendding } = useLogin({
+    onError: (err: any) => {
+      const message = err?.response?.data?.message ?? 'Login failed';
+      setError('email', {
+        message
+      });
+    },
+    onSuccess: (data: any) => {
+      router.push('/user/dashboard')
+    }
+  });
+  const { mutate: sendOtpMutate, isPending: isSendPendding } = useSendOtp({
+    onError: (err: any) => {
+      const message = err?.response?.data?.message ?? 'Otp send failed try again.';
+      setError('email', message);
+    },
+    onSuccess: () => setOtpStatus(true)
+  })
+  const onSubmit = async (data: LoginSchemaType) => loginMutate(data)
+  const hanndeSendOtp = () => sendOtpMutate(getValues('email'));
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -40,34 +61,41 @@ export default function LoginForm() {
             error={errors?.email}
             register={register}
           />
-          <PasswordInputField
-            label="Password"
-            name="password"
-            error={errors?.password}
-            register={register}
-          />
-        </div>
-
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between text-sm text-gray-600 gap-2 sm:gap-0">
-          <label className="inline-flex items-center space-x-2">
-            <input
-              type="checkbox"
-              className="form-checkbox rounded text-green-600"
+          {otpStatus && (
+            <TextInput
+              label="OTP"
+              name="otp"
+              error={errors?.otp}
+              register={register}
             />
-            <span>Remember me</span>
-          </label>
-          <Link href="#" className="text-green-600 hover:underline text-right">
-            Forgot password?
-          </Link>
+          )}
         </div>
-
+        {otpStatus && (
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between text-sm text-gray-600 gap-2 sm:gap-0">
+            <label className="inline-flex items-center space-x-2">
+              <input
+                type="checkbox"
+                className="form-checkbox rounded text-green-600"
+              />
+              <span>Remember me</span>
+            </label>
+          </div>
+        )}
         <LoaderButton
-          text="Login"
-          type="submit"
-          loading={isSubmitting}
+          text={otpStatus ? "Resend OTP" : "Get OTP"}
+          type="button"
+          loading={isSendPendding}
           className="w-full bg-green-600 text-white hover:bg-green-700 transition duration-300"
+          onClick={hanndeSendOtp}
         />
-
+        {otpStatus && (
+          <LoaderButton
+            text="Login"
+            type="submit"
+            loading={isLoginPendding}
+            className="w-full bg-green-600 text-white hover:bg-green-700 transition duration-300"
+          />
+        )}
         <p className="text-sm sm:text-base text-center text-gray-500">
           Don’t have an account?{" "}
           <Link

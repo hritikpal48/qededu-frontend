@@ -1,4 +1,4 @@
-import { useQuery, useMutation, MutateFunction, QueryFunction } from "@tanstack/react-query";
+import { useQuery, useMutation, MutationFunction, QueryFunction } from "@tanstack/react-query";
 
 type MutationParams = {
     onError: (err: any) => void;
@@ -13,7 +13,7 @@ type QueryParams<TData = unknown> = {
     cacheTime?: number;
 };
 
-export const useMutationHook = (mutationFn: MutateFunction) => (params: MutationParams) => {
+export const useMutationHook = (mutationFn: MutationFunction<any, any>) => (params: MutationParams) => {
     return useMutation({
         mutationFn,
         onError: params.onError,
