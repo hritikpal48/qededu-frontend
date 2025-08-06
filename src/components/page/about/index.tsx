@@ -273,8 +273,8 @@ const AboutPage = () => {
 
       <div className="max-w-7xl mx-auto py-10 ">
         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {blogPosts.map((post) => (
-            <BlogCard blogData={post} />
+          {blogPosts.map((post, id) => (
+            <BlogCard blogData={post} key={id} />
           ))}
         </div>
       </div>
