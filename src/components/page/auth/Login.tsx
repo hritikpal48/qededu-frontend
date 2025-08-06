@@ -6,41 +6,30 @@ import { loginSchema, LoginSchemaType } from "@/validations/auth";
 import TextInput from "@/components/ui/input/TextInput";
 import { LoaderButton } from "@/components/ui/button";
 import Link from "next/link";
-import { useLogin, useSendOtp } from "@/services/auth.service";
-import { useState } from "react";
+import { useLogin } from "@/services/auth.service";
 import { useRouter } from "next/navigation";
+import PasswordInputField from "@/components/ui/input/PasswordInput";
 export default function LoginForm() {
   const {
     register,
     handleSubmit,
     formState: { errors },
-    getValues,
     setError,
   } = useForm<LoginSchemaType>({
     resolver: zodResolver(loginSchema),
   });
   const router = useRouter();
-  const [otpStatus, setOtpStatus] = useState(false);
-  const { mutate: loginMutate, isPending: isLoginPendding } = useLogin({
-    onError: (err: any) => {
-      const message = err?.response?.data?.message ?? 'Login failed';
-      setError('email', {
-        message
-      });
-    },
-    onSuccess: () => {
-      router.push('/user/dashboard')
-    }
-  });
-  const { mutate: sendOtpMutate, isPending: isSendPendding } = useSendOtp({
-    onError: (err: any) => {
-      const message = err?.response?.data?.message ?? 'Otp send failed try again.';
-      setError('email', message);
-    },
-    onSuccess: () => setOtpStatus(true)
-  })
+  const onError = (err: any) => {
+    const message = err?.response?.data?.message ?? 'Login failed';
+    setError('email', {
+      message
+    });
+  }
+  const onSuccess = () => {
+    router.push('/user/dashboard')
+  }
+  const { mutate: loginMutate, isPending: isLoginPendding } = useLogin({ onError, onSuccess });
   const onSubmit = async (data: LoginSchemaType) => loginMutate(data)
-  const hanndeSendOtp = () => sendOtpMutate(getValues('email'));
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -61,16 +50,12 @@ export default function LoginForm() {
             error={errors?.email}
             register={register}
           />
-          {otpStatus && (
-            <TextInput
-              label="OTP"
-              name="otp"
-              error={errors?.otp}
-              register={register}
-            />
-          )}
-        </div>
-        {otpStatus && (
+          <PasswordInputField
+            label="Password"
+            name="password"
+            error={errors?.password}
+            register={register}
+          />
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between text-sm text-gray-600 gap-2 sm:gap-0">
             <label className="inline-flex items-center space-x-2">
               <input
@@ -80,22 +65,13 @@ export default function LoginForm() {
               <span>Remember me</span>
             </label>
           </div>
-        )}
-        <LoaderButton
-          text={otpStatus ? "Resend OTP" : "Get OTP"}
-          type="button"
-          loading={isSendPendding}
-          className="w-full bg-green-600 text-white hover:bg-green-700 transition duration-300"
-          onClick={hanndeSendOtp}
-        />
-        {otpStatus && (
           <LoaderButton
             text="Login"
             type="submit"
             loading={isLoginPendding}
             className="w-full bg-green-600 text-white hover:bg-green-700 transition duration-300"
           />
-        )}
+        </div>
         <p className="text-sm sm:text-base text-center text-gray-500">
           Don’t have an account?{" "}
           <Link

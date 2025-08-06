@@ -9,7 +9,7 @@ export type SignupPayload = {
 
 export type LoginPayload = {
     email: string,
-    otp: string
+    password: string
 };
 
 export interface UserData {

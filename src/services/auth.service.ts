@@ -7,7 +7,7 @@ const signup = async (data: SignupPayload): Promise<UserData> => {
     return res.data.data
 };
 
-const login = async (data: LoginPayload): Promise<UserData> => {
+const login = async (data: LoginPayload): Promise<void> => {
     const res = await HttpService.post('/auth/login', data, { withCredentials: true });
     return res.data.data
 };
