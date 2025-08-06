@@ -23,24 +23,25 @@ export default function LoginForm() {
   const [otpStatus, setOtpStatus] = useState(false);
   const { mutate: loginMutate, isPending: isLoginPendding } = useLogin({
     onError: (err: any) => {
-      const message = err?.response?.data?.message ?? 'Login failed';
-      setError('email', {
-        message
+      const message = err?.response?.data?.message ?? "Login failed";
+      setError("email", {
+        message,
       });
     },
     onSuccess: (data: any) => {
-      router.push('/user/dashboard')
-    }
+      router.push("/user/dashboard");
+    },
   });
   const { mutate: sendOtpMutate, isPending: isSendPendding } = useSendOtp({
     onError: (err: any) => {
-      const message = err?.response?.data?.message ?? 'Otp send failed try again.';
-      setError('email', message);
+      const message =
+        err?.response?.data?.message ?? "Otp send failed try again.";
+      setError("email", message);
     },
-    onSuccess: () => setOtpStatus(true)
-  })
-  const onSubmit = async (data: LoginSchemaType) => loginMutate(data)
-  const hanndeSendOtp = () => sendOtpMutate(getValues('email'));
+    onSuccess: () => setOtpStatus(true),
+  });
+  const onSubmit = async (data: LoginSchemaType) => loginMutate(data);
+  const hanndeSendOtp = () => sendOtpMutate(getValues("email"));
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -85,7 +86,7 @@ export default function LoginForm() {
           text={otpStatus ? "Resend OTP" : "Get OTP"}
           type="button"
           loading={isSendPendding}
-          className="w-full bg-green-600 text-white hover:bg-green-700 transition duration-300"
+          className="w-full bg-green-600 text-white "
           onClick={hanndeSendOtp}
         />
         {otpStatus && (
@@ -93,14 +94,14 @@ export default function LoginForm() {
             text="Login"
             type="submit"
             loading={isLoginPendding}
-            className="w-full bg-green-600 text-white hover:bg-green-700 transition duration-300"
+            className="w-full bg-green-600 text-white "
           />
         )}
         <p className="text-sm sm:text-base text-center text-gray-500">
           Don’t have an account?{" "}
           <Link
             href="/auth/signup"
-            className="text-green-600 hover:underline font-medium"
+            className="text-green-600 hover:text-green-700 hover:underline font-medium"
           >
             Sign up
           </Link>

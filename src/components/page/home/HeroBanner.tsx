@@ -15,10 +15,10 @@ const HeroBanner = () => {
           </p>
 
           {/* Video Thumbnail or Image */}
-          <div className="flex justify-center">
+          <div className="flex justify-center h-[280px] md:h-[600px] ">
             <iframe
               width="100%"
-              height="600"
+              height="100%"
               src="https://www.youtube.com/embed/Ck1c5eLa5PI?autoplay=1&mute=1"
               title="YouTube video player"
               frameBorder="0"

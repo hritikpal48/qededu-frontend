@@ -51,7 +51,7 @@ const BlogPage = () => {
 
   return (
     <>
-      <div className="max-w-7xl mx-auto py-10 ">
+      <div className="max-w-7xl mx-auto py-10 px-4">
         <h2 className="text-4xl font-bold text-center pb-10">
           Unlisted Shares in News
         </h2>
