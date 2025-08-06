@@ -28,7 +28,7 @@ export default function LoginForm() {
         message
       });
     },
-    onSuccess: (data: any) => {
+    onSuccess: () => {
       router.push('/user/dashboard')
     }
   });

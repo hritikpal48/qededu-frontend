@@ -13,14 +13,16 @@ type QueryParams<TData = unknown> = {
     cacheTime?: number;
 };
 
-export const useMutationHook = (mutationFn: MutationFunction<any, any>) => (params: MutationParams) => {
-    return useMutation({
-        mutationFn,
-        onError: params.onError,
-        onSuccess: params.onSuccess
-    })
+export const createMutationHook = <TData = any, TVariables = any>(
+  mutationFn: MutationFunction<TData, TVariables>
+) => {
+  return (params?: MutationParams) =>
+    useMutation({
+      mutationFn,
+      onSuccess: params?.onSuccess,
+      onError: params?.onError,
+    });
 };
-
 
 export const useQueryHook = <TData = unknown>(params: QueryParams<TData>) => {
     return useQuery<TData>({

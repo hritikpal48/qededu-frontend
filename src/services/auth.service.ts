@@ -1,5 +1,5 @@
 import HttpService from "./http.service";
-import { useMutationHook } from "@/hooks/useMutationHook";
+import { createMutationHook } from "@/hooks/useMutationHook";
 import { SignupPayload, LoginPayload, UserData } from "@/types/auth";
 
 const signup = async (data: SignupPayload): Promise<UserData> => {
@@ -17,6 +17,6 @@ const sendOtp = async (email: string): Promise<void> => {
     return res.data.data
 };
 
-export const useSignUp = useMutationHook(signup)
-export const useLogin = useMutationHook(login)
-export const useSendOtp = useMutationHook(sendOtp)
+export const useSignUp = createMutationHook(signup)
+export const useLogin = createMutationHook(login)
+export const useSendOtp = createMutationHook(sendOtp)

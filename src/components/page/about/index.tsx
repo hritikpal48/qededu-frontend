@@ -54,7 +54,7 @@ const stats = [
   { label: "Courses Offered", value: "50+" },
 ];
 
-const blogPosts: BlogPostType[] = [
+const blogPosts: any[] = [
   {
     id: "1",
     blogImg: AppImages.blogImg.blog1,
@@ -273,8 +273,8 @@ const AboutPage = () => {
 
       <div className="max-w-7xl mx-auto py-10 ">
         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {blogPosts.map((post) => (
-            <BlogCard blogData={post} />
+          {blogPosts.map((post , key) => (
+            <BlogCard blogData={post} key={key} />
           ))}
         </div>
       </div>

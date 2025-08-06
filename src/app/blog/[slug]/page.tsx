@@ -1,23 +1,13 @@
-// app/product/[slug]/page.tsx
-import { Metadata } from "next";
 import Image from "next/image";
 import AppImages from "@/config/constant/app.images";
 
+
 interface PageProps {
-  params: {
-    slug: string;
-  };
+  params: Promise<{ slug: string }>;
 }
 
-export const generateMetadata = ({ params }: PageProps): Metadata => {
-  return {
-    title: `Blog - ${params.slug}`,
-  };
-};
-
-export default async function Page({ params }: PageProps) {
-  const { slug } = params;
-
+export default async function Page(props: PageProps) {
+  
   return (
     <div className="min-h-screen bg-gray-50">
       <main className="max-w-7xl mx-auto px-2 py-8 grid grid-cols-1 lg:grid-cols-3 gap-8">

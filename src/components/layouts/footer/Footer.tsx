@@ -26,12 +26,12 @@ const quickLinks = [
 ];
 
 const unlistedZoneLinks = [
-  { name: "About Us", url: "/about-us" },
-  { name: "Shares List", url: "/unlisted-shares" },
-  { name: "Process", url: "/how-to-buy-unlisted-shares" },
-  { name: "FAQ", url: "/faq" },
-  { name: "In Media", url: "/in-media" },
-  { name: "Contact us", url: "/contact-us"},
+  { name: "About Us", url: "/about-us", badge: "" },
+  { name: "Shares List", url: "/unlisted-shares", badge: "" },
+  { name: "Process", url: "/how-to-buy-unlisted-shares", badge: "" },
+  { name: "FAQ", url: "/faq", badge: "" },
+  { name: "In Media", url: "/in-media", badge: "" },
+  { name: "Contact us", url: "/contact-us", badge: "" },
 ];
 
 const socialIcons = [
@@ -62,8 +62,8 @@ const Footer = () => {
           </p>
 
           <div className="flex gap-2 mb-4 flex-wrap">
-             <Link href="/"><Image src={appstore} alt="App Store" width={140} height={60} /></Link>
-             <Link href="/"><Image src={playstore} alt="Google Play" width={140} height={60} /></Link>
+            <Link href="/"><Image src={appstore} alt="App Store" width={140} height={60} /></Link>
+            <Link href="/"><Image src={playstore} alt="Google Play" width={140} height={60} /></Link>
           </div>
 
           <Link href="/">
@@ -89,7 +89,7 @@ const Footer = () => {
                 >
                   {link.name}
                 </Link>
-                {link.badge && (
+                {link?.badge && (
                   <span className="bg-green-500 text-xs px-1.5 py-0.5 rounded text-white">
                     New
                   </span>
