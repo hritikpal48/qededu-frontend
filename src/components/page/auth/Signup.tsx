@@ -45,7 +45,7 @@ export default function LoginForm() {
             label="Password"
             name="password"
             register={register}
-            error={errors?.password}
+            error={errors?.otp}
           />
         </div>
 

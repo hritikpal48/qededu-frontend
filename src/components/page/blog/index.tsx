@@ -56,8 +56,8 @@ const BlogPage = () => {
           Unlisted Shares in News
         </h2>
         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {blogPosts.map((post, id) => (
-            <BlogCard blogData={post} key={id} />
+          {blogPosts.map((post, key) => (
+            <BlogCard blogData={post} key={key} />
           ))}
         </div>
 

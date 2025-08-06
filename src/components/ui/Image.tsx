@@ -4,7 +4,7 @@ import Image, { ImageProps } from 'next/image';
 import { useState } from 'react';
 
 interface CustomImageProps extends ImageProps {
-
+  key?: string
 }
 
 const NextImage = ({ src, alt, ...rest }: CustomImageProps) => {

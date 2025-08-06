@@ -8,6 +8,7 @@ import {
   FaExchangeAlt,
 } from "react-icons/fa";
 import userImg from "../../../../../public/images/user.png";
+import React from "react";
 
 type TabKey = "profile" | "portfolio" | "transactions" | "external";
 
@@ -22,7 +23,7 @@ export default function Sidebar({
   onTabChange,
   user,
 }: SidebarProps) {
-  const tabs: { key: TabKey; label: string; icon: JSX.Element }[] = [
+  const tabs: { key: TabKey; label: string; icon: React.ReactElement }[] = [
     { key: "profile", label: "My Profile", icon: <FaUser /> },
     { key: "portfolio", label: "My Portfolio", icon: <FaClipboardList /> },
     { key: "transactions", label: "Transactions", icon: <FaFileAlt /> },
@@ -49,11 +50,10 @@ export default function Sidebar({
             key={tab.key}
             onClick={() => onTabChange(tab.key)}
             className={`flex items-center gap-2 w-full text-left px-3 py-2 cursor-pointer rounded
-                ${
-                  activeTab === tab.key
-                    ? "bg-gradient-to-r from-[#d1efcf] to-white text-[#000] font-medium text-[16px]"
-                    : "hover:bg-gray-50 text-gray-700"
-                }`}
+                ${activeTab === tab.key
+                ? "bg-gradient-to-r from-[#d1efcf] to-white text-[#000] font-medium text-[16px]"
+                : "hover:bg-gray-50 text-gray-700"
+              }`}
           >
             <span className="text-[#5d7d5b]">{tab.icon}</span>
             <span>{tab.label}</span>

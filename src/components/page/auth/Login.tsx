@@ -28,9 +28,15 @@ export default function LoginForm() {
         message,
       });
     },
+<<<<<<< HEAD
     onSuccess: (data: any) => {
       router.push("/user/dashboard");
     },
+=======
+    onSuccess: () => {
+      router.push('/user/dashboard')
+    }
+>>>>>>> 93ad8c6092e99410ffc3196e9fd3d0261185741d
   });
   const { mutate: sendOtpMutate, isPending: isSendPendding } = useSendOtp({
     onError: (err: any) => {
