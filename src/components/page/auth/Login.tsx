@@ -9,24 +9,25 @@ import Link from "next/link";
 import { useLogin } from "@/services/auth.service";
 import { useRouter } from "next/navigation";
 import PasswordInputField from "@/components/ui/input/PasswordInput";
+import toast from "react-hot-toast";
 export default function LoginForm() {
   const {
     register,
     handleSubmit,
     formState: { errors },
-    setError,
+    reset
   } = useForm<LoginSchemaType>({
     resolver: zodResolver(loginSchema),
   });
   const router = useRouter();
   const onError = (err: any) => {
-    const message = err?.response?.data?.message ?? 'Login failed';
-    setError('email', {
-      message
-    });
+    const message = err?.response?.data?.message ?? 'Resend OTP failed';
+    toast.error(message)
   }
   const onSuccess = () => {
-    router.push('/user/dashboard')
+    toast.success('Login succesfully')
+    router.push('/user/dashboard');
+    reset();
   }
   const { mutate: loginMutate, isPending: isLoginPendding } = useLogin({ onError, onSuccess });
   const onSubmit = async (data: LoginSchemaType) => loginMutate(data)
