@@ -15,22 +15,25 @@ export default function LoginForm() {
     register,
     handleSubmit,
     formState: { errors },
-    reset
+    reset,
   } = useForm<LoginSchemaType>({
     resolver: zodResolver(loginSchema),
   });
   const router = useRouter();
   const onError = (err: any) => {
-    const message = err?.response?.data?.message ?? 'Resend OTP failed';
-    toast.error(message)
-  }
+    const message = err?.response?.data?.message ?? "Resend OTP failed";
+    toast.error(message);
+  };
   const onSuccess = () => {
-    toast.success('Login succesfully')
-    router.push('/user/dashboard');
+    toast.success("Login succesfully");
+    router.push("/user/dashboard");
     reset();
-  }
-  const { mutate: loginMutate, isPending: isLoginPendding } = useLogin({ onError, onSuccess });
-  const onSubmit = async (data: LoginSchemaType) => loginMutate(data)
+  };
+  const { mutate: loginMutate, isPending: isLoginPendding } = useLogin({
+    onError,
+    onSuccess,
+  });
+  const onSubmit = async (data: LoginSchemaType) => loginMutate(data);
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}

@@ -1,12 +1,46 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useLogout } from "@/services/auth.service";
+import toast from "react-hot-toast";
+
+// Utility to check if user is logged in based on cookie
+const isUserLoggedIn = () => {
+  if (typeof window === "undefined") return false;
+  const token = document.cookie
+    .split("; ")
+    .find((row) => row.startsWith("access_token="));
+  return !!token;
+};
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const router = useRouter();
 
   const toggleMenu = () => setIsOpen(!isOpen);
+
+  const onError = (err: any) => {
+    const message = err?.response?.data?.message ?? "Logout failed";
+    toast.error(message);
+  };
+
+  const onSuccess = () => {
+    toast.success("Logged out successfully");
+    router.push("/auth/login");
+    setIsLoggedIn(false);
+  };
+
+  const { mutate: logoutMutate, isPending: isLogoutPending } = useLogout({
+    onError,
+    onSuccess,
+  });
+
+  useEffect(() => {
+    setIsLoggedIn(isUserLoggedIn());
+  }, []);
 
   const navItems = [
     { name: "Home", href: "/" },
@@ -45,18 +79,30 @@ const Header = () => {
           ))}
         </div>
 
-        {/* Right Side: Login & Signup */}
+        {/* Right Side */}
         <div className="flex items-center space-x-4">
-          <Link href="/auth/login">
-            <button className="border border-white text-white px-4 py-1 rounded hover:bg-white hover:text-black transition cursor-pointer">
-              Login
+          {!isLoggedIn ? (
+            <>
+              <Link href="/auth/login">
+                <button className="border border-white text-white px-4 py-1 rounded hover:bg-white hover:text-black transition cursor-pointer">
+                  Login
+                </button>
+              </Link>
+              <Link href="/auth/signup">
+                <button className="bg-green-600 px-4 py-1 rounded text-white hover:bg-green-700 transition cursor-pointer">
+                  Sign Up
+                </button>
+              </Link>
+            </>
+          ) : (
+            <button
+              onClick={() => logoutMutate({})}
+              disabled={isLogoutPending}
+              className="bg-green-600 px-4 py-1 rounded text-white hover:bg-green-700 transition cursor-pointer disabled:opacity-50"
+            >
+              {isLogoutPending ? "Logging out..." : "Logout"}
             </button>
-          </Link>
-          <Link href="/auth/signup">
-            <button className="bg-green-600 px-4 py-1 rounded text-white hover:bg-green-700 transition cursor-pointer">
-              Sign Up
-            </button>
-          </Link>
+          )}
 
           {/* Hamburger for Mobile */}
           <button
@@ -83,17 +129,32 @@ const Header = () => {
               {name}
             </Link>
           ))}
+
           <div className="flex space-x-4 mt-4">
-            <Link href="/login" className="w-full">
-              <button className="w-full border border-white text-white py-2 rounded hover:bg-white hover:text-black transition">
-                Login
+            {!isLoggedIn ? (
+              <>
+                <Link href="/auth/login" className="w-full">
+                  <button className="w-full border border-white text-white py-2 rounded hover:bg-white hover:text-black transition">
+                    Login
+                  </button>
+                </Link>
+                <Link href="/auth/signup" className="w-full">
+                  <button className="w-full bg-blue-600 py-2 rounded text-white hover:bg-blue-500 transition">
+                    Sign Up
+                  </button>
+                </Link>
+              </>
+            ) : (
+              <button
+                onClick={() => {
+                  logoutMutate({});
+                  setIsOpen(false);
+                }}
+                className="w-full bg-green-600 py-2 rounded text-white hover:bg-green-500 transition"
+              >
+                Logout
               </button>
-            </Link>
-            <Link href="/signup" className="w-full">
-              <button className="w-full bg-blue-600 py-2 rounded text-white hover:bg-blue-500 transition">
-                Sign Up
-              </button>
-            </Link>
+            )}
           </div>
         </div>
       )}
