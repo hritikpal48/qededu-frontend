@@ -22,7 +22,7 @@ export const defaultConfig: CreateHttpServiceParams = {
     headers: {
       "Content-Type": "application/json",
     },
-    timeout: 4000,
+    timeout: 20000,
   },
   sendAuthToken: true,
 };
@@ -40,11 +40,11 @@ export const createHttpService = (
   // Request interceptor
   axiosInstance.interceptors.request.use(
     async (config) => {
-       const token = Cookies.get('access_token');
+      const token = Cookies.get('access_token');
 
-             if (token) {
-          config.headers.Authorization = `Bearer ${token}`;
-        }
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
       return config;
     },
     (error) => {
