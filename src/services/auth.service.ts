@@ -12,9 +12,9 @@ const signup = async (data: SignupPayload): Promise<void> => {
   return res.data.data;
 };
 
-const login = async (data: LoginPayload): Promise<void> => {
+const login = async (data: LoginPayload): Promise<string | undefined> => {
   const res = await HttpService.post("/auth/login", data);
-  return res.data.data;
+  return res.data.data?.token;
 };
 
 const resendOtp = async (data: ResendOtpPayload): Promise<void> => {

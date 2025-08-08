@@ -1,10 +1,11 @@
-import React from "react";
-
+"use client"
+import React, { useState } from "react";
 import BlogCard from "@/components/page/blog";
 import Image from "@/components/ui/Image";
 import AppImages from "@/config/constant/app.images";
 import StockList from "../home/StockList";
 const UnlistedSharesPage = () => {
+  const [search, setSearch] = useState('');
   return (
     <>
       <section className="max-w-7xl mx-auto pt-10 pb-3 bg-white text-gray-800">
@@ -31,12 +32,13 @@ const UnlistedSharesPage = () => {
                 type="search"
                 placeholder="Search Share"
                 className="px-5 py-3 border w-100 rounded-lg"
+                onChange={e => setSearch(e?.target?.value)}
               />
             </form>
           </div>
         </div>
       </section>
-      <StockList />
+      <StockList searchKeyword={search} />
       <BlogCard />
     </>
   );

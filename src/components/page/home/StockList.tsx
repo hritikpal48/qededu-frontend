@@ -1,120 +1,40 @@
-import React from 'react'
-import AppImages from '@/config/constant/app.images';
+"use client"
+import React, { useEffect, useState } from 'react'
 import StockTable from '@/components/ui/table/StockListTable';
-import { Stock } from "@/types/stock";
+import { GetStockListApiParams } from "@/types/stock";
+import { useFetchStockList } from '@/services/stock.service';
+import { useDebounce } from '@/hooks/useDebounce';
+type Props = {
+    searchKeyword?: string
+}
+export default function StockList({ searchKeyword }: Props) {
+    const [params, setParams] = useState<GetStockListApiParams>({
+        page: 1,
+        limit: 10,
+        keyword: searchKeyword ?? ''
+    });
+    const debouncedSearch = useDebounce(params, 400);
+    const handlePageChnage = (page: number) => setParams(curr => ({ ...curr, page }));
+    const handleLimitChnage = (limit: number) => setParams(curr => ({ ...curr, limit }));
+    const handleSearchChnage = (keyword: string) => setParams(curr => ({ ...curr, keyword }));
+    const { data, isLoading, refetch } = useFetchStockList(debouncedSearch);
 
-export default function StockList() {
-    const data: Stock[] = [
-        {
-            name: "Paytm",
-            logo: AppImages.coins.comlist1,
-            nameLink: "/share",
-            unlistedPrice: "₹ 800-3500",
-            ipoPrice: "₹ 2150",
-            cmp: "₹ 1072.3",
-            gainLoss: -50.13,
-        },
-        {
-            name: "Nazara Tech",
-            logo: AppImages.coins.comlist2,
-            nameLink: "/share",
-            unlistedPrice: "₹ 200-750",
-            ipoPrice: "₹ 550",
-            cmp: "₹ 1338.1",
-            gainLoss: 143.29,
-        },
-        {
-            name: "Barbeque Nation",
-            logo: AppImages.coins.comlist3,
-            nameLink: "/share",
-            unlistedPrice: "₹ 510-1000",
-            ipoPrice: "₹ 500",
-            cmp: "₹ 302.8",
-            gainLoss: -39.44,
-        },
-        {
-            name: "CSB",
-            logo: AppImages.coins.comlist4,
-            nameLink: "/share",
-            unlistedPrice: "₹ 150-210",
-            ipoPrice: "₹ 195",
-            cmp: "₹ 424.15",
-            gainLoss: 117.51,
-        },
-        {
-            name: "AGS Transact",
-            logo: AppImages.coins.comlist5,
-            nameLink: "/share",
-            unlistedPrice: "₹ 225-575",
-            ipoPrice: "₹ 175",
-            cmp: "₹ 4.9",
-            gainLoss: -97.2,
-        },
-        {
-            name: "Anand Rathi Wealth Services",
-            logo: AppImages.coins.comlist6,
-            nameLink: "/share",
-            unlistedPrice: "₹ 175-400",
-            ipoPrice: "₹ 275",
-            cmp: "₹ 2660.1",
-            gainLoss: 867.31,
-        },
-        {
-            name: "Aptus Value Housing Finance",
-            logo: AppImages.coins.comlist7,
-            nameLink: "/share",
-            unlistedPrice: "₹ 350-420",
-            ipoPrice: "₹ 353",
-            cmp: "₹ 330.65",
-            gainLoss: -6.33,
-        },
-        {
-            name: "Suryoday SFB",
-            logo: AppImages.coins.comlist8,
-            nameLink: "/share",
-            unlistedPrice: "₹ 175-350",
-            ipoPrice: "₹ 305",
-            cmp: "₹ 128.76",
-            gainLoss: -57.78,
-        },
-        {
-            name: "UTI AMC",
-            logo: AppImages.coins.comlist9,
-            nameLink: "/share",
-            unlistedPrice: "₹ 750-1100",
-            ipoPrice: "₹ 554",
-            cmp: "₹ 1321.3",
-            gainLoss: 138.5,
-        },
-        {
-            name: "Delhivery",
-            logo: AppImages.coins.comlist10,
-            nameLink: "/share",
-            unlistedPrice: "₹ 650-900",
-            ipoPrice: "₹ 487",
-            cmp: "₹ 427.1",
-            gainLoss: -12.3,
-        },
-        {
-            name: "Zomato",
-            logo: AppImages.coins.comlist11,
-            nameLink: "/share",
-            unlistedPrice: "₹ 200-400",
-            ipoPrice: "₹ 76",
-            cmp: "₹ 132.1",
-            gainLoss: 73.82,
-        },
-        {
-            name: "Nykaa",
-            logo: AppImages.coins.comlist12,
-            nameLink: "/share",
-            unlistedPrice: "₹ 250-600",
-            ipoPrice: "₹ 1125",
-            cmp: "₹ 145.5",
-            gainLoss: -87.07,
-        },
-    ];
+    useEffect(() => {
+        handleSearchChnage(searchKeyword ?? '')
+    }, [searchKeyword]);
+
+    useEffect(() => {
+        refetch()
+    }, [debouncedSearch])
     return (
-        <StockTable data={data} />
+        <StockTable
+            data={data?.data ?? []}
+            page={params?.page}
+            perPage={params?.limit}
+            totalPage={data?.totalItems ?? 0}
+            setPage={handlePageChnage}
+            setPerPage={handleLimitChnage}
+            loading={isLoading}
+        />
     )
 }

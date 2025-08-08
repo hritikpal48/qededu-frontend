@@ -5,7 +5,7 @@ import Image from "@/components/ui/Image";
 import AppImages from "@/config/constant/app.images";
 interface ShareItem {
   name: string;
-  logo: string; // Assuming AppImages.share.shareX returns a string path or URL
+  logo: string;
   category: string;
   link: string;
 }
@@ -119,28 +119,27 @@ const latestShares: LatestShares = {
   ],
 };
 
-const TabItems = ({ item, index }: { item: ShareItem, index: number }) => {
+const ShareCard = ({ image, name, category, href }: { image: string, name: string, category: string, href: string }) => {
   return (
     <div
-      key={index}
       className="shadow-lg rounded overflow-hidden bg-white hover:scale-[1.02] transition"
     >
       <div className="flex items-center justify-center h-44 bg-white">
         <Image
-          src={item.logo}
-          alt={item.name}
+          src={image}
+          alt={name}
           width={150}
           height={100}
           objectFit="contain"
         />
       </div>
       <div className="bg-black text-white p-4 text-center">
-        <div className="text-[#59C20F] text-xs mb-1">{item.category}</div>
+        <div className="text-[#59C20F] text-xs mb-1">{category}</div>
         <h4 className="font-semibold text-lg leading-tight">
-          {item.name}
+          {name}
         </h4>
         <a
-          href={item.link}
+          href={href ?? '#'}
           className="text-white text-sm inline-block mt-2 hover:underline"
         >
           Learn More ›
@@ -149,6 +148,7 @@ const TabItems = ({ item, index }: { item: ShareItem, index: number }) => {
     </div>
   )
 }
+
 const SharesList = () => {
   const [tab, setTab] = useState<'offerings' | 'all'>("all");
 
@@ -182,7 +182,7 @@ const SharesList = () => {
 
       {/* Cards */}
       <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {latestShares[tab].map((item, index) => (<TabItems item={item} index={index} key={index} />))}
+        {latestShares[tab].map((item, index) => (<ShareCard image={item?.logo} name={item?.name} category={item?.category} href={item?.link} />))}
       </div>
     </section>
   );

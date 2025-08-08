@@ -30,7 +30,7 @@ export const DefaultButton: React.FC<ButtonProps> = ({
             onClick={onClick}
             disabled={disabled}
             className={clsx(
-                "bg-green-600 border border-white text-white px-4 py-1 rounded hover:bg-white hover:text-black transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed",
+                "bg-green-600 border text-white px-4 py-1 rounded hover:bg-green-400 transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed",
                 className
             )}
         >
@@ -48,7 +48,7 @@ export const LoaderButton: React.FC<LoaderButton> = ({
     text
 }) => {
     return (
-        <DefaultButton onClick={onClick} type={type} className={className} disabled={loading}>
+        <DefaultButton onClick={onClick} type={type} className={`h-10 flex items-center justify-center ${className}`} disabled={loading}>
             {loading ? <SpinnerLoader size={10} /> : text}
         </DefaultButton>
     )
