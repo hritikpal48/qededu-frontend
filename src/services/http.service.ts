@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, AxiosHeaderValue } from "axios";
 import { environmentVariables } from "@/config/app.config";
-console.log("envirmn fhff", environmentVariables);
-
+// console.log("envirmn fhff", environmentVariables);
+import Cookies from 'js-cookie';
 // import { getTokenServerSide } from "@/utils/authTokensServer"
 interface RawAxiosHeaders {
   [key: string]: AxiosHeaderValue;
@@ -22,7 +22,7 @@ export const defaultConfig: CreateHttpServiceParams = {
     headers: {
       "Content-Type": "application/json",
     },
-    // timeout: 4000,
+    timeout: 4000,
   },
   sendAuthToken: true,
 };
@@ -32,19 +32,19 @@ export const createHttpService = (
 ): AxiosInstance => {
   const axiosInstance = axios.create({
     baseURL: params?.baseURL,
-    // timeout: params?.config?.timeout ?? 10000,
+    timeout: params?.config?.timeout ?? 10000,
     headers: params?.config?.headers ?? {},
+
   });
 
   // Request interceptor
   axiosInstance.interceptors.request.use(
     async (config) => {
-      if (params?.sendAuthToken) {
-        const token = "";
-        if (token) {
+       const token = Cookies.get('access_token');
+
+             if (token) {
           config.headers.Authorization = `Bearer ${token}`;
         }
-      }
       return config;
     },
     (error) => {

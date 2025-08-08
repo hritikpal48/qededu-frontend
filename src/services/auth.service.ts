@@ -13,9 +13,7 @@ const signup = async (data: SignupPayload): Promise<void> => {
 };
 
 const login = async (data: LoginPayload): Promise<void> => {
-  const res = await HttpService.post("/auth/login", data, {
-    withCredentials: true,
-  });
+  const res = await HttpService.post("/auth/login", data);
   return res.data.data;
 };
 
@@ -30,9 +28,7 @@ const veroifyOtp = async (data: VerifyOtpPayload): Promise<void> => {
 };
 
 const logout = async (): Promise<void> => {
-  await HttpService.put("/auth/logout", {
-    withCredentials: true,
-  });
+  await HttpService.put("/auth/logout");
 };
 
 export const useSignUp = createMutationHook(signup);

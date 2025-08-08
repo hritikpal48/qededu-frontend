@@ -1,23 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import useCookie from "@/hooks/useCookies";
+import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useLogout } from "@/services/auth.service";
 import toast from "react-hot-toast";
 
-// Utility to check if user is logged in based on cookie
-const isUserLoggedIn = () => {
-  if (typeof window === "undefined") return false;
-  const token = document.cookie
-    .split("; ")
-    .find((row) => row.startsWith("access_token="));
-  return !!token;
-};
-
 const Header = () => {
+  const { value: token, deleteCookie } = useCookie("access_token");
+  const isLoggedIn = !!token;
+
   const [isOpen, setIsOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const router = useRouter();
 
   const toggleMenu = () => setIsOpen(!isOpen);
@@ -27,20 +21,16 @@ const Header = () => {
     toast.error(message);
   };
 
-  const onSuccess = () => {
+  const onSuccess = (result: any) => {
+    deleteCookie(); // ✅ Remove access_token cookie
     toast.success("Logged out successfully");
     router.push("/auth/login");
-    setIsLoggedIn(false);
   };
 
   const { mutate: logoutMutate, isPending: isLogoutPending } = useLogout({
     onError,
     onSuccess,
   });
-
-  useEffect(() => {
-    setIsLoggedIn(isUserLoggedIn());
-  }, []);
 
   const navItems = [
     { name: "Home", href: "/" },
@@ -79,7 +69,7 @@ const Header = () => {
           ))}
         </div>
 
-        {/* Right Side */}
+        {/* Right Side (Desktop) */}
         <div className="flex items-center space-x-4">
           {!isLoggedIn ? (
             <>
@@ -104,7 +94,7 @@ const Header = () => {
             </button>
           )}
 
-          {/* Hamburger for Mobile */}
+          {/* Hamburger Icon for Mobile */}
           <button
             className="md:hidden flex flex-col justify-center items-center space-y-1"
             onClick={toggleMenu}
