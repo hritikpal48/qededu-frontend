@@ -25,8 +25,8 @@ export default function LoginForm() {
     resolver: zodResolver(signSchema),
   });
   const onError = (err: any) => {
-    const message = err?.response?.data?.message ?? "Resend OTP failed";
     console.log("error", err);
+    const message = err?.response?.data?.message ?? "Something went wrong";
     toast.error(message);
   };
   const onSuccess = () => {
