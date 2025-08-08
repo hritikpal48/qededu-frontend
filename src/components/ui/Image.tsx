@@ -1,5 +1,6 @@
 'use client';
 
+import { StaticImport } from 'next/dist/shared/lib/get-img-props';
 import Image, { ImageProps } from 'next/image';
 import { useEffect, useState } from 'react';
 
@@ -28,7 +29,7 @@ const isValidImageSrc = (src: string): boolean => {
 const NextImage = ({ src, alt, ...rest }: CustomImageProps) => {
   const fallbackSrc = '/images/placeholderImage.png';
 
-  const [imgSrc, setImgSrc] = useState(() => {
+  const [imgSrc, setImgSrc] = useState<string | StaticImport>(() => {
     if (typeof src === 'string' && isValidImageSrc(src)) {
       return src.trim();
     }
@@ -36,10 +37,15 @@ const NextImage = ({ src, alt, ...rest }: CustomImageProps) => {
   });
 
   useEffect(() => {
-    if (typeof src === 'string' && isValidImageSrc(src)) {
-      setImgSrc(src.trim());
-    } else {
-      setImgSrc(fallbackSrc);
+    if (typeof src === 'string') {
+      if (typeof src === 'string' && isValidImageSrc(src)) {
+        setImgSrc(src.trim());
+      } else {
+        setImgSrc(fallbackSrc);
+      }
+    }
+    else {
+      setImgSrc(src);
     }
   }, [src]);
 
