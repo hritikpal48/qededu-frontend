@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Manrope } from "next/font/google";
 import "./globals.css";
@@ -33,11 +34,13 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${manrope.variable} antialiased`}
       >
-        <ReactQueryProvider>
-          <HomeLayout>
-            {children}
-          </HomeLayout>
-        </ReactQueryProvider>
+        <Suspense fallback={<div>Loading sidebar...</div>}>
+          <ReactQueryProvider>
+            <HomeLayout>
+              {children}
+            </HomeLayout>
+          </ReactQueryProvider>
+        </Suspense>
       </body>
     </html>
   );

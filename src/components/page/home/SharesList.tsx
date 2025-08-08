@@ -182,7 +182,7 @@ const SharesList = () => {
 
       {/* Cards */}
       <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {latestShares[tab].map((item, index) => (<ShareCard image={item?.logo} name={item?.name} category={item?.category} href={item?.link} />))}
+        {latestShares[tab].map((item, index) => (<ShareCard image={item?.logo} name={item?.name} category={item?.category} href={item?.link} key={index} />))}
       </div>
     </section>
   );
