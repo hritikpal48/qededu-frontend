@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { FaArrowDown, FaUpload } from "react-icons/fa";
 import { FaArrowDownLong, FaArrowRightLong } from "react-icons/fa6";
 import { IoMdRefresh } from "react-icons/io";
@@ -37,6 +38,7 @@ export default function DashboardContent({
   formData,
   setFormData,
 }: DashboardContentProps) {
+  const [activeSubTab, setActiveSubTab] = useState<"buy" | "sell">("buy");
   return (
     <section className="flex-1 p-6">
       <div className="bg-[#d1efcf] border border-[#badbb8] text-green-700 px-4 py-3 rounded mb-6 text-sm flex justify-between items-center">
@@ -245,7 +247,7 @@ export default function DashboardContent({
             />
             {/* Action buttons */}
             <div className="flex items-center justify-end gap-2">
-              <button className="bg-blue-900 hover:bg-blue-800 text-white p-2 rounded cursor-pointer">
+              <button className="bg-green-900 hover:bg-green-800 text-white p-2 rounded cursor-pointer">
                 <FaArrowDownLong />
               </button>
               <button className="bg-green-600 hover:bg-green-500 text-white p-2 rounded cursor-pointer">
@@ -329,7 +331,7 @@ export default function DashboardContent({
             />
             {/* Action buttons */}
             <div className="flex items-center justify-end gap-2">
-              <button className="bg-blue-900 hover:bg-blue-800 text-white p-2 rounded cursor-pointer">
+              <button className="bg-green-900 hover:bg-green-800 text-white p-2 rounded cursor-pointer">
                 <FaArrowDownLong />
               </button>
               <button className="bg-green-600 hover:bg-green-500 text-white p-2 rounded cursor-pointer">
@@ -618,50 +620,91 @@ export default function DashboardContent({
       )}
 
       {activeTab === "myshare" && (
-        <>
-          <h2 className="text-[22px] font-semibold mb-4">My Share</h2>
-
-          {/* Table */}
-          <div className="overflow-x-auto border-t border-gray-200">
-            <table className="min-w-full text-sm text-left">
-              <thead className="bg-white text-gray-700 font-medium">
-                <tr>
-                  <th className="px-4 py-2">Company</th>
-                  <th className="px-4 py-2">Type</th>
-                  <th className="px-4 py-2">Quantity</th>
-                  <th className="px-4 py-2">Transaction Date</th>
-                  <th className="px-4 py-2">Total (₹)</th>
-                  <th className="px-4 py-2">
-                    <button>Details</button>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {/* Empty row */}
-                <tr className="text-gray-400 text-center">
-                  <td className="px-4 py-3" colSpan={7}>
-                    No data available in table
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          {/* Pagination */}
-          <div className="flex items-center justify-between mt-4">
-            <div className="text-sm text-gray-600 flex items-center gap-2">
-              <select className="border border-[#dee2e6] rounded px-2 py-1 text-sm">
-                <option value="10">10</option>
-                <option value="25">25</option>
-                <option value="50">50</option>
-              </select>
-              Showing no records
-            </div>
-            <button className="text-gray-400 bg-gray-100 px-3 py-1 rounded">
-              ◀
+        <div>
+          {/* Tabs */}
+          <div className="flex border-b border-gray-200 mb-4">
+            <button
+              className={`px-4 py-2 font-medium ${
+                activeSubTab === "buy"
+                  ? "border-b-2 border-green-500 text-green-500"
+                  : "text-gray-600 hover:text-green-500"
+              }`}
+              onClick={() => setActiveSubTab("buy")}
+            >
+              Buy
+            </button>
+            <button
+              className={`px-4 py-2 font-medium ${
+                activeSubTab === "sell"
+                  ? "border-b-2 border-green-500 text-green-500"
+                  : "text-gray-600 hover:text-green-500"
+              }`}
+              onClick={() => setActiveSubTab("sell")}
+            >
+              Sell
             </button>
           </div>
-        </>
+
+          {/* Buy Tab Content */}
+          {activeSubTab === "buy" && (
+            <>
+              <h2 className="text-[22px] font-semibold mb-4">My Share - Buy</h2>
+              <div className="overflow-x-auto border-t border-gray-200">
+                <table className="min-w-full text-sm text-left">
+                  <thead className="bg-white text-gray-700 font-medium">
+                    <tr>
+                      <th className="px-4 py-2">Company</th>
+                      <th className="px-4 py-2">Quantity</th>
+                      <th className="px-4 py-2">Transaction Date</th>
+                      <th className="px-4 py-2">Total (₹)</th>
+                      <th className="px-4 py-2">
+                        <button>Details</button>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="text-gray-400 text-center">
+                      <td className="px-4 py-3" colSpan={12}>
+                        No data available in table
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </>
+          )}
+
+          {/* Sell Tab Content */}
+          {activeSubTab === "sell" && (
+            <>
+              <h2 className="text-[22px] font-semibold mb-4">
+                My Share - Sell
+              </h2>
+              <div className="overflow-x-auto border-t border-gray-200">
+                <table className="min-w-full text-sm text-left">
+                  <thead className="bg-white text-gray-700 font-medium">
+                    <tr>
+                      <th className="px-4 py-2">Company</th>
+                      <th className="px-4 py-2">Quantity</th>
+                      <th className="px-4 py-2">Transaction Date</th>
+                      <th className="px-4 py-2">Total (₹)</th>
+                      <th className="px-4 py-2">
+                        <button>Details</button>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="text-gray-400 text-center">
+                      <td className="px-4 py-3" colSpan={12}>
+                        No data available in table
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </>
+          )}
+        </div>
       )}
     </section>
   );
