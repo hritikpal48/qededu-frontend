@@ -19,6 +19,7 @@ export default function StockList({ searchKeyword }: Props) {
     const handleSearchChnage = (keyword: string) => setParams(curr => ({ ...curr, keyword }));
     const { data, isLoading, refetch } = useFetchStockList(debouncedSearch);
 
+
     useEffect(() => {
         handleSearchChnage(searchKeyword ?? '')
     }, [searchKeyword]);
