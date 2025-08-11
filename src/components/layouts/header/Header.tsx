@@ -1,11 +1,36 @@
 "use client";
+
+import useCookie from "@/hooks/useCookies";
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useLogout } from "@/services/auth.service";
+import toast from "react-hot-toast";
 
 const Header = () => {
+  const { value: token, deleteCookie } = useCookie("access_token");
+  const isLoggedIn = !!token;
+
   const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
 
   const toggleMenu = () => setIsOpen(!isOpen);
+
+  const onError = (err: any) => {
+    const message = err?.response?.data?.message ?? "Logout failed";
+    toast.error(message);
+  };
+
+  const onSuccess = (result: any) => {
+    deleteCookie(); // ✅ Remove access_token cookie
+    toast.success("Logged out successfully");
+    router.push("/auth/login");
+  };
+
+  const { mutate: logoutMutate, isPending: isLogoutPending } = useLogout({
+    onError,
+    onSuccess,
+  });
 
   const navItems = [
     { name: "Home", href: "/" },
@@ -44,20 +69,32 @@ const Header = () => {
           ))}
         </div>
 
-        {/* Right Side: Login & Signup */}
+        {/* Right Side (Desktop) */}
         <div className="flex items-center space-x-4">
-          <Link href="/auth/login">
-            <button className="border border-white text-white px-4 py-1 rounded hover:bg-white hover:text-black transition cursor-pointer text-[14px] md:text-[16px]">
-              Login
+          {!isLoggedIn ? (
+            <>
+              <Link href="/auth/login">
+                <button className="border border-white text-white px-4 py-1 rounded hover:bg-white hover:text-black transition cursor-pointer text-[14px] md:text-[16px]">
+                  Login
+                </button>
+              </Link>
+              <Link href="/auth/signup">
+                <button className="bg-green-600 px-4 py-1 rounded text-white hover:bg-green-700 transition cursor-pointer text-[14px] md:text-[16px]">
+                  Sign Up
+                </button>
+              </Link>
+            </>
+          ) : (
+            <button
+              onClick={() => logoutMutate({})}
+              disabled={isLogoutPending}
+              className="bg-green-600 px-4 py-1 rounded text-white hover:bg-green-700 transition cursor-pointer disabled:opacity-50"
+            >
+              {isLogoutPending ? "Logging out..." : "Logout"}
             </button>
-          </Link>
-          <Link href="/auth/signup">
-            <button className="bg-green-600 px-4 py-1 rounded text-white hover:bg-green-700 transition cursor-pointer text-[14px] md:text-[16px]">
-              Sign Up
-            </button>
-          </Link>
+          )}
 
-          {/* Hamburger for Mobile */}
+          {/* Hamburger Icon for Mobile */}
           <button
             className="md:hidden flex flex-col justify-center items-center space-y-1"
             onClick={toggleMenu}
@@ -83,17 +120,32 @@ const Header = () => {
               {name}
             </Link>
           ))}
+
           <div className="flex space-x-4 mt-4">
-            <Link href="/auth/login" className="w-full">
-              <button className="w-full border border-white text-white py-2 rounded hover:bg-white hover:text-black transition">
-                Login
+            {!isLoggedIn ? (
+              <>
+                <Link href="/auth/login" className="w-full">
+                  <button className="w-full border border-white text-white py-2 rounded hover:bg-white hover:text-black transition">
+                    Login
+                  </button>
+                </Link>
+                <Link href="/auth/signup" className="w-full">
+                  <button className="w-full bg-green-600 py-2 rounded text-white hover:bg-green-500 transition">
+                    Sign Up
+                  </button>
+                </Link>
+              </>
+            ) : (
+              <button
+                onClick={() => {
+                  logoutMutate({});
+                  setIsOpen(false);
+                }}
+                className="w-full bg-green-600 py-2 rounded text-white hover:bg-green-500 transition"
+              >
+                Logout
               </button>
-            </Link>
-            <Link href="/auth/signup" className="w-full">
-              <button className="w-full bg-green-600 py-2 rounded text-white hover:bg-green-500 transition">
-                Sign Up
-              </button>
-            </Link>
+            )}
           </div>
         </div>
       )}

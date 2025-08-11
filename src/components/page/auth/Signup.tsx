@@ -20,24 +20,28 @@ export default function LoginForm() {
     formState: { errors },
     control,
     getValues,
-    reset
+    reset,
   } = useForm<signupSchemaType>({
     resolver: zodResolver(signSchema),
   });
   const onError = (err: any) => {
-    const message = err?.response?.data?.message ?? 'Resend OTP failed';
-    toast.error(message)
+    console.log("error", err);
+    const message = err?.response?.data?.message ?? "Something went wrong";
+    toast.error(message);
   };
   const onSuccess = () => {
-    toast.success('Please verify your email address')
-    const email = getValues('email');
+    toast.success(
+      "You are almost done! Enter the OTP sent to your email to complete registration."
+    );
+    const email = getValues("email");
     router.push(`/auth/otp_verification?email=${email}`);
-    reset()
-  }
-  const { mutate, isPending } = useSignUp({ onError, onSuccess })
+    reset();
+  };
+  const { mutate, isPending } = useSignUp({ onError, onSuccess });
   const onSubmit = async (data: signupSchemaType) => {
-    mutate({ ...data, countryCode: "" })
-  }
+    const { confirm_password, ...rest } = data;
+    mutate({ ...rest, countryCode: "" });
+  };
 
   return (
     <form
@@ -84,6 +88,12 @@ export default function LoginForm() {
             register={register}
             error={errors?.password}
           />
+          <PasswordInputField
+            label="Confirm Password"
+            name="confirm_password"
+            register={register}
+            error={errors?.confirm_password}
+          />
           <Checkbox
             type="checkbox"
             label="Term & conditions"
@@ -102,7 +112,10 @@ export default function LoginForm() {
 
         <p className="text-sm text-center text-gray-500">
           Already have an account?{" "}
-          <Link href="/auth/login" className="text-green-600 hover:underline font-medium">
+          <Link
+            href="/auth/login"
+            className="text-green-600 hover:underline font-medium"
+          >
             Login
           </Link>
         </p>

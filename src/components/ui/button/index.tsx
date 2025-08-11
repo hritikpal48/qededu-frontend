@@ -24,19 +24,19 @@ export const DefaultButton: React.FC<ButtonProps> = ({
   className = "",
   disabled = false,
 }) => {
-  return (
-    <button
-      type={type}
-      onClick={onClick}
-      disabled={disabled}
-      className={clsx(
-        "bg-green-600 border border-white text-white px-4 py-1 rounded hover:bg-green-700 transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed",
-        className
-      )}
-    >
-      {children}
-    </button>
-  );
+    return (
+        <button
+            type={type}
+            onClick={onClick}
+            disabled={disabled}
+            className={clsx(
+                "bg-green-600 border text-white px-4 py-1 rounded hover:bg-green-400 transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed",
+                className
+            )}
+        >
+            {children}
+        </button>
+    );
 };
 
 export const LoaderButton: React.FC<LoaderButton> = ({
@@ -46,6 +46,7 @@ export const LoaderButton: React.FC<LoaderButton> = ({
   loading = false,
   text,
 }) => {
+<<<<<<< HEAD
   return (
     <DefaultButton
       onClick={onClick}
@@ -65,3 +66,11 @@ export const LoaderButton: React.FC<LoaderButton> = ({
     </DefaultButton>
   );
 };
+=======
+    return (
+        <DefaultButton onClick={onClick} type={type} className={`h-10 flex items-center justify-center ${className}`} disabled={loading}>
+            {loading ? <SpinnerLoader size={10} /> : text}
+        </DefaultButton>
+    )
+}
+>>>>>>> 7b599fd9041157a54e15a34eddf2af2e2da2f8ca
