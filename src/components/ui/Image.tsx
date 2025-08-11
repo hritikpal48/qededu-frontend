@@ -1,12 +1,15 @@
 'use client';
 
-import { StaticImport } from 'next/dist/shared/lib/get-img-props';
 import Image, { ImageProps } from 'next/image';
 import { useEffect, useState } from 'react';
 
 interface CustomImageProps extends ImageProps {
   key?: string;
 }
+
+const customLoader = ({ src }: { src: string }) => {
+  return src.startsWith("http") ? src : `${src}`;
+};
 
 const isValidImageSrc = (src: string): boolean => {
   // Trim trailing whitespace
@@ -29,7 +32,7 @@ const isValidImageSrc = (src: string): boolean => {
 const NextImage = ({ src, alt, ...rest }: CustomImageProps) => {
   const fallbackSrc = '/images/placeholderImage.png';
 
-  const [imgSrc, setImgSrc] = useState<string | StaticImport>(() => {
+  const [imgSrc, setImgSrc] = useState(() => {
     if (typeof src === 'string' && isValidImageSrc(src)) {
       return src.trim();
     }
@@ -37,15 +40,10 @@ const NextImage = ({ src, alt, ...rest }: CustomImageProps) => {
   });
 
   useEffect(() => {
-    if (typeof src === 'string') {
-      if (typeof src === 'string' && isValidImageSrc(src)) {
-        setImgSrc(src.trim());
-      } else {
-        setImgSrc(fallbackSrc);
-      }
-    }
-    else {
-      setImgSrc(src);
+    if (typeof src === 'string' && isValidImageSrc(src)) {
+      setImgSrc(src.trim());
+    } else {
+      setImgSrc(fallbackSrc);
     }
   }, [src]);
 
@@ -61,6 +59,7 @@ const NextImage = ({ src, alt, ...rest }: CustomImageProps) => {
       src={imgSrc}
       alt={alt}
       onError={handleError}
+      loader={customLoader}
     />
   );
 };
