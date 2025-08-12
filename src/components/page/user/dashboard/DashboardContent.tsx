@@ -399,6 +399,14 @@ export default function DashboardContent({
               />
             </div>
             <div>
+              <label>Aadhar Number</label>
+              <input
+                type="text"
+                placeholder="Enter Aadhar Number"
+                className="border border-[#dee2e6] rounded-[8px] px-[15px] py-[12px] w-full mt-2"
+              />
+            </div>
+            <div>
               <label>Gender</label>
               <select className="border border-[#dee2e6] rounded-[8px] px-[15px] py-[12px] w-full mt-2">
                 <option value="">Select Gender</option>
