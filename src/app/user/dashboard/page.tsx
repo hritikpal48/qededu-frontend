@@ -14,7 +14,7 @@ export default function DashboardPage() {
   });
 
   return (
-    <main className="py-20 flex flex-col md:flex-row max-w-7xl mx-auto">
+    <main className="md:py-20 py-10 flex flex-col md:flex-row max-w-7xl mx-auto">
       <Sidebar
         activeTab={activeTab}
         onTabChange={setActiveTab}

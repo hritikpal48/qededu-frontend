@@ -58,7 +58,7 @@ export default function Sidebar({
         <p className="text-lg text-gray-500 ">{user.email}</p>
       </div>
 
-      <nav className="space-y-2">
+      <nav className="space-y-2 md:block flex overflow-auto flex-nowrap text-nowrap gap-3">
         {tabs.map((tab) => (
           <button
             key={tab.key}
