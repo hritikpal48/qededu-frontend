@@ -49,9 +49,9 @@ const Header = () => {
         {/* Logo */}
         <Link href="/" className="flex items-center space-x-2">
           <div className="text-white font-bold text-2xl flex items-center">
-            <span className="text-blue-700 text-3xl font-extrabold">Q</span>
-            <span className="text-yellow-400 text-3xl font-extrabold">E</span>
-            <span className="text-green-400 text-3xl font-extrabold">D</span>
+            <span className="text-blue-700 text-3xl font-bold">Q</span>
+            <span className="text-yellow-400 text-3xl font-bold">E</span>
+            <span className="text-green-400 text-3xl font-bold">D</span>
             <span className="ml-2 text-white">Edu</span>
           </div>
         </Link>
@@ -74,12 +74,12 @@ const Header = () => {
           {!isLoggedIn ? (
             <>
               <Link href="/auth/login">
-                <button className="border border-white text-white px-4 py-1 rounded hover:bg-white hover:text-black transition cursor-pointer">
+                <button className="border border-white text-white px-4 py-1 rounded hover:bg-white hover:text-black transition cursor-pointer text-[14px] md:text-[16px]">
                   Login
                 </button>
               </Link>
               <Link href="/auth/signup">
-                <button className="bg-green-600 px-4 py-1 rounded text-white hover:bg-green-700 transition cursor-pointer">
+                <button className="bg-green-600 px-4 py-1 rounded text-white hover:bg-green-700 transition cursor-pointer text-[14px] md:text-[16px]">
                   Sign Up
                 </button>
               </Link>
@@ -100,20 +100,21 @@ const Header = () => {
             onClick={toggleMenu}
             aria-label="Toggle Menu"
           >
-            <span className="w-6 h-0.5 bg-blue-500" />
-            <span className="w-6 h-0.5 bg-blue-500" />
+            <span className="w-6 h-0.5 bg-white" />
+            <span className="w-6 h-0.5 bg-white" />
+            <span className="w-6 h-0.5 bg-white" />
           </button>
         </div>
       </nav>
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div className="absolute top-16 left-0 w-full bg-black text-white md:hidden flex flex-col space-y-4 p-4 z-50">
+        <div className="absolute top-15 left-0 w-full bg-black text-white md:hidden flex flex-col space-y-4 p-4 z-50">
           {navItems.map(({ name, href }) => (
             <Link
               key={name}
               href={href}
-              className="hover:text-blue-500 uppercase text-sm font-semibold"
+              className="hover:text-green-500 uppercase text-sm font-semibold"
               onClick={() => setIsOpen(false)}
             >
               {name}
@@ -129,7 +130,7 @@ const Header = () => {
                   </button>
                 </Link>
                 <Link href="/auth/signup" className="w-full">
-                  <button className="w-full bg-blue-600 py-2 rounded text-white hover:bg-blue-500 transition">
+                  <button className="w-full bg-green-600 py-2 rounded text-white hover:bg-green-500 transition">
                     Sign Up
                   </button>
                 </Link>

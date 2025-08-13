@@ -100,7 +100,7 @@ const AboutPage = () => {
   return (
     <>
       <section className="max-w-7xl mx-auto py-10 bg-white text-gray-800">
-        <div className="">
+        <div className="px-4">
           <h1 className="text-[30px] font-bold mb-3">About Us</h1>
           <p className="pb-10">
             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam
@@ -148,7 +148,7 @@ const AboutPage = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center mt-10">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center mt-10 px-4 md:px-8">
           {stats.map((item, idx) => (
             <div key={idx} className="py-10 border border-[#ccc] rounded-lg">
               <h3 className="text-[28px] font-semibold text-gray-900">
@@ -271,7 +271,7 @@ const AboutPage = () => {
         </div>
       </section>
 
-      <div className="max-w-7xl mx-auto py-10 ">
+      <div className="max-w-7xl mx-auto py-10 px-4">
         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
           {blogPosts.map((post , key) => (
             <BlogCard blogData={post} key={key} />

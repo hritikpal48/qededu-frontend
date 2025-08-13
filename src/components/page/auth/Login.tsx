@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import PasswordInputField from "@/components/ui/input/PasswordInput";
 import toast from "react-hot-toast";
 import useCookie from "@/hooks/useCookies";
+
 export default function LoginForm() {
     const { setCookie } = useCookie<string>("access_token");
     const {
@@ -86,7 +87,7 @@ export default function LoginForm() {
                     />
                 </div>
                 <p className="text-sm sm:text-base text-center text-gray-500">
-                    Don’t have an account?{" "}
+                    Don't have an account?{" "}
                     <Link
                         href="/auth/signup"
                         className="text-green-600 hover:underline font-medium"

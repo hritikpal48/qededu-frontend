@@ -10,7 +10,7 @@ export default async function Page(props: PageProps) {
   
   return (
     <div className="min-h-screen bg-gray-50">
-      <main className="max-w-7xl mx-auto px-2 py-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <section className="max-w-7xl mx-auto px-2 py-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
         <article className="lg:col-span-2 bg-white shadow-md rounded-lg overflow-hidden">
           <div className="bg-gray-200 h-64 w-full flex items-center justify-center overflow-hidden relative">
             <Image
@@ -252,7 +252,7 @@ export default async function Page(props: PageProps) {
             </ul>
           </div>
         </aside>
-      </main>
+      </section>
     </div>
   );
 }
