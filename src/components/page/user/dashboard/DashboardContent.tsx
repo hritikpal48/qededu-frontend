@@ -1,24 +1,16 @@
 "use client";
 
-<<<<<<< HEAD
 import { useEffect } from "react";
 import { IoShieldCheckmarkSharp } from "react-icons/io5";
 import { MdAccessTime } from "react-icons/md";
 import { useFetchUserProfile } from "@/services/user.service";
-import { FaArrowDown, FaUpload } from "react-icons/fa";
+import { FaUpload, FaRegEye } from "react-icons/fa";
 import { FaArrowDownLong, FaArrowRightLong } from "react-icons/fa6";
 import { IoMdRefresh } from "react-icons/io";
-=======
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { FaArrowDown, FaRegEye, FaUpload } from "react-icons/fa";
-import { FaArrowDownLong, FaArrowRightLong } from "react-icons/fa6";
-import { IoMdRefresh } from "react-icons/io";
-import { IoShieldCheckmarkSharp } from "react-icons/io5";
-import { MdAccessTime } from "react-icons/md";
 import placeholderimage from "../../../../../public/images/placeholderImage.png";
->>>>>>> 517095bb465b98282f25504d42808b68775aff85
 
 const customLoader = ({ src }: { src: string }) => {
   return src.startsWith("http") ? src : `${src}`;
@@ -55,8 +47,7 @@ export default function DashboardContent({
   formData,
   setFormData,
 }: DashboardContentProps) {
-<<<<<<< HEAD
-  const { data: userProfile, isLoading, error } = useFetchUserProfile();
+  const { data: userProfile } = useFetchUserProfile();
 
   useEffect(() => {
     if (userProfile) {
@@ -71,13 +62,8 @@ export default function DashboardContent({
       console.log("userProfile", userProfile);
     }
   }, [userProfile, setFormData]);
-  if (isLoading) return <p>Loading...</p>;
-  if (error)
-    return <div className="p-6 text-red-500">Failed to fetch profile.</div>;
 
-=======
   const [activeSubTab, setActiveSubTab] = useState<"buy" | "sell">("buy");
->>>>>>> 517095bb465b98282f25504d42808b68775aff85
   return (
     <section className="flex-1 p-6">
       <div className="bg-[#d1efcf] border border-[#badbb8] text-green-700 px-4 py-3 rounded mb-6 text-sm lg:flex justify-between items-center">
@@ -727,7 +713,7 @@ export default function DashboardContent({
                           width={24}
                           height={24}
                           className="rounded-sm"
-                          loader={customLoader}
+                          // loader={customLoader}
                         />
                         <Link
                           href="/"

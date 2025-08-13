@@ -1,16 +1,19 @@
-'use client';
+"use client";
 
-import DashboardContent from '@/components/page/user/dashboard/DashboardContent';
-import Sidebar from '@/components/page/user/dashboard/Sidebar';
-import { useState } from 'react';
+import DashboardContent from "@/components/page/user/dashboard/DashboardContent";
+import Sidebar from "@/components/page/user/dashboard/Sidebar";
+import { useState } from "react";
 
 export default function DashboardPage() {
-  const [activeTab, setActiveTab] = useState<'profile' | 'portfolio' | 'transactions' | 'external'>('profile');
+  const [activeTab, setActiveTab] = useState<
+    "profile" | "portfolio" | "transactions" | "external" | "myshare" | "kyc"
+  >("profile");
+
   const [formData, setFormData] = useState({
-    fullName: 'Santosh Kumar',
-    email: 'santosh.asvayuk@gmail.com',
-    dob: '',
-    phone: '+91 7854213265',
+    fullName: "Santosh Kumar",
+    email: "santosh.asvayuk@gmail.com",
+    dob: "",
+    phone: "+91 7854213265",
   });
 
   return (
@@ -18,7 +21,7 @@ export default function DashboardPage() {
       <Sidebar
         activeTab={activeTab}
         onTabChange={setActiveTab}
-        user={{ name: formData.fullName, email: formData.email }}
+        // user={{ name: formData.fullName, email: formData.email }}
       />
       <DashboardContent
         activeTab={activeTab}

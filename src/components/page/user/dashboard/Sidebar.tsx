@@ -12,13 +12,26 @@ import {
   FaExchangeAlt,
 } from "react-icons/fa";
 import userImg from "../../../../../public/images/user.png";
+import { GrDocumentTransfer } from "react-icons/gr";
+import { CgWebsite } from "react-icons/cg"; // ✅ added
+import { TbUserScan } from "react-icons/tb"; // ✅ added
+import { LiaListUlSolid } from "react-icons/lia"; // ✅ added
+import { BiTransfer } from "react-icons/bi"; // ✅ added
+import { FaRegUserCircle } from "react-icons/fa";
 import {
   useUpdateUserAvatar,
   useFetchUserProfile,
 } from "@/services/user.service";
 import toast from "react-hot-toast";
 import { FiEdit } from "react-icons/fi";
-type TabKey = "profile" | "portfolio" | "transactions" | "external";
+
+type TabKey =
+  | "profile"
+  | "portfolio"
+  | "transactions"
+  | "kyc"
+  | "myshare"
+  | "external";
 
 type CropArea = {
   x: number;
@@ -98,6 +111,7 @@ export default function Sidebar({ activeTab, onTabChange }: SidebarProps) {
     onError,
     onSuccess,
   });
+
   const onCropComplete = useCallback(
     (croppedArea: CropArea, croppedAreaPixels: CropArea) => {
       setCroppedAreaPixels(croppedAreaPixels);
@@ -143,13 +157,13 @@ export default function Sidebar({ activeTab, onTabChange }: SidebarProps) {
     { key: "kyc", label: "KYC", icon: <TbUserScan /> },
     { key: "myshare", label: "My Share", icon: <LiaListUlSolid /> },
     { key: "transactions", label: "Transactions", icon: <BiTransfer /> },
+
     {
       key: "external",
       label: "External Transactions",
       icon: <GrDocumentTransfer />,
     },
   ];
-
   if (isUserLoading) {
     return (
       <aside className="w-full md:w-80 bg-white border-r border-[#efefef] p-6 flex justify-center items-center">
