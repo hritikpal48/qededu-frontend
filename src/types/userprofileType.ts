@@ -1,0 +1,22 @@
+export interface UserProfile {
+  _id: string;
+  fname: string;
+  lname: string;
+  role: number;
+  email: string;
+  countryCode: string;
+  phoneNumber: string;
+  isBlocked: boolean;
+  isEmailVerified: boolean;
+  status: number;
+  createdAt: string;
+  updatedAt: string;
+  expiresIn: string;
+  otp: string;
+  avatar?: string;
+  name?: string;
+}
+
+export interface UpdateAvatarPayload {
+  avatar: File; // rename this property from 'image' to 'avatar'
+}

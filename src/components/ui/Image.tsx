@@ -1,8 +1,9 @@
-'use client';
+"use client";
 
-import { StaticImport } from 'next/dist/shared/lib/get-img-props';
-import Image, { ImageProps } from 'next/image';
-import { useEffect, useState } from 'react';
+import { StaticImport } from "next/dist/shared/lib/get-img-props";
+import Image, { ImageProps } from "next/image";
+import { useEffect, useState } from "react";
+const customLoader = ({ src }: { src: string }) => src;
 
 interface CustomImageProps extends ImageProps {
   key?: string;
@@ -13,13 +14,17 @@ const isValidImageSrc = (src: string): boolean => {
   const trimmed = src.trim();
 
   // Reject if empty, not a string, or contains invalid characters
-  if (!trimmed || /\s/.test(trimmed) || !/\.(jpg|jpeg|png|webp|svg|gif)$/i.test(trimmed)) {
+  if (
+    !trimmed ||
+    /\s/.test(trimmed) ||
+    !/\.(jpg|jpeg|png|webp|svg|gif)$/i.test(trimmed)
+  ) {
     return false;
   }
 
   // Accept relative or absolute URLs
   try {
-    new URL(trimmed, 'http://localhost'); // Local fallback base
+    new URL(trimmed, "http://localhost"); // Local fallback base
     return true;
   } catch {
     return false;
@@ -27,24 +32,23 @@ const isValidImageSrc = (src: string): boolean => {
 };
 
 const NextImage = ({ src, alt, ...rest }: CustomImageProps) => {
-  const fallbackSrc = '/images/placeholderImage.png';
+  const fallbackSrc = "/images/placeholderImage.png";
 
   const [imgSrc, setImgSrc] = useState<string | StaticImport>(() => {
-    if (typeof src === 'string' && isValidImageSrc(src)) {
+    if (typeof src === "string" && isValidImageSrc(src)) {
       return src.trim();
     }
     return fallbackSrc;
   });
 
   useEffect(() => {
-    if (typeof src === 'string') {
-      if (typeof src === 'string' && isValidImageSrc(src)) {
+    if (typeof src === "string") {
+      if (typeof src === "string" && isValidImageSrc(src)) {
         setImgSrc(src.trim());
       } else {
         setImgSrc(fallbackSrc);
       }
-    }
-    else {
+    } else {
       setImgSrc(src);
     }
   }, [src]);
@@ -61,6 +65,7 @@ const NextImage = ({ src, alt, ...rest }: CustomImageProps) => {
       src={imgSrc}
       alt={alt}
       onError={handleError}
+      loader={customLoader}
     />
   );
 };

@@ -24,3 +24,7 @@ body {
   background-position: top center;
 }
 
+.reactEasyCrop_Container + div.flex.justify-between.mt-4 {
+  z-index: 999 !important;
+  position: relative !important;
+}

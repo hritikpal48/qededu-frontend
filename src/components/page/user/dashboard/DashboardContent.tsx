@@ -1,10 +1,12 @@
 "use client";
 
+import { useEffect } from "react";
+import { IoShieldCheckmarkSharp } from "react-icons/io5";
+import { MdAccessTime } from "react-icons/md";
+import { useFetchUserProfile } from "@/services/user.service";
 import { FaArrowDown, FaUpload } from "react-icons/fa";
 import { FaArrowDownLong, FaArrowRightLong } from "react-icons/fa6";
 import { IoMdRefresh } from "react-icons/io";
-import { IoShieldCheckmarkSharp } from "react-icons/io5";
-import { MdAccessTime } from "react-icons/md";
 
 type TabKey = "profile" | "portfolio" | "transactions" | "external";
 
@@ -31,19 +33,34 @@ export default function DashboardContent({
   formData,
   setFormData,
 }: DashboardContentProps) {
+  const { data: userProfile, isLoading, error } = useFetchUserProfile();
+
+  useEffect(() => {
+    if (userProfile) {
+      setFormData({
+        fullName: `${userProfile.fname || ""} ${
+          userProfile.lname || ""
+        }`.trim(),
+        email: userProfile.email || "",
+        dob: "", // no DOB in API
+        phone: userProfile.phoneNumber || "",
+      });
+      console.log("userProfile", userProfile);
+    }
+  }, [userProfile, setFormData]);
+  if (isLoading) return <p>Loading...</p>;
+  if (error)
+    return <div className="p-6 text-red-500">Failed to fetch profile.</div>;
+
   return (
     <section className="flex-1 p-6">
       <div className="bg-[#d1efcf] border border-[#badbb8] text-green-700 px-4 py-3 rounded mb-6 text-sm flex justify-between items-center">
         <div className="flex align-center gap-1">
-          <span>
-            <IoShieldCheckmarkSharp className="mt-1" />
-          </span>
+          <IoShieldCheckmarkSharp className="mt-1" />
           Kindly complete your KYC to continue.
         </div>
         <div className="flex align-center gap-1">
-          <span>
-            <MdAccessTime className="mt-1" />
-          </span>
+          <MdAccessTime className="mt-1" />
           It will only take a few minutes
         </div>
       </div>
