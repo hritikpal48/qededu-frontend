@@ -1,6 +1,5 @@
 "use client";
 
-<<<<<<< HEAD
 import React, { useRef, useState, useCallback, useEffect } from "react";
 import Image from "@/components/ui/Image";
 import Cropper from "react-easy-crop";
@@ -20,25 +19,6 @@ import {
 import toast from "react-hot-toast";
 import { FiEdit } from "react-icons/fi";
 type TabKey = "profile" | "portfolio" | "transactions" | "external";
-=======
-import Image from "next/image";
-import { FaRegUserCircle } from "react-icons/fa";
-import userImg from "../../../../../public/images/user.png";
-import React from "react";
-import { CgWebsite } from "react-icons/cg";
-import { BiTransfer } from "react-icons/bi";
-import { GrDocumentTransfer } from "react-icons/gr";
-import { TbUserScan } from "react-icons/tb";
-import { LiaListUlSolid } from "react-icons/lia";
-
-type TabKey =
-  | "profile"
-  | "portfolio"
-  | "transactions"
-  | "external"
-  | "kyc"
-  | "myshare";
->>>>>>> 517095bb465b98282f25504d42808b68775aff85
 
 type CropArea = {
   x: number;
@@ -180,7 +160,6 @@ export default function Sidebar({ activeTab, onTabChange }: SidebarProps) {
 
   return (
     <aside className="w-full md:w-80 bg-white border-r border-[#efefef] p-6">
-<<<<<<< HEAD
       <div className="flex flex-col items-center mb-6 pb-4 border-b border-[#efefef] relative">
         <div className="relative w-40 h-40">
           <div className="overflow-hidden h-40 w-40 rounded-full group cursor-pointer">
@@ -214,16 +193,6 @@ export default function Sidebar({ activeTab, onTabChange }: SidebarProps) {
             className="hidden"
             accept="image/*"
             onChange={handleImageChange}
-=======
-      <div className="flex flex-col items-center mb-6 pb-4 border-b border-[#efefef]">
-        <div className="w-40 h-40 bg-gray-200 rounded-full mb-3 overflow-hidden">
-          <Image
-            src={userImg}
-            alt="User"
-            width={160}
-            height={160}
-            loader={() => userImg.src}
->>>>>>> 517095bb465b98282f25504d42808b68775aff85
           />
         </div>
 
@@ -233,7 +202,6 @@ export default function Sidebar({ activeTab, onTabChange }: SidebarProps) {
         <p className="text-lg text-gray-500">{user?.email}</p>
       </div>
 
-<<<<<<< HEAD
       {/* Cropper Modal */}
       {showCropper && selectedFile && selectedFileUrl && (
         <div className="fixed inset-0 z-50 bg-black bg-opacity-70 flex items-center justify-center p-4">
@@ -274,27 +242,16 @@ export default function Sidebar({ activeTab, onTabChange }: SidebarProps) {
       )}
 
       <nav className="space-y-2 mt-6">
-=======
-      <nav className="space-y-2 md:block flex overflow-auto flex-nowrap text-nowrap gap-3">
->>>>>>> 517095bb465b98282f25504d42808b68775aff85
         {tabs.map((tab) => (
           <button
             key={tab.key}
             onClick={() => onTabChange(tab.key)}
             className={`flex items-center gap-2 w-full text-left px-3 py-2 cursor-pointer rounded
-<<<<<<< HEAD
               ${
                 activeTab === tab.key
                   ? "bg-gradient-to-r from-[#d1efcf] to-white text-[#000] font-medium text-[16px]"
                   : "hover:bg-gray-50 text-gray-700"
               }`}
-=======
-                ${
-                  activeTab === tab.key
-                    ? "bg-gradient-to-r from-[#d1efcf] to-white text-[#000] font-medium text-[16px]"
-                    : "hover:bg-gray-50 text-gray-700"
-                }`}
->>>>>>> 517095bb465b98282f25504d42808b68775aff85
           >
             <span className="text-[#5d7d5b] text-[18px]">{tab.icon}</span>
             <span>{tab.label}</span>
