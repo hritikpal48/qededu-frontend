@@ -4,6 +4,7 @@ export interface UserProfile {
   lname: string;
   role: number;
   email: string;
+  dob:string;
   countryCode: string;
   phoneNumber: string;
   isBlocked: boolean;
@@ -19,4 +20,12 @@ export interface UserProfile {
 
 export interface UpdateAvatarPayload {
   avatar: File; // rename this property from 'image' to 'avatar'
+}
+
+
+export type updateUserProfileData ={
+    fname: string;
+  lname: string;
+  email: string;
+  dob:string;
 }

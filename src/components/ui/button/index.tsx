@@ -30,8 +30,9 @@ export const DefaultButton: React.FC<ButtonProps> = ({
       onClick={onClick}
       disabled={disabled}
       className={clsx(
-        "bg-green-600 border border-white text-white px-4 py-1 rounded hover:bg-green-700 transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed",
-        className
+        "border border-white px-4 py-1 rounded transition cursor-pointer", // Base styles
+        "disabled:opacity-50 disabled:cursor-not-allowed", // Disabled states
+        className // Custom classes will override
       )}
     >
       {children}
