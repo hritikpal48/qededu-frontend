@@ -1,46 +1,97 @@
+"use client";
+
+import { useForm, SubmitHandler } from "react-hook-form";
+import SelectInput from "@/components/ui/input/SelectInput";
 import { FaArrowDownLong, FaArrowRightLong } from "react-icons/fa6";
 import { IoMdRefresh } from "react-icons/io";
+import TextInput from "@/components/ui/input/TextInput";
+
+type FormValues = {
+  company: string;
+  transactionType: string;
+  fromDate: string;
+  toDate: string;
+};
 
 export default function ExternalTransactionsTab() {
+  const { register, handleSubmit, watch, reset } = useForm<FormValues>({
+    defaultValues: {
+      company: "",
+      transactionType: "",
+      fromDate: "",
+      toDate: "",
+    },
+  });
+
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
+    console.log("Form submitted:", data);
+  };
+
   return (
-    <>
+    <div>
       <h2 className="text-[22px] font-semibold mb-4">External Transactions</h2>
+
       {/* Filters */}
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-4">
-        <input
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-4"
+      >
+        <TextInput
+          name="company"
+          label="Company"
           type="text"
-          placeholder="Company name"
-          className="border border-[#dee2e6] px-3 py-2 rounded w-full text-sm"
+          register={register}
         />
-        <select className="border border-[#dee2e6] px-3 py-2 rounded w-full text-sm text-gray-500">
-          <option>Select Transaction Type</option>
-          <option>Buy</option>
-          <option>Sell</option>
-          <option>Transfer</option>
-        </select>
-        <input
+
+        <SelectInput
+          name="transactionType"
+          label="Transaction Type"
+          value={watch("transactionType")}
+          onChange={(e) => {
+            const value = e.target.value;
+            register("transactionType").onChange({ target: { value } } as any);
+          }}
+          options={["Buy", "Sell", "Transfer"]}
+        />
+
+        <TextInput
+          name="fromDate"
+          label="From Date"
           type="date"
-          placeholder="From Date"
-          className="border border-[#dee2e6] px-3 py-2 rounded w-full text-sm"
+          register={register}
         />
-        <input
+
+        <TextInput
+          name="toDate"
+          label="To Date"
           type="date"
-          placeholder="To Date"
-          className="border border-[#dee2e6] px-3 py-2 rounded w-full text-sm"
+          register={register}
         />
+
         {/* Action buttons */}
-        <div className="flex items-center justify-end gap-2">
-          <button className="bg-green-900 hover:bg-green-800 text-white p-2 rounded cursor-pointer">
+        <div className="flex items-end justify-end gap-2">
+          <button
+            type="submit"
+            className="bg-green-900 hover:bg-green-800 text-white p-2 rounded cursor-pointer"
+          >
             <FaArrowDownLong />
           </button>
-          <button className="bg-green-600 hover:bg-green-500 text-white p-2 rounded cursor-pointer">
+          <button
+            type="button"
+            onClick={() => console.log("Apply filter")}
+            className="bg-green-600 hover:bg-green-500 text-white p-2 rounded cursor-pointer"
+          >
             <FaArrowRightLong />
           </button>
-          <button className="bg-red-600 hover:bg-red-500 text-white p-2 rounded cursor-pointer">
+          <button
+            type="button"
+            onClick={() => reset()}
+            className="bg-red-600 hover:bg-red-500 text-white p-2 rounded cursor-pointer"
+          >
             <IoMdRefresh />
           </button>
         </div>
-      </div>
+      </form>
 
       {/* Table */}
       <div className="overflow-x-auto border-t border-gray-200">
@@ -57,7 +108,6 @@ export default function ExternalTransactionsTab() {
             </tr>
           </thead>
           <tbody>
-            {/* Empty row */}
             <tr className="text-gray-400 text-center">
               <td className="px-4 py-3" colSpan={7}>
                 No data available in table
@@ -81,6 +131,6 @@ export default function ExternalTransactionsTab() {
           ◀
         </button>
       </div>
-    </>
+    </div>
   );
 }

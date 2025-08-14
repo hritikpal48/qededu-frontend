@@ -1,18 +1,27 @@
 "use client";
 
 import TextInput from "@/components/ui/input/TextInput";
+import SelectInput from "@/components/ui/input/SelectInput";
 import Image from "next/image";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { FaUpload } from "react-icons/fa";
+import { FaUpload, FaTimes } from "react-icons/fa";
+import dummyImg from "../../../../../../public/images/dummyImg.jpg";
+import { Country, State } from "country-state-city";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 export default function KycTab() {
   const [isEditMode, setIsEditMode] = useState(false);
   const { register, handleSubmit } = useForm();
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
 
   const onSubmit = (data: any) => {
     console.log(data);
   };
+
+  const customLoader = ({ src }: { src: string }) =>
+    src.startsWith("http") ? src : `${src}`;
 
   // Image states
   const [aadhaarFront, setAadhaarFront] = useState<string | null>(null);
@@ -20,7 +29,7 @@ export default function KycTab() {
   const [panImage, setPanImage] = useState<string | null>(null);
   const [bankProof, setBankProof] = useState<string | null>(null);
 
-  // Form states
+  // Form data
   const [formData, setFormData] = useState({
     fullName: "John Doe",
     aadhaarNumber: "1234 5678 9012",
@@ -44,25 +53,26 @@ export default function KycTab() {
     bankCountry: "India",
   });
 
+  const [selectedCountry, setSelectedCountry] = useState(formData.country);
+  const [selectedState, setSelectedState] = useState(formData.state);
+  const [selectedDob, setSelectedDob] = useState<Date | null>(
+    formData.dob ? new Date(formData.dob) : null
+  );
+
+  const handleInputChange = (name: string, value: string) => {
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
   const handleImageUpload = (
     e: React.ChangeEvent<HTMLInputElement>,
     setImage: any
   ) => {
     const file = e.target.files?.[0];
-    if (file) {
-      setImage(URL.createObjectURL(file));
-    }
+    if (file) setImage(URL.createObjectURL(file));
   };
 
   const handleImageError = (setImage: any) => {
     setImage("/image-not-found.png");
-  };
-
-  const handleInputChange = (name: string, value: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
   };
 
   const UploadBox = ({ label, image, setImage }: any) => (
@@ -82,8 +92,9 @@ export default function KycTab() {
         />
       )}
       <div
-        className="border border-dashed border-gray-300 rounded-md flex items-center justify-center bg-[#F4F5F7]"
+        className="border border-dashed border-gray-300 rounded-md flex items-center justify-center bg-[#F4F5F7] overflow-hidden cursor-pointer"
         style={{ height: "250px" }}
+        onClick={() => image && setPreviewImage(image)}
       >
         {image ? (
           <Image
@@ -93,9 +104,17 @@ export default function KycTab() {
             onError={() => handleImageError(setImage)}
             width={250}
             height={250}
+            loader={customLoader}
           />
         ) : (
-          <span className="text-gray-500">No Image</span>
+          <Image
+            src={dummyImg}
+            alt="no-image"
+            className="h-full object-contain"
+            width={300}
+            height={250}
+            loader={customLoader}
+          />
         )}
       </div>
     </div>
@@ -108,10 +127,10 @@ export default function KycTab() {
         <TextInput
           type={type}
           name={name}
-          value={formData[name]}
-          // onChange={(e) => handleInputChange(name, e.target.value)}
-          className="mt-2"
+          className="mt-1 w-full"
           register={register}
+          value={formData[name]}
+          onChange={(e) => handleInputChange(name, e.target.value)}
         />
       ) : (
         <p className="mt-2">{formData[name] || "-"}</p>
@@ -119,137 +138,232 @@ export default function KycTab() {
     </div>
   );
 
-  const SelectField = ({ label, name, options }: any) => (
+  const SelectField = ({ label, name, options, value, onChange }: any) => (
     <div>
-      <label className="font-bold">{label}</label>
       {isEditMode ? (
-        <select
+        <SelectInput
           name={name}
-          value={formData[name]}
-          // onChange={(e) => handleInputChange(name, e.target.value)}
-          className="border border-[#dee2e6] rounded-[8px] px-[15px] py-[12px] w-full mt-2"
-        >
-          <option value="">Select {label}</option>
-          {options.map((opt: string) => (
-            <option key={opt} value={opt}>
-              {opt}
-            </option>
-          ))}
-        </select>
+          label={label}
+          value={value || formData[name]}
+          onChange={(e) =>
+            onChange
+              ? onChange(e.target.value)
+              : handleInputChange(name, e.target.value)
+          }
+          options={options}
+          className="mt-1"
+        />
       ) : (
-        <p className="mt-2">{formData[name] || "-"}</p>
+        <>
+          <label className="font-bold">{label}</label>
+          <p className="mt-2">{formData[name] || "-"}</p>
+        </>
       )}
     </div>
   );
 
+  // Split full name
+  const firstName = formData.fullName.split(" ")[0];
+  const lastName = formData.fullName.split(" ").slice(1).join(" ");
+
   return (
-    <>
-      <form action="" onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex justify-end mb-4">
-          {isEditMode ? (
-            <>
-              <button
-                onClick={() => setIsEditMode(false)}
-                className="bg-red-700 text-white px-6 py-2 rounded-[5px] hover:bg-red-800 mr-2 cursor-pointer font-semibold"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => setIsEditMode(false)}
-                className="bg-green-600 text-white px-6 py-2 rounded-[5px] hover:bg-green-700 cursor-pointer font-semibold"
-              >
-                Save Changes
-              </button>
-            </>
-          ) : (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <div className="flex justify-end mb-4">
+        {isEditMode ? (
+          <>
             <button
-              onClick={() => setIsEditMode(true)}
+              type="button"
+              onClick={() => setIsEditMode(false)}
+              className="bg-red-700 text-white px-6 py-2 rounded-[5px] hover:bg-red-800 mr-2 cursor-pointer font-semibold"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
               className="bg-green-600 text-white px-6 py-2 rounded-[5px] hover:bg-green-700 cursor-pointer font-semibold"
             >
-              Edit
+              Save Changes
             </button>
+          </>
+        ) : (
+          <button
+            type="button"
+            onClick={() => setIsEditMode(true)}
+            className="bg-green-600 text-white px-6 py-2 rounded-[5px] hover:bg-green-700 cursor-pointer font-semibold"
+          >
+            Edit
+          </button>
+        )}
+      </div>
+
+      {/* Aadhaar Section */}
+      <h2 className="text-[22px] font-semibold mb-4">Aadhaar Details</h2>
+      <div className={`grid ${isEditMode ? "md:grid-cols-2" : "md:grid-cols-3"} gap-4`}>
+        {/* Full Name */}
+        {isEditMode ? (
+          <>
+            <InputField
+              label="First Name"
+              name="firstName"
+              type="text"
+              value={firstName}
+              onChange={(e: any) =>
+                handleInputChange(
+                  "fullName",
+                  e.target.value + (lastName ? " " + lastName : "")
+                )
+              }
+            />
+            <InputField
+              label="Last Name"
+              name="lastName"
+              type="text"
+              value={lastName}
+              onChange={(e: any) =>
+                handleInputChange(
+                  "fullName",
+                  firstName + (e.target.value ? " " + e.target.value : "")
+                )
+              }
+            />
+          </>
+        ) : (
+          <div className="">
+            <label className="font-bold">Full Name</label>
+            <p className="mt-2">{formData.fullName || "-"}</p>
+          </div>
+        )}
+
+        <InputField label="Aadhaar Number" name="aadhaarNumber" />
+        <SelectField label="Gender" name="gender" options={["Male", "Female", "Other"]} />
+
+        {/* Date Picker */}
+        <div className="mt-1">
+          <label className="font-bold">Date of Birth</label>
+          {isEditMode ? (
+            <DatePicker
+              selected={selectedDob}
+              onChange={(date: Date) => {
+                setSelectedDob(date);
+                handleInputChange("dob", date.toISOString().split("T")[0]);
+              }}
+              className="mt-1 border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring focus:border-green-400 w-full"
+              dateFormat="yyyy-MM-dd"
+              placeholderText="Select Date"
+            />
+          ) : (
+            <p className="mt-2">{formData.dob || "-"}</p>
           )}
         </div>
 
-        {/* Aadhaar Section */}
-        <h2 className="text-[22px] font-semibold mb-4">Aadhaar Details</h2>
-        <div
-          className={`grid ${
-            isEditMode ? "md:grid-cols-2" : "md:grid-cols-3"
-          } gap-4`}
-        >
-          <InputField label="Full Name" name="fullName" />
-          <InputField label="Aadhaar Number" name="aadhaarNumber" />
-          <SelectField
-            label="Gender"
-            name="gender"
-            options={["Male", "Female", "Other"]}
-          />
-          <InputField label="Date of Birth" name="dob" type="date" />
-          <InputField label="Address" name="address" />
-          <InputField label="State" name="state" />
-          <InputField label="Pin Code" name="pinCode" />
-          <InputField label="Country" name="country" />
-        </div>
+        <InputField label="Address" name="address" />
 
-        {/* Aadhaar Upload */}
-        <div className="grid md:grid-cols-2 gap-6 mt-6">
-          <UploadBox
-            label="Upload Front Photo"
-            image={aadhaarFront}
-            setImage={setAadhaarFront}
-          />
-          <UploadBox
-            label="Upload Back Photo"
-            image={aadhaarBack}
-            setImage={setAadhaarBack}
-          />
-        </div>
+        {/* Country & State */}
+        <SelectField
+          label="Country"
+          name="country"
+          value={selectedCountry}
+          onChange={(value: string) => {
+            setSelectedCountry(value);
+            setSelectedState("");
+            handleInputChange("country", value);
+          }}
+          options={Country.getAllCountries().map((c) => c.name)}
+        />
+        <SelectField
+          label="State"
+          name="state"
+          value={selectedState}
+          onChange={(value: string) => {
+            setSelectedState(value);
+            handleInputChange("state", value);
+          }}
+          options={
+            selectedCountry
+              ? State.getStatesOfCountry(
+                  Country.getAllCountries().find((c) => c.name === selectedCountry)?.isoCode || ""
+                ).map((s) => s.name)
+              : []
+          }
+        />
+        <InputField label="Pin Code" name="pinCode" />
+      </div>
 
-        {/* PAN Section */}
-        <h2 className="text-[22px] font-semibold mt-10 mb-4">PAN Details</h2>
-        <div
-          className={`grid ${
-            isEditMode ? "md:grid-cols-2" : "md:grid-cols-3"
-          } gap-4`}
-        >
-          <InputField label="PAN Number" name="panNumber" />
-          <InputField label="Full Name" name="panFullName" />
-        </div>
-        <div className="mt-6">
-          <UploadBox
-            label="Upload PAN Image"
-            image={panImage}
-            setImage={setPanImage}
-          />
-        </div>
+      {/* Aadhaar Upload */}
+      <div className="grid md:grid-cols-2 gap-6 mt-6">
+        <UploadBox label="Upload Front Photo" image={aadhaarFront} setImage={setAadhaarFront} />
+        <UploadBox label="Upload Back Photo" image={aadhaarBack} setImage={setAadhaarBack} />
+      </div>
 
-        {/* Bank Section */}
-        <h2 className="text-[22px] font-semibold mt-10 mb-4">Bank Details</h2>
-        <div
-          className={`grid ${
-            isEditMode ? "md:grid-cols-2" : "md:grid-cols-3"
-          } gap-4`}
-        >
-          <InputField label="Account Name" name="accountName" />
-          <InputField label="Account Number" name="accountNumber" />
-          <InputField label="IFSC Code" name="ifsc" />
-          <InputField label="Bank Name" name="bankName" />
-          <InputField label="Branch" name="branch" />
-          <InputField label="Address" name="bankAddress" />
-          <InputField label="Phone" name="phone" />
-          <InputField label="District" name="district" />
-          <InputField label="State" name="bankState" />
-          <InputField label="Country" name="bankCountry" />
+      {/* PAN Section */}
+      <h2 className="text-[22px] font-semibold mt-10 mb-4">PAN Details</h2>
+      <div className={`grid ${isEditMode ? "md:grid-cols-2" : "md:grid-cols-3"} gap-4`}>
+        <InputField label="PAN Number" name="panNumber" />
+        <InputField label="Full Name" name="panFullName" />
+      </div>
+      <div className="mt-6">
+        <UploadBox label="Upload PAN Image" image={panImage} setImage={setPanImage} />
+      </div>
+
+      {/* Bank Section */}
+      <h2 className="text-[22px] font-semibold mt-10 mb-4">Bank Details</h2>
+      <div className={`grid ${isEditMode ? "md:grid-cols-2" : "md:grid-cols-3"} gap-4`}>
+        <InputField label="Account Name" name="accountName" />
+        <InputField label="Account Number" name="accountNumber" />
+        <InputField label="IFSC Code" name="ifsc" />
+        <InputField label="Bank Name" name="bankName" />
+        <InputField label="Branch" name="branch" />
+        <InputField label="Address" name="bankAddress" />
+        <InputField label="Phone" name="phone" />
+        <InputField label="District" name="district" />
+
+        <SelectField
+          label="Country"
+          name="bankCountry"
+          value={formData.bankCountry}
+          onChange={(value: string) => handleInputChange("bankCountry", value)}
+          options={Country.getAllCountries().map((c) => c.name)}
+        />
+        <SelectField
+          label="State"
+          name="bankState"
+          value={formData.bankState}
+          onChange={(value: string) => handleInputChange("bankState", value)}
+          options={
+            formData.bankCountry
+              ? State.getStatesOfCountry(
+                  Country.getAllCountries().find((c) => c.name === formData.bankCountry)?.isoCode || ""
+                ).map((s) => s.name)
+              : []
+          }
+        />
+      </div>
+
+      <div className="mt-6">
+        <UploadBox label="Upload Bank Proof Image" image={bankProof} setImage={setBankProof} />
+      </div>
+
+      {/* Image Preview Modal */}
+      {previewImage && (
+        <div className="fixed inset-0 bg-[#00000075] flex items-center justify-center z-50">
+          <div className="relative max-w-[90%] max-h-[90%] bg-white p-5 rounded-3xl">
+            <button
+              onClick={() => setPreviewImage(null)}
+              className="absolute top-4 right-4 bg-red-600 hover:bg-red-700 text-white p-2 rounded-full shadow-lg cursor-pointer"
+            >
+              <FaTimes size={18} />
+            </button>
+            <Image
+              src={previewImage}
+              alt="Preview"
+              width={600}
+              height={400}
+              className="object-contain"
+              loader={customLoader}
+            />
+          </div>
         </div>
-        <div className="mt-6">
-          <UploadBox
-            label="Upload Bank Proof Image"
-            image={bankProof}
-            setImage={setBankProof}
-          />
-        </div>
-      </form>
-    </>
+      )}
+    </form>
   );
 }

@@ -28,3 +28,8 @@ body {
   z-index: 999 !important;
   position: relative !important;
 }
+
+.react-datepicker-wrapper,
+.react-datepicker__input-container{
+  width: 100% !important;
+}

@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Manrope } from "next/font/google";
 import "./globals.css";
+import "react-datepicker/dist/react-datepicker.css";
 import ReactQueryProvider from "@/providers/ReactQueryProvider";
 import HomeLayout from "@/components/layouts/homelayout/HomeLayout";
 const geistSans = Geist({
@@ -28,7 +29,10 @@ export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) {
+}>) 
+
+
+{
   return (
     <html lang="en">
       <body
