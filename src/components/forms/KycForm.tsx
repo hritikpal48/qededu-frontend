@@ -40,6 +40,9 @@ const validationSchema = z.object({
   bankState: z.string().min(1, "State is required"),
 });
 
+const customLoader = ({ src }: { src: string }) =>
+  src.startsWith("http") ? src : `${src}`;
+
 type FormData = z.infer<typeof validationSchema>;
 
 export default function KycForm() {
@@ -106,7 +109,7 @@ export default function KycForm() {
     onRemove: () => void,
     onUpload: (e: React.ChangeEvent<HTMLInputElement>) => void
   ) => (
-    <div className="bg-white shadow rounded-[10px] p-5 border flex flex-col gap-4">
+    <div className="bg-white shadow rounded-[10px] p-5 border border-[#e9e9e9] flex flex-col gap-4">
       <div className="flex items-center gap-2 font-semibold">
         <span className="p-3 text-[14px] rounded-[10px] bg-green-600 text-white">
           <FaUpload />
@@ -123,6 +126,7 @@ export default function KycForm() {
               fill
               className="object-contain cursor-pointer"
               onClick={() => setPreviewImage(image)}
+              loader={customLoader}
             />
             <button
               type="button"

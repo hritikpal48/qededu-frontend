@@ -42,7 +42,13 @@ export default function ProfileTab({
       {/* Toggle Buttons */}
       <div className="flex justify-end mb-5">
         {isEditMode ? (
-<></>
+          <button
+            type="button"
+            onClick={handleCancel}
+            className="bg-red-700 text-white px-6 py-2 rounded-[5px] hover:bg-red-800 mr-2 font-semibold cursor-pointer"
+          >
+            Cancel
+          </button>
         ) : (
           <button
             type="button"
