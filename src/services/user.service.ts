@@ -29,7 +29,7 @@ const updateUserAvatar = async (data: UpdateAvatarPayload): Promise<void> => {
 
 //update user Profile
 const updateUserProfile = async (payload:updateUserProfileData):Promise<string | undefined>  => {
-  const res = await HttpService.patch("/user/profile", payload);
+  const res = await HttpService.put("/user/profile", payload);
   return res.data.data; // adjust if your API's shape is different
 };
 
@@ -37,7 +37,7 @@ const updateUserProfile = async (payload:updateUserProfileData):Promise<string |
 
 
 // ----------------------
-// Hooks
+// React Query Hooks
 // ----------------------
 export const useFetchUserProfile = () =>
   useQueryHook<UserProfile>({

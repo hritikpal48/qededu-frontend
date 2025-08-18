@@ -5,12 +5,6 @@ import Image from "@/components/ui/Image";
 import Cropper from "react-easy-crop";
 import { getCroppedImg } from "./cropImageHelper";
 import { environmentVariables } from "@/config/image.config";
-import {
-  FaUser,
-  FaClipboardList,
-  FaFileAlt,
-  FaExchangeAlt,
-} from "react-icons/fa";
 import userImg from "../../../../../public/images/user.png";
 import { GrDocumentTransfer } from "react-icons/gr";
 import { CgWebsite } from "react-icons/cg"; // ✅ added
@@ -43,9 +37,11 @@ type CropArea = {
 interface SidebarProps {
   activeTab: TabKey;
   onTabChange: (key: TabKey) => void;
+  isPending: boolean | undefined
+  avatar: string | undefined
 }
 
-export default function Sidebar({ activeTab, onTabChange }: SidebarProps) {
+export default function Sidebar({ activeTab, onTabChange, isPending, avatar }: SidebarProps) {
   // Fetch user profile data using hook
   const {
     data: user,
@@ -180,8 +176,8 @@ export default function Sidebar({ activeTab, onTabChange }: SidebarProps) {
             <Image
               src={
                 preview ||
-                (user?.avatar
-                  ? `${environmentVariables.UPLOAD_URL}/profile/${user.avatar}`
+                (avatar
+                  ? `${environmentVariables.UPLOAD_URL}/profile/${avatar}`
                   : userImg)
               }
               alt="User"

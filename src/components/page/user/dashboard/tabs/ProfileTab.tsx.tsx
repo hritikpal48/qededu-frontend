@@ -1,49 +1,36 @@
 "use client";
 
 import { useState } from "react";
-import { useForm } from "react-hook-form";
-import TextInput from "@/components/ui/input/TextInput";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import Image from "next/image";
-import { FaUpload, FaTimes } from "react-icons/fa";
-import dummyImg from "../../../../../../public/images/dummyImg.jpg";
-import { useFetchUserProfile } from "@/services/user.service";
 import ProfileEditForm from "@/components/forms/ProfileForm";
+import { dateFormat } from "@/utils";
 
-const customLoader = ({ src }: { src: string }) =>
-  src.startsWith("http") ? src : `${src}`;
+type UserProfile = {
+  _id: string;
+  fname?: string;
+  lname?: string;
+  email?: string;
+  phoneNumber?: string;
+  dob?: string; // ISO string
+  avatar?: string;
+};
 
-export default function ProfileTab() {
-  const { data: userProfile } = useFetchUserProfile();
-  
+type Props = {
+  userProfile?: UserProfile;
+  isPending?: boolean;
+  refetchUser?: () => any;
+};
+
+export default function ProfileTab({ userProfile, isPending, refetchUser }: Props) {
   const [isEditMode, setIsEditMode] = useState(false);
 
-  const [previewImage, setPreviewImage] = useState<string | null>(null);
-  const [aadhaarFront, setAadhaarFront] = useState<string | null>(null);
-  const [aadhaarBack, setAadhaarBack] = useState<string | null>(null);
+  const handleCancel = () => setIsEditMode(false);
 
-
-
-
-
-  const handleCancel = () => {
-    // reset(formData);
-    // setSelectedDob(formData.dob ? new Date(formData.dob) : null);
-    setIsEditMode(false);
-  };
-
-
-
-
-
-  // Prepare default values for ProfileEditForm
   const editFormDefaultValues = {
-    fname: userProfile?.fname || "",
-    lname: userProfile?.lname || "",
-    email: userProfile?.email || "",
-    phoneNumber: userProfile?.phoneNumber || "",
-    dob: userProfile?.dob || "",
+    fname: userProfile?.fname ?? "",
+    lname: userProfile?.lname ?? "",
+    email: userProfile?.email ?? "",
+    phoneNumber: userProfile?.phoneNumber ?? "",
+    dob: userProfile?.dob ?? "",
   };
 
   return (
@@ -51,15 +38,13 @@ export default function ProfileTab() {
       {/* Toggle Buttons */}
       <div className="flex justify-end mb-5">
         {isEditMode ? (
-          <>
-            <button
-              type="button"
-              onClick={handleCancel}
-              className="bg-red-700 text-white px-6 py-2 rounded-[5px] hover:bg-red-800 mr-2 font-semibold cursor-pointer"
-            >
-              Cancel
-            </button>
-          </>
+          <button
+            type="button"
+            onClick={handleCancel}
+            className="bg-red-700 text-white px-6 py-2 rounded-[5px] hover:bg-red-800 mr-2 font-semibold cursor-pointer"
+          >
+            Cancel
+          </button>
         ) : (
           <button
             type="button"
@@ -74,30 +59,37 @@ export default function ProfileTab() {
       <h2 className="text-[22px] font-semibold mb-4">My Profile</h2>
 
       {isEditMode ? (
-        <ProfileEditForm 
-          defaultValues={editFormDefaultValues} 
-          onComplete={() => setIsEditMode(false)}
+        <ProfileEditForm
+          defaultValues={editFormDefaultValues}
+          onComplete={() => {
+            setIsEditMode(false);
+            refetchUser?.(); // refresh parent data after update
+          }}
         />
       ) : (
         <div className="grid md:grid-cols-2 gap-4">
           <div>
             <label className="font-bold">Full Name</label>
-            <p className="mt-2">{userProfile?.fname || "-"} {userProfile?.lname || ""}</p>
+            <p className="mt-2">
+              {(userProfile?.fname ?? "-")} {(userProfile?.lname ?? "")}
+            </p>
           </div>
 
           <div>
             <label className="font-bold">Email</label>
-            <p className="mt-2">{userProfile?.email || "-"}</p>
+            <p className="mt-2">{userProfile?.email ?? "-"}</p>
           </div>
 
           <div>
             <label className="font-bold">Date of Birth</label>
-            <p className="mt-2">{userProfile?.dob || "-"}</p>
+            <p className="mt-2">
+              {userProfile?.dob ? dateFormat(userProfile.dob) : "-"}
+            </p>
           </div>
 
           <div>
             <label className="font-bold">Phone Number</label>
-            <p className="mt-2">{userProfile?.phoneNumber || "-"}</p>
+            <p className="mt-2">{userProfile?.phoneNumber ?? "-"}</p>
           </div>
         </div>
       )}

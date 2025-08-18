@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import TextInput from '../ui/input/TextInput';
 import DatePicker from 'react-datepicker';
 import { z } from "zod";
@@ -20,6 +20,12 @@ const validationSchema = z.object({
 type FormData = z.infer<typeof validationSchema>;
 
 const ProfileEditForm = ({ defaultValues, onComplete }: { defaultValues: FormData, onComplete: () => void }) => {
+
+
+
+
+
+
     const onError = (err: any) => {
         const message = err?.response?.data?.message ?? "Update failed";
         toast.error(message);
@@ -51,7 +57,10 @@ const ProfileEditForm = ({ defaultValues, onComplete }: { defaultValues: FormDat
     });
 
     // Convert dob string to Date object for the DatePicker
-    const dobDate = defaultValues.dob ? new Date(defaultValues.dob) : null;
+      const [dobDate, setDobDate] = useState<Date | null>(
+        defaultValues.dob ? new Date(defaultValues.dob) : null
+    );
+
 
     const onSubmit = (data: FormData) => { updateMutate(data) };
 
@@ -88,19 +97,20 @@ const ProfileEditForm = ({ defaultValues, onComplete }: { defaultValues: FormDat
 
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mt-2">Date of Birth</label>
-                    <DatePicker
-                        selected={dobDate}
-                        onChange={(date: Date | null) => {
-                            if (date) {
-                                const dateString = date.toISOString().split('T')[0];
-                                setValue('dob', dateString, { shouldValidate: true });
-                            }
-                        }}
-                        isClearable={false}
-                        className="mt-1 border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring focus:border-green-400 w-full"
-                        dateFormat="yyyy-MM-dd"
-                        placeholderText="Select Date of Birth"
-                    />
+                <DatePicker
+                    selected={dobDate}
+                    onChange={(date: Date | null) => {
+                        setDobDate(date); // Update local state
+                        if (date) {
+                            const dateString = date.toISOString().split('T')[0];
+                            setValue('dob', dateString, { shouldValidate: true });
+                        }
+                    }}
+                    isClearable={false}
+                    className="mt-1 border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring focus:border-green-400 w-full"
+                    dateFormat="yyyy-MM-dd"
+                    placeholderText="Select Date of Birth"
+                />
                     {errors.dob && (
                         <p className="mt-1 text-sm text-red-600">{errors.dob.message}</p>
                     )}
@@ -118,7 +128,7 @@ const ProfileEditForm = ({ defaultValues, onComplete }: { defaultValues: FormDat
                 <div className="md:col-span-2 flex justify-end gap-2 mt-4">
                     <LoaderButton
                         type="button"
-                        text={isLoginPendding ? 'Saving...' : 'Save Changes'}
+                        text='Cancel'
                         onClick={onComplete}
                         className="bg-red-300 hover:bg-gray-400 text-gray-800"
                     />
