@@ -131,7 +131,7 @@ export default function KycForm({ onComplete }: { onComplete: () => void }) {
             />
             <LoaderButton
               type="button"
-              text={<FaTimes />}
+              text="X"
               onClick={onRemove}
               className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full"
             />
@@ -433,7 +433,7 @@ export default function KycForm({ onComplete }: { onComplete: () => void }) {
       {/* Submit Button */}
       <div className="mt-8 flex justify-end gap-3">
         <LoaderButton
-          type="close"
+          type="button"
           text="Cancel"
           className="border border-white transition disabled:opacity-50 disabled:cursor-not-allowed bg-red-700 text-white px-6 py-2 rounded-[5px] hover:bg-red-800 font-semibold cursor-pointer"
         />
@@ -463,7 +463,7 @@ export default function KycForm({ onComplete }: { onComplete: () => void }) {
               className="mx-auto rounded-lg shadow-lg object-contain"
             />
             <LoaderButton
-              type="close"
+              type="button"
               text="Close"
               onClick={() => setPreviewImage(null)}
               className="absolute top-2 right-2 bg-red-500 text-white px-3 py-1 rounded-full"
