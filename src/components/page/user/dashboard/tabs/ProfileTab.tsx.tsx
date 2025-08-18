@@ -41,20 +41,17 @@ export default function ProfileTab({
   return (
     <>
       {/* Toggle Buttons */}
-      <div className="flex justify-end mb-5">
+      <div className="flex justify-between items-center gap-2 mb-5">
+        <h2 className="text-[22px] font-bold">My Profile</h2>
         {!isEditMode && (
-
           <LoaderButton
             type="button"
-            text='Edit'
+            text="Edit"
             onClick={() => setIsEditMode(true)}
             className="bg-green-600 text-white px-6 py-2 rounded-[5px] hover:bg-green-700 font-semibold cursor-pointer"
           />
-
-       )}
+        )}
       </div>
-
-      <h2 className="text-[22px] font-semibold mb-4">My Profile</h2>
 
       {isEditMode ? (
         <ProfileEditForm
