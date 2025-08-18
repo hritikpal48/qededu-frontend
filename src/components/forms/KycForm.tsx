@@ -7,14 +7,14 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import toast from "react-hot-toast";
 
 import TextInput from "../ui/input/TextInput";
 import SelectInput from "../ui/input/SelectInput";
 import { LoaderButton } from "../ui/button";
 
-import { Country, State } from "country-state-city";
+import { Country, State, IState } from "country-state-city";
 
 const validationSchema = z.object({
   firstName: z.string().min(1, "First Name is required"),
@@ -50,6 +50,7 @@ export default function KycForm() {
     register,
     handleSubmit,
     setValue,
+    control,
     formState: { errors },
     reset,
   } = useForm<FormData>({
@@ -69,11 +70,8 @@ export default function KycForm() {
 
   // Country & State options
   const countries = Country.getAllCountries();
-  const [selectedCountry, setSelectedCountry] = useState<string>("");
-  const [states, setStates] = useState<any[]>([]);
-
-  const [selectedBankCountry, setSelectedBankCountry] = useState<string>("");
-  const [bankStates, setBankStates] = useState<any[]>([]);
+  const [states, setStates] = useState<IState[]>([]);
+  const [bankStates, setBankStates] = useState<IState[]>([]);
 
   const onSubmit = (data: FormData) => {
     if (!aadhaarFront || !aadhaarBack || !panImage || !bankImage) {
@@ -87,6 +85,9 @@ export default function KycForm() {
     setAadhaarBack(null);
     setPanImage(null);
     setBankImage(null);
+    setDob(null);
+    setStates([]);
+    setBankStates([]);
   };
 
   const handleImageUpload = (
@@ -166,36 +167,47 @@ export default function KycForm() {
           register={register}
           error={errors.aadhaarNumber}
         />
-        <SelectInput
+
+        <Controller
           name="gender"
-          label="Gender"
-          options={["Male", "Female", "Other"]}
-          register={register}
-          error={errors.gender}
+          control={control}
+          render={({ field }) => (
+            <SelectInput
+              name="gender"
+              label="Gender"
+              value={field.value || ""}
+              onChange={field.onChange}
+              options={["Male", "Female", "Other"]}
+            />
+          )}
         />
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Date of Birth
-          </label>
-          <DatePicker
-            selected={dob}
-            onChange={(date) => {
-              setDob(date);
-              if (date) {
-                setValue("dob", date.toISOString().split("T")[0], {
-                  shouldValidate: true,
-                });
-              }
-            }}
-            dateFormat="yyyy-MM-dd"
-            placeholderText="Select Date"
-            className="mt-1 border border-gray-300 rounded-md px-3 py-2 w-full"
-          />
-          {errors.dob && (
-            <p className="mt-1 text-sm text-red-600">{errors.dob.message}</p>
+        <Controller
+          name="dob"
+          control={control}
+          render={({ field }) => (
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Date of Birth
+              </label>
+              <DatePicker
+                selected={dob}
+                onChange={(date) => {
+                  setDob(date);
+                  if (date) field.onChange(date.toISOString().split("T")[0]);
+                }}
+                dateFormat="yyyy-MM-dd"
+                placeholderText="Select Date"
+                className="mt-1 border border-gray-300 rounded-md px-3 py-2 w-full"
+              />
+              {errors.dob && (
+                <p className="mt-1 text-sm text-red-600">
+                  {errors.dob.message}
+                </p>
+              )}
+            </div>
           )}
-        </div>
+        />
 
         <TextInput
           name="address"
@@ -213,8 +225,9 @@ export default function KycForm() {
             {...register("country")}
             onChange={(e) => {
               const countryCode = e.target.value;
-              setSelectedCountry(countryCode);
+              setValue("country", countryCode, { shouldValidate: true });
               setStates(State.getStatesOfCountry(countryCode));
+              setValue("state", ""); // reset state
             }}
             className="mt-1 border border-gray-300 rounded-md px-3 py-2 w-full"
           >
@@ -364,8 +377,9 @@ export default function KycForm() {
             {...register("bankCountry")}
             onChange={(e) => {
               const countryCode = e.target.value;
-              setSelectedBankCountry(countryCode);
+              setValue("bankCountry", countryCode, { shouldValidate: true });
               setBankStates(State.getStatesOfCountry(countryCode));
+              setValue("bankState", "");
             }}
             className="mt-1 border border-gray-300 rounded-md px-3 py-2 w-full"
           >
@@ -419,7 +433,7 @@ export default function KycForm() {
 
       {/* Submit Button */}
       <div className="mt-8">
-        <LoaderButton type="submit">Submit KYC</LoaderButton>
+        <button type="submit">Submit KYC</button>
       </div>
 
       {/* Fullscreen Image Preview Modal */}
@@ -428,7 +442,10 @@ export default function KycForm() {
           className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50"
           onClick={() => setPreviewImage(null)}
         >
-          <div className="relative max-w-3xl w-full">
+          <div
+            className="relative max-w-3xl w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
             <Image
               src={previewImage}
               alt="Preview"
