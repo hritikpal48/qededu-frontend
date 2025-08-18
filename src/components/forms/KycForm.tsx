@@ -307,6 +307,7 @@ export default function KycForm() {
           error={errors.panFullName}
         />
       </div>
+      
       <div className="mt-4">
         {renderUploadBox(
           "Upload PAN Card",
