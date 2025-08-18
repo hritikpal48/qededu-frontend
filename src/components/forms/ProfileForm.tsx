@@ -140,7 +140,7 @@ const ProfileEditForm = ({
           <LoaderButton
             type="submit"
             text={isLoginPendding ? "Saving..." : "Save Changes"}
-            className="bg-green-600 text-white px-6 py-2 rounded-[5px] hover:bg-green-700 font-semibold cursor-pointer"
+            className="bg-green-600 hover:bg-green-700 text-white disabled:bg-gray-400"
           />
         </div>
       </div>

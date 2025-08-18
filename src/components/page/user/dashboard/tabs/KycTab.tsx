@@ -21,14 +21,13 @@ export default function KycTab() {
   }, []);
 
   const handleCancel = () => setIsEditMode(false);
-    const handleStartKYC = () => setIsEditMode(true);
-
+  const handleStartKYC = () => setIsEditMode(true);
 
   if (isLoading) {
     return <SpinnerLoader />;
   }
 
-// No KYC data exists
+  // No KYC data exists
   if (!kycData) {
     return (
       <div className="text-center py-10">
@@ -37,30 +36,32 @@ export default function KycTab() {
           To buy or sell unlisted shares, pre-IPO shares, ESOP buy and sell,
           please complete your KYC information
         </p>
-        <button
+        <LoaderButton
+          text="Click here to fill KYC"
           type="button"
           onClick={handleStartKYC}
           className="bg-green-600 text-white px-6 py-2 rounded-[5px] hover:bg-green-700 font-semibold cursor-pointer"
-        >
-          Click here to fill KYC
-        </button>
+        />
       </div>
     );
   }
 
-
-    // KYC exists but can't be edited
+  // KYC exists but can't be edited
   if (!canEditKYC(kycData.status)) {
     return (
       <div className="text-center py-10">
         <h2 className="text-[22px] font-bold mb-2">KYC Details</h2>
         <p className="text-gray-700 mb-2">
-          Status: <span className="font-semibold">{getKYCStatusText(kycData.status)}</span>
+          Status:{" "}
+          <span className="font-semibold">
+            {getKYCStatusText(kycData.status)}
+          </span>
         </p>
         <p className="text-gray-500 mb-6">
-          Your KYC is currently being processed. Editing is not available at this time.
+          Your KYC is currently being processed. Editing is not available at
+          this time.
         </p>
-        
+
         {/* Display read-only KYC data here if needed */}
       </div>
     );
@@ -70,29 +71,31 @@ export default function KycTab() {
     <>
       {/* Toggle Buttons */}
       <div className="flex justify-end mb-5">
-              {/* Status Display */}
-      <div className="mb-4">
-        <h2 className="text-[22px] font-bold inline-block mr-4">KYC Status</h2>
-        <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
-          {getKYCStatusText(kycData.status)}
-        </span>
-      </div>
+        <div className="flex justify-between items-center w-[100%]">
+          {/* Status Display */}
+          <div className="">
+            <h2 className="text-[25px] font-bold inline-block mr-4">
+              KYC Status
+            </h2>
+            <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-bold">
+              {getKYCStatusText(kycData.status)}
+            </span>
+          </div>
 
-      {/* Edit Button (only shown when allowed) */}
-      {canEditKYC(kycData.status) && (
-        <div className="flex justify-end mb-5">
-          {!isEditMode&& (
-            <LoaderButton
-              type="button"
-              text='Edit'
-              onClick={() => setIsEditMode(true)}
-              className="bg-green-600 text-white px-6 py-2 rounded-[5px] hover:bg-green-700 font-semibold cursor-pointer"
-            />
-             
+          {/* Edit Button (only shown when allowed) */}
+          {canEditKYC(kycData.status) && (
+            <div className="flex justify-end mb-5">
+              {!isEditMode && (
+                <LoaderButton
+                  type="button"
+                  text="Edit"
+                  onClick={() => setIsEditMode(true)}
+                  className="bg-green-600 text-white px-6 py-2 rounded-[5px] hover:bg-green-700 font-semibold cursor-pointer"
+                />
+              )}
+            </div>
           )}
         </div>
-      )}
- 
       </div>
 
       <h2 className="text-[22px] font-bold mb-4">KYC Details</h2>
