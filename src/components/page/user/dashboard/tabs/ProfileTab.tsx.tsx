@@ -3,6 +3,7 @@
 import { useState } from "react";
 import ProfileEditForm from "@/components/forms/ProfileForm";
 import { dateFormat } from "@/utils";
+import { LoaderButton } from "@/components/ui/button";
 
 type UserProfile = {
   _id: string;
@@ -41,23 +42,16 @@ export default function ProfileTab({
     <>
       {/* Toggle Buttons */}
       <div className="flex justify-end mb-5">
-        {isEditMode ? (
-          <button
+        {!isEditMode && (
+
+          <LoaderButton
             type="button"
-            onClick={handleCancel}
-            className="bg-red-700 text-white px-6 py-2 rounded-[5px] hover:bg-red-800 mr-2 font-semibold cursor-pointer"
-          >
-            Cancel
-          </button>
-        ) : (
-          <button
-            type="button"
+            text='Edit'
             onClick={() => setIsEditMode(true)}
             className="bg-green-600 text-white px-6 py-2 rounded-[5px] hover:bg-green-700 font-semibold cursor-pointer"
-          >
-            Edit
-          </button>
-        )}
+          />
+
+       )}
       </div>
 
       <h2 className="text-[22px] font-semibold mb-4">My Profile</h2>
