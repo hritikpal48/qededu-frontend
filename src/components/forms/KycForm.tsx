@@ -45,7 +45,7 @@ const customLoader = ({ src }: { src: string }) =>
 
 type FormData = z.infer<typeof validationSchema>;
 
-export default function KycForm({onComplete}:{onComplete: () => void;}) {
+export default function KycForm({ onComplete }: { onComplete: () => void }) {
   const {
     register,
     handleSubmit,
@@ -129,13 +129,12 @@ export default function KycForm({onComplete}:{onComplete: () => void;}) {
               onClick={() => setPreviewImage(image)}
               loader={customLoader}
             />
-            <button
+            <LoaderButton
               type="button"
+              text="X"
               onClick={onRemove}
               className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full"
-            >
-              <FaTimes />
-            </button>
+            />
           </>
         ) : (
           <p className="text-gray-400">No Image Uploaded</p>
@@ -432,8 +431,18 @@ export default function KycForm({onComplete}:{onComplete: () => void;}) {
       </div>
 
       {/* Submit Button */}
-      <div className="mt-8">
-        <button type="submit">Submit KYC</button>
+      <div className="mt-8 flex justify-end gap-3">
+        <LoaderButton
+          type="button"
+          text="Cancel"
+          className="border border-white transition disabled:opacity-50 disabled:cursor-not-allowed bg-red-700 text-white px-6 py-2 rounded-[5px] hover:bg-red-800 font-semibold cursor-pointer"
+        />
+        <LoaderButton
+          type="submit"
+          text="Submit KYC"
+          className="border border-white transition disabled:opacity-50 disabled:cursor-not-allowed bg-green-600 text-white px-6 py-2 rounded-[5px] hover:bg-green-700 font-semibold cursor-pointer"
+        />
+        
       </div>
 
       {/* Fullscreen Image Preview Modal */}
@@ -453,13 +462,12 @@ export default function KycForm({onComplete}:{onComplete: () => void;}) {
               height={600}
               className="mx-auto rounded-lg shadow-lg object-contain"
             />
-            <button
+            <LoaderButton
               type="button"
+              text="Close"
               onClick={() => setPreviewImage(null)}
               className="absolute top-2 right-2 bg-red-500 text-white px-3 py-1 rounded-full"
-            >
-              Close
-            </button>
+            />
           </div>
         </div>
       )}
