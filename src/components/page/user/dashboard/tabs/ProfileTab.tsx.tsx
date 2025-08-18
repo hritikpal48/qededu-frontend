@@ -20,7 +20,11 @@ type Props = {
   refetchUser?: () => any;
 };
 
-export default function ProfileTab({ userProfile, isPending, refetchUser }: Props) {
+export default function ProfileTab({
+  userProfile,
+  isPending,
+  refetchUser,
+}: Props) {
   const [isEditMode, setIsEditMode] = useState(false);
 
   const handleCancel = () => setIsEditMode(false);
@@ -38,13 +42,7 @@ export default function ProfileTab({ userProfile, isPending, refetchUser }: Prop
       {/* Toggle Buttons */}
       <div className="flex justify-end mb-5">
         {isEditMode ? (
-          <button
-            type="button"
-            onClick={handleCancel}
-            className="bg-red-700 text-white px-6 py-2 rounded-[5px] hover:bg-red-800 mr-2 font-semibold cursor-pointer"
-          >
-            Cancel
-          </button>
+<></>
         ) : (
           <button
             type="button"
@@ -71,7 +69,7 @@ export default function ProfileTab({ userProfile, isPending, refetchUser }: Prop
           <div>
             <label className="font-bold">Full Name</label>
             <p className="mt-2">
-              {(userProfile?.fname ?? "-")} {(userProfile?.lname ?? "")}
+              {userProfile?.fname ?? "-"} {userProfile?.lname ?? ""}
             </p>
           </div>
 
