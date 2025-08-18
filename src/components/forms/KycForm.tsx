@@ -45,7 +45,7 @@ const customLoader = ({ src }: { src: string }) =>
 
 type FormData = z.infer<typeof validationSchema>;
 
-export default function KycForm() {
+export default function KycForm({onComplete}:{onComplete: () => void;}) {
   const {
     register,
     handleSubmit,
