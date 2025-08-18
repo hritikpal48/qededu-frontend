@@ -4,6 +4,7 @@ import { useState } from "react";
 import KycForm from "@/components/forms/KycForm";
 import Image from "next/image";
 import dummyImg from "../../../../../../public/images/dummyImg.jpg";
+import { LoaderButton } from "@/components/ui/button";
 
 type UserKyc = {
   _id: string;
@@ -35,35 +36,6 @@ export default function KycTab({ userKyc, isPending, refetchKyc }: Props) {
   return (
     <>
       {/* Toggle Buttons */}
-      <div className="flex justify-end mb-5">
-        {isEditMode ? (
-          <>
-            <button
-              type="button"
-              onClick={handleCancel}
-              className="bg-red-700 text-white px-6 py-2 rounded-[5px] hover:bg-red-800 mr-2 font-semibold cursor-pointer"
-            >
-              Cancel
-            </button>
-            <button
-              type="button"
-              onClick={() => setIsEditMode(true)}
-              className="bg-green-600 text-white px-6 py-2 rounded-[5px] hover:bg-green-700 font-semibold cursor-pointer"
-            >
-              Save KYC
-            </button>
-          </>
-        ) : (
-          <button
-            type="button"
-            onClick={() => setIsEditMode(true)}
-            className="bg-green-600 text-white px-6 py-2 rounded-[5px] hover:bg-green-700 font-semibold cursor-pointer"
-          >
-            Edit
-          </button>
-        )}
-      </div>
-
       <h2 className="text-[22px] font-bold mb-4">KYC Details</h2>
 
       {isEditMode ? (
@@ -232,6 +204,33 @@ export default function KycTab({ userKyc, isPending, refetchKyc }: Props) {
           </div>
         </form>
       )}
+
+      <div className="flex justify-end mt-5">
+        {isEditMode ? (
+          <>
+            <LoaderButton
+              type="close"
+              text="Cancel"
+              onClick={handleCancel}
+              className="bg-red-700 text-white px-6 py-2 rounded-[5px] hover:bg-red-800 mr-2 font-semibold cursor-pointer"
+            />
+
+            <LoaderButton
+              type="submit"
+              text="Save KYC"
+              onClick={() => setIsEditMode(true)}
+              className="bg-green-600 text-white px-6 py-2 rounded-[5px] hover:bg-green-700 font-semibold cursor-pointer"
+            />
+          </>
+        ) : (
+          <LoaderButton
+            type="button"
+            text="Edit"
+            onClick={() => setIsEditMode(true)}
+            className="bg-green-600 text-white px-6 py-2 rounded-[5px] hover:bg-green-700 font-semibold cursor-pointer"
+          />
+        )}
+      </div>
     </>
   );
 }

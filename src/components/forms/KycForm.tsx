@@ -64,9 +64,10 @@ export default function KycForm() {
   const [aadhaarBack, setAadhaarBack] = useState<string | null>(null);
   const [panImage, setPanImage] = useState<string | null>(null);
   const [bankImage, setBankImage] = useState<string | null>(null);
-
   // Preview modal state
   const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [isEditMode, setIsEditMode] = useState(true);
+  const handleCancel = () => setIsEditMode(true);
 
   // Country & State options
   const countries = Country.getAllCountries();
@@ -129,13 +130,12 @@ export default function KycForm() {
               onClick={() => setPreviewImage(image)}
               loader={customLoader}
             />
-            <button
+            <LoaderButton
               type="button"
+              text={<FaTimes />}
               onClick={onRemove}
               className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full"
-            >
-              <FaTimes />
-            </button>
+            />
           </>
         ) : (
           <p className="text-gray-400">No Image Uploaded</p>
@@ -431,10 +431,32 @@ export default function KycForm() {
         )}
       </div>
 
-      {/* Submit Button */}
-      <div className="mt-8">
-        <button type="submit">Submit KYC</button>
-      </div>
+      {/* <div className="flex justify-end mt-5">
+        {isEditMode ? (
+          <>
+            <LoaderButton
+              type="close"
+              text="Cancel"
+              onClick={handleCancel}
+              className="bg-red-700 text-white px-6 py-2 rounded-[5px] hover:bg-red-800 mr-2 font-semibold cursor-pointer"
+            />
+
+            <LoaderButton
+              type="submit"
+              text="Save KYC"
+              onClick={() => setIsEditMode(false)}
+              className="bg-green-600 text-white px-6 py-2 rounded-[5px] hover:bg-green-700 font-semibold cursor-pointer"
+            />
+          </>
+        ) : (
+          <LoaderButton
+            type="button"
+            text="Edit"
+            onClick={() => setIsEditMode(false)}
+            className="bg-green-600 text-white px-6 py-2 rounded-[5px] hover:bg-green-700 font-semibold cursor-pointer"
+          />
+        )}
+      </div> */}
 
       {/* Fullscreen Image Preview Modal */}
       {previewImage && (
@@ -453,13 +475,12 @@ export default function KycForm() {
               height={600}
               className="mx-auto rounded-lg shadow-lg object-contain"
             />
-            <button
-              type="button"
+            <LoaderButton
+              type="close"
+              text="Close"
               onClick={() => setPreviewImage(null)}
               className="absolute top-2 right-2 bg-red-500 text-white px-3 py-1 rounded-full"
-            >
-              Close
-            </button>
+            />
           </div>
         </div>
       )}
