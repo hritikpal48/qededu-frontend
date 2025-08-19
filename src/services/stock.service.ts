@@ -6,12 +6,14 @@ import {
   StockData,
 } from "@/types/stock";
 
-const getStockList = async (params: GetStockListApiParams): Promise<StockListApiRespone> => {
-    const res = await HttpService.get('/stock', { params });
-        console.log('dddd', res)
+const getStockList = async (
+  params: GetStockListApiParams
+): Promise<StockListApiRespone> => {
+  const res = await HttpService.get("/stock", { params });
+  console.log("dddd", res);
 
-    return res?.data
-}
+  return res?.data;
+};
 
 const getStockDetails = async (id: string): Promise<StockData> => {
   const res = await HttpService.get(`/stock/${id}`);

@@ -1,20 +1,42 @@
 "use client";
 
 import React from "react";
+import { useForm } from "react-hook-form";
 import {
   FaPhoneAlt,
   FaEnvelope,
   FaMapMarkerAlt,
   FaWhatsapp,
 } from "react-icons/fa";
+import TextInput from "@/components/ui/input/TextInput";
+
+type ContactFormData = {
+  fullName: string;
+  email: string;
+  phone: string;
+  subject: string;
+  message: string;
+};
 
 const Contactpage = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ContactFormData>();
+
+  const onSubmit = (data: ContactFormData) => {
+    console.log("Form submitted:", data);
+  };
+
   return (
     <section className="py-16 px-4 md:px-8 max-w-7xl mx-auto">
       {/* Heading */}
       <div className="text-center mb-12">
         <h2 className="text-4xl font-bold text-gray-800">Let’s Talk</h2>
-        <p className="text-green-600 font-medium mt-2 text-lg">— Get in Touch —</p>
+        <p className="text-green-600 font-medium mt-2 text-lg">
+          — Get in Touch —
+        </p>
         <p className="mt-4 text-gray-600">
           We’re here to answer any questions you may have.
         </p>
@@ -28,41 +50,66 @@ const Contactpage = () => {
             Send Us a Message
           </h3>
           <p className="text-sm text-gray-500 mb-6">
-            Have a question or feedback? Fill out the form and we’ll get back to you.
-            Or drop an email at{" "}
-            <a href="mailto:info@qededu.com" className="text-green-600 underline">
+            Have a question or feedback? Fill out the form and we’ll get back to
+            you. Or drop an email at{" "}
+            <a
+              href="mailto:info@qededu.com"
+              className="text-green-600 underline"
+            >
               info@qededu.com
             </a>
           </p>
 
-          <form className="space-y-5">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-              <input
-                type="text"
-                placeholder="Full Name"
-                className="w-full border border-gray-300 px-4 py-3 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+              <TextInput
+                label="Full Name"
+                name="fullName"
+                register={register}
+                error={errors.fullName}
               />
-              <input
+
+              <TextInput
+                label="Email Address"
+                name="email"
                 type="email"
-                placeholder="Email Address"
-                className="w-full border border-gray-300 px-4 py-3 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+                register={register}
+                error={errors.email}
               />
             </div>
-            <input
+
+            <TextInput
+              label="Mobile Number (WhatsApp)"
+              name="phone"
               type="tel"
-              placeholder="Mobile Number (WhatsApp)"
-              className="w-full border border-gray-300 px-4 py-3 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+              register={register}
+              error={errors.phone}
             />
-            <input
-              type="text"
-              placeholder="Subject"
-              className="w-full border border-gray-300 px-4 py-3 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+
+            <TextInput
+              label="Subject"
+              name="subject"
+              register={register}
+              error={errors.subject}
+              
             />
-            <textarea
-              placeholder="Your Message"
-              rows={5}
-              className="w-full border border-gray-300 px-4 py-3 rounded-md shadow-sm resize-none focus:outline-none focus:ring-2 focus:ring-green-500"
-            />
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Your Message
+              </label>
+              <textarea
+                {...register("message", { required: "Message is required" })}
+                rows={5}
+                className="w-full border border-gray-300 px-4 py-3 rounded-md shadow-sm resize-none focus:outline-none focus:ring-2 focus:ring-green-500"
+              />
+              {errors.message && (
+                <span className="text-red-500 text-sm">
+                  {errors.message.message}
+                </span>
+              )}
+            </div>
+
             <button
               type="submit"
               className="bg-green-600 hover:bg-green-700 transition text-white font-medium py-3 px-6 rounded-md shadow-lg w-full sm:w-auto"
@@ -74,7 +121,9 @@ const Contactpage = () => {
 
         {/* Contact Info */}
         <div className="bg-green-50 p-8 flex flex-col justify-center">
-          <h4 className="text-xl font-semibold text-gray-800 mb-6">Contact Info</h4>
+          <h4 className="text-xl font-semibold text-gray-800 mb-6">
+            Contact Info
+          </h4>
           <div className="space-y-6 text-sm text-gray-700">
             <div className="flex items-start gap-4">
               <FaPhoneAlt className="text-green-500 mt-1" />
