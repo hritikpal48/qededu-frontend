@@ -17,6 +17,14 @@ const uploadScreenshot = async (data: FormData): Promise<any> => {
   return res.data;
 };
 
+const createKyc = async (data:FormData): Promise<any> => {
+  const res = await HttpService.post("/kyc", data,{
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  return res?.data?.data;
+};
+
+
 //update KYC
 const updateKyc = async (data:FormData): Promise<any> => {
   const res = await HttpService.put("/kyc", data,{
@@ -36,5 +44,7 @@ export const useFetchKycDetails = () =>
   });
 
 export const useUpdateKyc = createMutationHook(updateKyc);
+export const useCreateKyc = createMutationHook(createKyc);
+
 
 

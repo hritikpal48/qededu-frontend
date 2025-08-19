@@ -16,6 +16,7 @@ export interface UserProfile {
   otp: string;
   avatar?: string;
   name?: string;
+  kycStatus?: number;
 }
 
 export interface UpdateAvatarPayload {

@@ -12,6 +12,7 @@ export interface AadharDetails {
   address: string;
   pincode: string;
   country: string;
+  state: string;
   aadharFrontImage: string;
   aadharBackImage: string;
 }
@@ -23,8 +24,9 @@ export interface BankDetails {
   branch: string;
   phone: string;
   address: string;
-  district: string;
   country: string;
+  state: string;
+  city: string;
   bankImage: string;
 }
 export interface PanDetails {

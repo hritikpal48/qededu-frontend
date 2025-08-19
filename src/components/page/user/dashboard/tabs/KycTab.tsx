@@ -1,13 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import KycForm from "@/components/forms/KycForm";
+import KycEditForm from "@/components/forms/KycEditForm";
+import KycCreateForm from "@/components/forms/KycCreateForm";
 import Image from "next/image";
 import dummyImg from "../../../../../../public/images/dummyImg.jpg";
 import { useFetchKycDetails } from "@/services/kyc.service";
 import SpinnerLoader from "@/components/ui/loader/SpinerLoader";
-import { canEditKYC, getKYCStatusText } from "@/utils";
+import { canEditKYC, getKYCStatusClasses, getKYCStatusText } from "@/utils";
 import { LoaderButton } from "@/components/ui/button";
+import { environmentVariables } from "@/config/app.config";
 
 const customLoader = ({ src }: { src: string }) =>
   src.startsWith("http") ? src : `${src}`;
@@ -15,10 +17,10 @@ const customLoader = ({ src }: { src: string }) =>
 export default function KycTab() {
   const [isEditMode, setIsEditMode] = useState(false);
   const { data: kycData, isLoading, refetch } = useFetchKycDetails();
-
-  useEffect(() => {
-    refetch();
-  }, []);
+  console.log('kycData', kycData)
+  // useEffect(() => {
+  //   refetch();
+  // }, []);
 
   const handleCancel = () => setIsEditMode(false);
   const handleStartKYC = () => setIsEditMode(true);
@@ -28,44 +30,41 @@ export default function KycTab() {
   }
 
   // No KYC data exists
-  if (!kycData) {
-    return (
-      <div className="text-center py-10">
-        <h2 className="text-[22px] font-bold mb-4">KYC Details</h2>
-        <p className="text-gray-500 mb-6">
-          To buy or sell unlisted shares, pre-IPO shares, ESOP buy and sell,
-          please complete your KYC information
-        </p>
-        <LoaderButton
-          text="Click here to fill KYC"
-          type="button"
-          onClick={handleStartKYC}
-          className="bg-green-600 text-white px-6 py-2 rounded-[5px] hover:bg-green-700 font-semibold cursor-pointer"
+if (!kycData) {
+  return (
+    <div>
+      {/* Agar edit mode off hai tabhi ye show hoga */}
+      {!isEditMode && (
+        <div className="text-center py-10">
+          <h2 className="text-[22px] font-bold mb-4">KYC Details</h2>
+          <p className="text-gray-500 mb-6">
+            To buy or sell unlisted shares, pre-IPO shares, ESOP buy and sell,
+            please complete your KYC information
+          </p>
+          <LoaderButton
+            text="Click here to fill KYC"
+            type="button"
+            onClick={handleStartKYC}
+            className="bg-green-600 text-white px-6 py-2 rounded-[5px] hover:bg-green-700 font-semibold cursor-pointer"
+          />
+        </div>
+      )}
+
+      {/* Agar edit mode true hai to sirf form dikhega */}
+      {isEditMode && (
+        <KycCreateForm
+          onComplete={() => {
+            setIsEditMode(false);
+            refetch(); // KYC data refresh karega
+          }}
         />
-      </div>
-    );
-  }
+      )}
+    </div>
+  );
+}
 
-  // KYC exists but can't be edited
-  if (!canEditKYC(kycData.status)) {
-    return (
-      <div className="text-center py-10">
-        <h2 className="text-[22px] font-bold mb-2">KYC Details</h2>
-        <p className="text-gray-700 mb-2">
-          Status:{" "}
-          <span className="font-semibold">
-            {getKYCStatusText(kycData.status)}
-          </span>
-        </p>
-        <p className="text-gray-500 mb-6">
-          Your KYC is currently being processed. Editing is not available at
-          this time.
-        </p>
 
-        {/* Display read-only KYC data here if needed */}
-      </div>
-    );
-  }
+
 
   return (
     <>
@@ -73,14 +72,19 @@ export default function KycTab() {
       <div className="flex justify-end mb-5">
         <div className="flex justify-between items-center w-[100%]">
           {/* Status Display */}
-          <div className="">
-            <h2 className="text-[25px] font-bold inline-block mr-4">
-              KYC Status
-            </h2>
-            <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-bold">
-              {getKYCStatusText(kycData.status)}
-            </span>
-          </div>
+
+          {!isEditMode && (
+            <div>
+              <h2 className="text-[25px] font-bold inline-block mr-4">
+                KYC Status
+              </h2>
+              <span
+                className={`${getKYCStatusClasses(kycData.status)} px-3 py-1 rounded-full text-sm font-bold`}
+              >
+                {getKYCStatusText(kycData.status)}
+              </span>
+            </div>
+          )}
 
           {/* Edit Button (only shown when allowed) */}
           {canEditKYC(kycData.status) && (
@@ -98,10 +102,18 @@ export default function KycTab() {
         </div>
       </div>
 
-      <h2 className="text-[22px] font-bold mb-4">KYC Details</h2>
+               {!isEditMode && (
+ <h2 className="text-[22px] font-bold mb-4">KYC Details</h2>  )}
 
       {isEditMode ? (
-        <KycForm onComplete={() => setIsEditMode(false)} />
+        // Use KycEditForm when data exists and in edit mode
+      <KycEditForm
+  defaultValues={kycData}
+  onComplete={() => {
+    setIsEditMode(false);
+    refetch(); // Edit ke baad latest KYC data fetch karega
+  }}
+/>
       ) : (
         <>
           {/* Aadhaar Section */}
@@ -143,6 +155,12 @@ export default function KycTab() {
                 {kycData.aadharDetails?.country || "N/A"}
               </p>
             </div>
+                        <div>
+              <label className="font-bold">State</label>
+              <p className="mt-1 text-gray-700">
+                {kycData.aadharDetails?.state || "N/A"}
+              </p>
+            </div>
             <div>
               <label className="font-bold">Pin Code</label>
               <p className="mt-1 text-gray-700">
@@ -158,7 +176,7 @@ export default function KycTab() {
               <div className="border border-dashed border-gray-300 rounded-md flex items-center justify-center bg-[#F4F5F7] h-[250px] overflow-hidden">
                 {kycData.aadharDetails?.aadharFrontImage ? (
                   <Image
-                    src={`/uploads/${kycData.aadharDetails.aadharFrontImage}`}
+                    src={`${environmentVariables.UPLOAD_URL}/kyc/${kycData.aadharDetails.aadharFrontImage}`}
                     alt="Front Aadhaar"
                     width={300}
                     height={250}
@@ -182,7 +200,7 @@ export default function KycTab() {
               <div className="border border-dashed border-gray-300 rounded-md flex items-center justify-center bg-[#F4F5F7] h-[250px] overflow-hidden">
                 {kycData.aadharDetails?.aadharBackImage ? (
                   <Image
-                    src={`/uploads/${kycData.aadharDetails.aadharBackImage}`}
+                    src={`${environmentVariables.UPLOAD_URL}/kyc/${kycData.aadharDetails.aadharBackImage}`}
                     alt="Back Aadhaar"
                     width={300}
                     height={250}
@@ -224,7 +242,7 @@ export default function KycTab() {
             <div className="border border-dashed border-gray-300 rounded-md flex items-center justify-center bg-[#F4F5F7] h-[250px] overflow-hidden">
               {kycData.panDetails?.panImage ? (
                 <Image
-                  src={`/uploads/${kycData.panDetails.panImage}`}
+                  src={`${environmentVariables.UPLOAD_URL}/kyc/${kycData.panDetails.panImage}`}
                   alt="PAN Card"
                   width={300}
                   height={250}
@@ -289,25 +307,32 @@ export default function KycTab() {
                 {kycData.bankDetails?.address || "N/A"}
               </p>
             </div>
-            <div>
-              <label className="font-bold">District</label>
-              <p className="mt-1 text-gray-700">
-                {kycData.bankDetails?.district || "N/A"}
-              </p>
-            </div>
-            <div>
+                        <div>
               <label className="font-bold">Country</label>
               <p className="mt-1 text-gray-700">
                 {kycData.bankDetails?.country || "N/A"}
               </p>
             </div>
+                                    <div>
+              <label className="font-bold">State</label>
+              <p className="mt-1 text-gray-700">
+                {kycData.bankDetails?.state || "N/A"}
+              </p>
+            </div>
+            <div>
+              <label className="font-bold">City</label>
+              <p className="mt-1 text-gray-700">
+                {kycData.bankDetails?.city || "N/A"}
+              </p>
+            </div>
+
           </div>
           <div className="mt-6 bg-white shadow rounded-[10px] p-5 border border-[#e9e9e9] flex flex-col gap-4">
             <label className="font-bold">Bank Proof Image</label>
             <div className="border border-dashed border-gray-300 rounded-md flex items-center justify-center bg-[#F4F5F7] h-[250px] overflow-hidden">
               {kycData.bankDetails?.bankImage ? (
                 <Image
-                  src={`/uploads/${kycData.bankDetails.bankImage}`}
+                  src={`${environmentVariables.UPLOAD_URL}/kyc/${kycData.bankDetails.bankImage}`}
                   alt="Bank Proof"
                   width={300}
                   height={250}

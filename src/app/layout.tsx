@@ -38,13 +38,13 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${manrope.variable} antialiased`}
       >
-        <Suspense fallback={<div>Loading sidebar...</div>}>
+        {/* <Suspense fallback={<div>Loading sidebar...</div>}> */}
           <ReactQueryProvider>
             <HomeLayout>
               {children}
             </HomeLayout>
           </ReactQueryProvider>
-        </Suspense>
+        {/* </Suspense> */}
       </body>
     </html>
   );
