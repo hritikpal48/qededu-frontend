@@ -362,13 +362,15 @@ export default function KycCreateForm({ onComplete }: KycCreateFormProps) {
                             label="Country"
                             value={field.value ?? ""}
                             onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                                const countryCode = e.target.value;
-                                field.onChange(countryCode);
-                                setStates(State.getStatesOfCountry(countryCode));
-                                setValue("kycData.aadharDetails.state", "");
+                                const countryName = e.target.value;
+                                field.onChange(countryName); // Save country name
+                                const selectedCountry = countries.find(c => c.name === countryName);
+                                if (selectedCountry) {
+                                    setStates(State.getStatesOfCountry(selectedCountry.isoCode));
+                                    setValue("kycData.aadharDetails.state", "");
+                                }
                             }}
                             options={countries.map(c => c.name)}
-                            valueMap={countries.reduce((acc, c) => ({ ...acc, [c.name]: c.isoCode }), {})}
                             error={errors.kycData?.aadharDetails?.country}
                         />
                     )}
@@ -382,9 +384,11 @@ export default function KycCreateForm({ onComplete }: KycCreateFormProps) {
                             name={field.name}
                             label="State"
                             value={field.value ?? ""}
-                            onChange={field.onChange}
+                            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                                const stateName = e.target.value;
+                                field.onChange(stateName); // Save state name
+                            }}
                             options={states.map(s => s.name)}
-                            valueMap={states.reduce((acc, c) => ({ ...acc, [c.name]: c.isoCode }), {})}
                             error={errors.kycData?.aadharDetails?.state}
                             disabled={!states.length}
                         />
@@ -494,8 +498,6 @@ export default function KycCreateForm({ onComplete }: KycCreateFormProps) {
                     error={errors.kycData?.bankDetails?.address}
                 />
 
-
-
                 <Controller
                     name="kycData.bankDetails.country"
                     control={control}
@@ -505,53 +507,52 @@ export default function KycCreateForm({ onComplete }: KycCreateFormProps) {
                             label="Country"
                             value={field.value ?? ""}
                             onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                                const countryCode = e.target.value;
-                                field.onChange(countryCode);
-                                setBankStates(State.getStatesOfCountry(countryCode));
-                                setValue("kycData.bankDetails.state", "");
+                                const countryName = e.target.value;
+                                field.onChange(countryName); // Save country name
+                                const selectedCountry = countries.find(c => c.name === countryName);
+                                if (selectedCountry) {
+                                    setBankStates(State.getStatesOfCountry(selectedCountry.isoCode));
+                                    setValue("kycData.bankDetails.state", "");
+                                    setBankCities([]);
+                                    setValue("kycData.bankDetails.city", "");
+                                }
                             }}
                             options={countries.map(c => c.name)}
-                            valueMap={countries.reduce((acc, c) => ({ ...acc, [c.name]: c.isoCode }), {})}
                             error={errors.kycData?.bankDetails?.country}
                         />
                     )}
                 />
 
                 <Controller
-                name="kycData.bankDetails.state"
-                control={control}
-                render={({ field }) => {
-                    const stateOptions = bankStates.map(s => ({ label: s.name, value: s.isoCode, countryCode: (s as any).countryCode ?? (s as any).countryIsoCode }));
-
-                    return (
-                    <SelectInput
-                        name={field.name}
-                        label="State"
-                        value={field.value ?? ""}
-                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                        const stateIso = e.target.value; // isoCode
-                        field.onChange(stateIso);
-                        const selectedState = bankStates.find(s => s.isoCode === stateIso) as any | undefined;
-                        if (selectedState) {
-                            const countryIso = selectedState.countryCode ?? selectedState.countryIsoCode ?? selectedState.country;
-                            const citiesList = City.getCitiesOfState(countryIso, stateIso) || [];
-                            setBankCities(citiesList);
-                            setValue("kycData.bankDetails.city", "");
-                        } else {
-                            setBankCities([]);
-                            setValue("kycData.bankDetails.city", "");
-                        }
-                        }}
-                        options={stateOptions.map(o => o.label)}
-                        valueMap={stateOptions.reduce((acc, o) => ({ ...acc, [o.label]: o.value }), {})}
-                        error={errors.kycData?.bankDetails?.state}
-                        disabled={!stateOptions.length}
-                    />
-                    );
-                }}
+                    name="kycData.bankDetails.state"
+                    control={control}
+                    render={({ field }) => (
+                        <SelectInput
+                            name={field.name}
+                            label="State"
+                            value={field.value ?? ""}
+                            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                                const stateName = e.target.value;
+                                field.onChange(stateName); // Save state name
+                                const selectedState = bankStates.find(s => s.name === stateName);
+                                if (selectedState) {
+                                    const selectedCountry = countries.find(c => c.name === watch("kycData.bankDetails.country"));
+                                    if (selectedCountry) {
+                                        const citiesList = City.getCitiesOfState(selectedCountry.isoCode, selectedState.isoCode) || [];
+                                        setBankCities(citiesList);
+                                        setValue("kycData.bankDetails.city", "");
+                                    }
+                                } else {
+                                    setBankCities([]);
+                                    setValue("kycData.bankDetails.city", "");
+                                }
+                            }}
+                            options={bankStates.map(s => s.name)}
+                            error={errors.kycData?.bankDetails?.state}
+                            disabled={!bankStates.length}
+                        />
+                    )}
                 />
-
-
 
                 <Controller
                     name="kycData.bankDetails.city"
@@ -561,14 +562,16 @@ export default function KycCreateForm({ onComplete }: KycCreateFormProps) {
                             name={field.name}
                             label="City"
                             value={field.value ?? ""}
-                            onChange={field.onChange}
+                            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                                const cityName = e.target.value;
+                                field.onChange(cityName); // Save city name
+                            }}
                             options={bankCities.map(c => c.name)}
                             error={errors.kycData?.bankDetails?.city}
                             disabled={!bankCities.length}
                         />
                     )}
                 />
-
             </div>
 
             {/* Bank Proof Upload */}

@@ -23,7 +23,7 @@ type Props = {
 
 export default function ProfileTab({
   userProfile,
-  isPending,
+  isPending = false,
   refetchUser,
 }: Props) {
   const [isEditMode, setIsEditMode] = useState(false);
@@ -38,12 +38,19 @@ export default function ProfileTab({
     dob: userProfile?.dob ?? "",
   };
 
+  // Skeleton component (small helper to keep JSX tidy)
+  const Skeleton = ({ className = "" }: { className?: string }) => (
+    <div className={`bg-gray-200 animate-pulse rounded ${className}`} />
+  );
+
   return (
     <>
       {/* Toggle Buttons */}
       <div className="flex justify-between items-center gap-2 mb-5">
         <h2 className="text-[22px] font-bold">My Profile</h2>
-        {!isEditMode && (
+
+        {/* Hide edit button while loading */}
+        {!isPending && !isEditMode && (
           <LoaderButton
             type="button"
             text="Edit"
@@ -51,9 +58,45 @@ export default function ProfileTab({
             className="bg-green-600 text-white px-6 py-2 rounded-[5px] hover:bg-green-700 font-semibold cursor-pointer"
           />
         )}
+
+        {/* When pending, show small skeleton instead of button to avoid layout shift */}
+        {isPending && <Skeleton className="h-8 w-24" />}
       </div>
 
-      {isEditMode ? (
+      {/* If loading, show skeleton placeholders first */}
+      {isPending ? (
+        <div className="grid md:grid-cols-2 gap-4">
+          <div>
+            <label className="font-bold">Full Name</label>
+            <div className="mt-2">
+              <div className="h-7 w-40 bg-gray-200 animate-pulse rounded mt-3"></div>
+              <div className="h-5 w-56 bg-gray-200 animate-pulse rounded mt-2"></div>
+            </div>
+          </div>
+
+          <div>
+            <label className="font-bold">Email</label>
+            <div className="mt-2">
+              <div className="h-7 w-56 bg-gray-200 animate-pulse rounded mt-3"></div>
+              <div className="h-5 w-40 bg-gray-200 animate-pulse rounded mt-2"></div>
+            </div>
+          </div>
+
+          <div>
+            <label className="font-bold">Date of Birth</label>
+            <div className="mt-2">
+              <div className="h-7 w-40 bg-gray-200 animate-pulse rounded mt-3"></div>
+            </div>
+          </div>
+
+          <div>
+            <label className="font-bold">Phone Number</label>
+            <div className="mt-2">
+              <div className="h-7 w-48 bg-gray-200 animate-pulse rounded mt-3"></div>
+            </div>
+          </div>
+        </div>
+      ) : isEditMode ? (
         <ProfileEditForm
           defaultValues={editFormDefaultValues}
           onComplete={() => {

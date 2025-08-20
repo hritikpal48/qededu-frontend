@@ -27,6 +27,6 @@ export interface UpdateAvatarPayload {
 export type updateUserProfileData ={
     fname: string;
   lname: string;
-  email: string;
+  // email: string;
   dob:string;
 }

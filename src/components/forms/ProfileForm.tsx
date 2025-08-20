@@ -65,9 +65,10 @@ const ProfileEditForm = ({
     defaultValues.dob ? new Date(defaultValues.dob) : null
   );
 
-  const onSubmit = (data: FormData) => {
-    updateMutate(data);
-  };
+const onSubmit = (data: FormData) => {
+  const { email, ...cleanData } = data;
+  updateMutate(cleanData);
+};
 
   return (
     <form id="profileEditForm" onSubmit={handleSubmit(onSubmit)}>
