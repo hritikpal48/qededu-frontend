@@ -58,35 +58,36 @@ export default function ImageCropper({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black bg-opacity-70 flex items-center justify-center p-4">
-      <div className="relative w-full max-w-sm h-[350px] bg-white rounded-md p-4 flex flex-col">
-        <Cropper
-          image={imageSrc}
-          crop={crop}
-          zoom={zoom}
-          aspect={1}
-          cropShape="round"
-          onCropChange={setCrop}
-          onZoomChange={setZoom}
-          onCropComplete={onCropCompleteCallback}
-        />
+    <div className="fixed inset-0 z-50 bg-[#000000c9] bg-opacity-70 flex items-center justify-center p-4">
+      <div className="bg-white md:px-10 md:pt-10 md:pb-1  px-2 pt-2 pb-0 rounded-2xl  w-[800px] md:min-h-[500px] min-h-[350px]">
+        <div className="relative h-100 rounded-2xl overflow-hidden">
+          <Cropper
+            image={imageSrc}
+            crop={crop}
+            zoom={zoom}
+            aspect={1}
+            cropShape="round"
+            onCropChange={setCrop}
+            onZoomChange={setZoom}
+            onCropComplete={onCropCompleteCallback}
+          />
+        </div>
 
-        <div className="flex justify-between mt-4">
+        <div className="flex justify-between md:py-4 py-2">
           <LoaderButton
             text="Cancel"
-            className="px-4 py-2 bg-gray-200 rounded"
+            className="transition bg-red-700 text-white px-6 py-2 rounded-[5px] hover:bg-red-800 mr-2 font-semibold cursor-pointer border-0"
             onClick={onCancel}
             // disabled={isUploading}
           />
-          
+
           <LoaderButton
-            className="px-4 py-2 bg-green-600 text-white rounded cursor-pointer"
+            className="px-4 py-1 rounded transition cursor-pointer bg-green-600 hover:bg-green-700 text-white border-0"
             onClick={handleCropAndUpload}
             // disabled={isUploading}
             text={isUploading ? "Uploading..." : "Crop & Upload"}
             loading={isUploading}
           />
-           
         </div>
       </div>
     </div>

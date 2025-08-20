@@ -1,17 +1,39 @@
 "use client";
 
 import useCookie from "@/hooks/useCookies";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useLogout } from "@/services/auth.service";
 import toast from "react-hot-toast";
+import { RiAccountCircleLine } from "react-icons/ri";
+import { FaUser } from "react-icons/fa";
+import { FiLogOut } from "react-icons/fi";
 
 const Header = () => {
   const { value: token, deleteCookie } = useCookie("access_token");
   const isLoggedIn = !!token;
 
   const [isOpen, setIsOpen] = useState(false);
+  const [open, setOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
   const router = useRouter();
 
   const toggleMenu = () => setIsOpen(!isOpen);
@@ -104,6 +126,38 @@ const Header = () => {
             <span className="w-6 h-0.5 bg-white" />
             <span className="w-6 h-0.5 bg-white" />
           </button>
+
+          {/* DropDown After Login */}
+          <div ref={dropdownRef} className="relative inline-block text-center pt-2">
+            <button onClick={() => setOpen(!open)} className="cursor-pointer">
+              <RiAccountCircleLine className="w-8 h-8 text-white" />
+            </button>
+
+            {open && (
+              <div className="absolute right-0 mt-2 w-52 bg-white border border-gray-200 rounded-lg shadow-lg z-50 p-3">
+                <ul className="flex flex-col text-gray-700">
+                  <li>
+                    <Link
+                      href="/profile"
+                      className="flex items-center gap-2 px-4 py-2 hover:bg-green-700 hover:text-white rounded-lg transition"
+                      onClick={() => setOpen(false)}
+                    >
+                      <FaUser /> Profile
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/logout"
+                      className="flex items-center gap-2 px-4 py-2 hover:bg-green-700 hover:text-white rounded-lg transition"
+                      onClick={() => setOpen(false)}
+                    >
+                      <FiLogOut /> Logout
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            )}
+          </div>
         </div>
       </nav>
 
