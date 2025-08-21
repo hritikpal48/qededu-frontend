@@ -39,7 +39,7 @@ export const getKYCStatusClasses = (status?: number): string => {
     case KYC_STATUS.APPROVED:
       return "bg-green-100 text-green-800";
     case KYC_STATUS.PENDING:
-      return "bg-yellow-100 text-yellow-800";
+      return "bg-yellow-100 text-yellow-600";
     case KYC_STATUS.REJECTED:
       return "bg-red-100 text-red-800";
     case KYC_STATUS.SUBMITTED:

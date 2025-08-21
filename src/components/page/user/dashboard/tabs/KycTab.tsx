@@ -17,7 +17,7 @@ const customLoader = ({ src }: { src: string }) =>
 export default function KycTab() {
   const [isEditMode, setIsEditMode] = useState(false);
   const { data: kycData, isLoading, refetch } = useFetchKycDetails();
-  console.log('kycData', kycData)
+  console.log("kycData", kycData);
   // useEffect(() => {
   //   refetch();
   // }, []);
@@ -30,95 +30,90 @@ export default function KycTab() {
   }
 
   // No KYC data exists
-if (!kycData) {
-  return (
-    <div>
-      {/* Agar edit mode off hai tabhi ye show hoga */}
-      {!isEditMode && (
-        <div className="text-center py-10">
-          <h2 className="text-[22px] font-bold mb-4">KYC Details</h2>
-          <p className="text-gray-500 mb-6">
-            To buy or sell unlisted shares, pre-IPO shares, ESOP buy and sell,
-            please complete your KYC information
-          </p>
-          <LoaderButton
-            text="Click here to fill KYC"
-            type="button"
-            onClick={handleStartKYC}
-            className="bg-green-600 text-white px-6 py-2 rounded-[5px] hover:bg-green-700 font-semibold cursor-pointer"
+  if (!kycData) {
+    return (
+      <div>
+        {/* Agar edit mode off hai tabhi ye show hoga */}
+        {!isEditMode && (
+          <div className="text-center py-10">
+            <h2 className="text-[22px] font-bold mb-4">KYC Details</h2>
+            <p className="text-gray-500 mb-6">
+              To buy or sell unlisted shares, pre-IPO shares, ESOP buy and sell,
+              please complete your KYC information
+            </p>
+            <LoaderButton
+              text="Click here to fill KYC"
+              type="button"
+              onClick={handleStartKYC}
+              className="bg-green-600 text-white px-6 py-2 rounded-[5px] hover:bg-green-700 font-semibold cursor-pointer"
+            />
+          </div>
+        )}
+
+        {/* Agar edit mode true hai to sirf form dikhega */}
+        {isEditMode && (
+          <KycCreateForm
+            onComplete={() => {
+              setIsEditMode(false);
+              refetch(); // KYC data refresh karega
+            }}
           />
-        </div>
-      )}
-
-      {/* Agar edit mode true hai to sirf form dikhega */}
-      {isEditMode && (
-        <KycCreateForm
-          onComplete={() => {
-            setIsEditMode(false);
-            refetch(); // KYC data refresh karega
-          }}
-        />
-      )}
-    </div>
-  );
-}
-
-
-
+        )}
+      </div>
+    );
+  }
 
   return (
     <>
-      {/* Toggle Buttons */}
-      <div className="flex justify-end mb-5">
-        <div className="flex justify-between items-center w-[100%]">
-          {/* Status Display */}
-
-          {!isEditMode && (
-            <div>
-              <h2 className="text-[25px] font-bold inline-block mr-4">
-                KYC Status
-              </h2>
-              <span
-                className={`${getKYCStatusClasses(kycData.status)} px-3 py-1 rounded-full text-sm font-bold`}
-              >
-                {getKYCStatusText(kycData.status)}
-              </span>
-            </div>
-          )}
-
-          {/* Edit Button (only shown when allowed) */}
-          {canEditKYC(kycData.status) && (
-            <div className="flex justify-end mb-5">
-              {!isEditMode && (
-                <LoaderButton
-                  type="button"
-                  text="Edit"
-                  onClick={() => setIsEditMode(true)}
-                  className="bg-green-600 text-white px-6 py-2 rounded-[5px] hover:bg-green-700 font-semibold cursor-pointer"
-                />
-              )}
-            </div>
-          )}
-        </div>
+      {/* Status Display */}
+      <div className="w-[100%] mb-5">
+        {!isEditMode && (
+          <div className="w-full">
+            <p
+              className={`${getKYCStatusClasses(
+                kycData.status
+              )} px-4 py-3 rounded-[5px] text-sm font-bold w-full block`}
+            >
+              <span className="text-black">Our KYC Status is</span> :{" "}
+              {getKYCStatusText(kycData.status)}
+            </p>
+          </div>
+        )}
       </div>
 
-               {!isEditMode && (
- <h2 className="text-[22px] font-bold mb-4">KYC Details</h2>  )}
+      <div className="flex justify-between gap-1.5 items-center">
+        {!isEditMode && (
+          <h2 className="text-[22px] font-bold mb-4">KYC Details</h2>
+        )}
+        {/* Edit Button (only shown when allowed) */}
+        {canEditKYC(kycData.status) && (
+          <div className="flex justify-end mb-5">
+            {!isEditMode && (
+              <LoaderButton
+                type="button"
+                text="Edit"
+                onClick={() => setIsEditMode(true)}
+                className="bg-green-600 text-white px-6 py-2 rounded-[5px] hover:bg-green-700 font-semibold cursor-pointer"
+              />
+            )}
+          </div>
+        )}
+      </div>
 
       {isEditMode ? (
         // Use KycEditForm when data exists and in edit mode
-      <KycEditForm
-  defaultValues={kycData}
-  onComplete={() => {
-    setIsEditMode(false);
-    refetch(); // Edit ke baad latest KYC data fetch karega
-  }}
-/>
+        <KycEditForm
+          defaultValues={kycData}
+          onComplete={() => {
+            setIsEditMode(false);
+            refetch(); // Edit ke baad latest KYC data fetch karega
+          }}
+        />
       ) : (
         <>
           {/* Aadhaar Section */}
           <h2 className="text-[20px] font-semibold mb-4">Aadhaar Details</h2>
-          <div className="grid md:grid-cols-2 gap-4">
+          <div className="grid md:grid-cols-3 grid-cols-2 gap-4">
             <div>
               <label className="font-bold">Full Name</label>
               <p className="mt-1 text-gray-700">
@@ -155,7 +150,7 @@ if (!kycData) {
                 {kycData.aadharDetails?.country || "N/A"}
               </p>
             </div>
-                        <div>
+            <div>
               <label className="font-bold">State</label>
               <p className="mt-1 text-gray-700">
                 {kycData.aadharDetails?.state || "N/A"}
@@ -180,7 +175,7 @@ if (!kycData) {
                     alt="Front Aadhaar"
                     width={300}
                     height={250}
-                    className="object-contain"
+                    className="object-contain text-center"
                     loader={customLoader}
                   />
                 ) : (
@@ -189,7 +184,7 @@ if (!kycData) {
                     alt="Front Aadhaar"
                     width={300}
                     height={250}
-                    className="object-contain"
+                    className="object-contain text-center"
                     loader={customLoader}
                   />
                 )}
@@ -204,7 +199,7 @@ if (!kycData) {
                     alt="Back Aadhaar"
                     width={300}
                     height={250}
-                    className="object-contain"
+                    className="object-contain text-center"
                     loader={customLoader}
                   />
                 ) : (
@@ -213,7 +208,7 @@ if (!kycData) {
                     alt="Back Aadhaar"
                     width={300}
                     height={250}
-                    className="object-contain"
+                    className="object-contain text-center"
                     loader={customLoader}
                   />
                 )}
@@ -222,8 +217,8 @@ if (!kycData) {
           </div>
 
           {/* PAN Section */}
-          <h2 className="text-[22px] font-semibold mt-10 mb-4">PAN Details</h2>
-          <div className="grid md:grid-cols-2 gap-4">
+          <h2 className="text-[20px] font-semibold mb-4 pt-8">PAN Details</h2>
+          <div className="grid md:grid-cols-3 grid-cols-2 gap-4">
             <div>
               <label className="font-bold">PAN Number</label>
               <p className="mt-1 text-gray-700">
@@ -246,7 +241,7 @@ if (!kycData) {
                   alt="PAN Card"
                   width={300}
                   height={250}
-                  className="object-contain"
+                  className="object-contain text-center"
                   loader={customLoader}
                 />
               ) : (
@@ -255,7 +250,7 @@ if (!kycData) {
                   alt="PAN Card"
                   width={300}
                   height={250}
-                  className="object-contain"
+                  className="object-contain text-center"
                   loader={customLoader}
                 />
               )}
@@ -263,8 +258,8 @@ if (!kycData) {
           </div>
 
           {/* Bank Section */}
-          <h2 className="text-[22px] font-semibold mt-10 mb-4">Bank Details</h2>
-          <div className="grid md:grid-cols-2 gap-4">
+          <h2 className="text-[20px] font-semibold mb-4 pt-8">Bank Details</h2>
+          <div className="grid md:grid-cols-3 grid-cols-2 gap-4">
             <div>
               <label className="font-bold">Account Name</label>
               <p className="mt-1 text-gray-700">
@@ -307,13 +302,13 @@ if (!kycData) {
                 {kycData.bankDetails?.address || "N/A"}
               </p>
             </div>
-                        <div>
+            <div>
               <label className="font-bold">Country</label>
               <p className="mt-1 text-gray-700">
                 {kycData.bankDetails?.country || "N/A"}
               </p>
             </div>
-                                    <div>
+            <div>
               <label className="font-bold">State</label>
               <p className="mt-1 text-gray-700">
                 {kycData.bankDetails?.state || "N/A"}
@@ -325,7 +320,6 @@ if (!kycData) {
                 {kycData.bankDetails?.city || "N/A"}
               </p>
             </div>
-
           </div>
           <div className="mt-6 bg-white shadow rounded-[10px] p-5 border border-[#e9e9e9] flex flex-col gap-4">
             <label className="font-bold">Bank Proof Image</label>
@@ -336,7 +330,7 @@ if (!kycData) {
                   alt="Bank Proof"
                   width={300}
                   height={250}
-                  className="object-contain"
+                  className="object-contain text-center"
                   loader={customLoader}
                 />
               ) : (
@@ -345,7 +339,7 @@ if (!kycData) {
                   alt="Bank Proof"
                   width={300}
                   height={250}
-                  className="object-contain"
+                  className="object-contain text-center"
                   loader={customLoader}
                 />
               )}
