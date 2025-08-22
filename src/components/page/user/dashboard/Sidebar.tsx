@@ -99,7 +99,7 @@ export default function Sidebar({ activeTab, onTabChange, isPending, avatar }: S
     : userImg;
 
   return (
-    <aside className="w-full md:w-80 bg-white border-r border-[#efefef] p-6">
+    <aside className="w-full md:w-80 bg-white border-r border-[#efefef] px-6 pb-5 md:pt-5 pt-0">
       <div className="flex flex-col items-center mb-6 pb-4 border-b border-[#efefef] relative">
         <div className="relative w-40 h-40">
           {isUserLoading ? (
@@ -161,7 +161,7 @@ export default function Sidebar({ activeTab, onTabChange, isPending, avatar }: S
         />
       )}
       
-      <nav className="space-y-2 mt-6">
+      <nav className="space-y-2 mt-6 md:block flex flex-nowrap text-nowrap overflow-auto">
         {tabs.map((tab) => (
           <button
             key={tab.key}
