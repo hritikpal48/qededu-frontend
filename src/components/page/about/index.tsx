@@ -2,29 +2,8 @@
 
 import Image from "@/components/ui/Image";
 import Link from "next/link";
-import { FaLinkedinIn } from "react-icons/fa";
 import AppImages from "@/config/constant/app.images";
 import BlogCard from "@/components/ui/card/Blogcard";
-const founders = [
-  {
-    name: "Umesh Paliwal",
-    role: "Co-Founder & CFO",
-    image: AppImages.about.team1,
-    linkedin: "#",
-  },
-  {
-    name: "Harsha Varma",
-    role: "Co-Founder & CMO",
-    image: AppImages.about.team2,
-    linkedin: "#",
-  },
-  {
-    name: "Dinesh Gupta",
-    role: "Co-Founder & COO",
-    image: AppImages.about.team3,
-    linkedin: "#",
-  },
-];
 
 const mediaArticles = [
   {
@@ -159,43 +138,6 @@ const AboutPage = () => {
           ))}
         </div>
 
-        {/* <div className="mt-14">
-          <h2 className="text-2xl md:text-3xl font-semibold text-center mb-8">
-            Our Founders
-          </h2>
-          <div className="grid md:grid-cols-3 gap-6">
-            {founders.map((founder) => (
-              <div
-                key={founder.name}
-                className="p-4 rounded-lg text-center"
-              >
-                <Image
-                  src={founder.image}
-                  alt={founder.name}
-                  width={400}
-                  height={300}
-                  className="mx-auto rounded-md object-cover"
-                />
-                <div className="mt-4 flex justify-between">
-                  <div>
-                    <h3 className="text-lg font-semibold">{founder.name}</h3>
-                    <p className="text-sm text-gray-600">{founder.role}</p>
-                  </div>
-                  <div className="mt-2">
-                    <a
-                      href={founder.linkedin}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-green-600 text-white hover:bg-green-700 transition"
-                    >
-                      <FaLinkedinIn />
-                    </a>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div> */}
       </section>
 
       <section className="bg-white text-gray-800">

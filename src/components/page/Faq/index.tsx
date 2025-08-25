@@ -2,7 +2,6 @@
 import AppImages from "@/config/constant/app.images";
 import React, { useState } from "react";
 import Image from "next/image";
-import faqBanner from "../../../public/images/faqBanner.jpg";
 import { FaMinus, FaPlus } from "react-icons/fa";
 import Link from "next/link";
 

@@ -1,7 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useFetchUserProfile } from "@/services/user.service";
 import PortfolioTab from "./tabs/PortfolioTab";
 import TransactionsTab from "./tabs/TransactionsTab";
 import ExternalTransactionsTab from "./tabs/ExternalTransactionsTab";
@@ -18,34 +16,39 @@ export type TabKey =
   | "myshare"
   | "kyc";
 
-export default function DashboardContent({ activeTab }: { activeTab: TabKey }) {
-  const { data: userProfile } = useFetchUserProfile();
+export type UserProfile = {
+  _id: string;
+  fname?: string;
+  lname?: string;
+  email?: string;
+  phoneNumber?: string;
+  dob?: string;        // ISO string from API
+  avatar?: string;
+  // add other fields if you use them
+};
 
-  const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    dob: "",
-    phone: "",
-  });
+type Props = {
+  activeTab: TabKey;
+  userProfile?: UserProfile;
+  isPending?: boolean;
+  refetchUser?: () => any;
+};
 
-  useEffect(() => {
-    if (userProfile) {
-      setFormData({
-        fullName: `${userProfile.fname || ""} ${userProfile.lname || ""}`.trim(),
-        email: userProfile.email || "",
-        dob: "",
-        phone: userProfile.phoneNumber || "",
-      });
-    }
-  }, [userProfile]);
-
+export default function DashboardContent({
+  activeTab,
+  userProfile,
+  isPending,
+  refetchUser,
+}: Props) {
   return (
     <section className="flex-1 p-6">
-
       <KycAlertTab />
-
       {activeTab === "profile" && (
-        <ProfileTab formData={formData} setFormData={setFormData} />
+        <ProfileTab
+          userProfile={userProfile}
+          isPending={isPending}
+          refetchUser={refetchUser}
+        />
       )}
       {activeTab === "portfolio" && <PortfolioTab />}
       {activeTab === "kyc" && <KycTab />}

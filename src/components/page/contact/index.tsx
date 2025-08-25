@@ -2,6 +2,8 @@
 
 import React from "react";
 import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   FaPhoneAlt,
   FaEnvelope,
@@ -9,24 +11,47 @@ import {
   FaWhatsapp,
 } from "react-icons/fa";
 import TextInput from "@/components/ui/input/TextInput";
+import { useCreateContact } from "@/services/contact.service";
+import toast from "react-hot-toast";
+import { LoaderButton } from "@/components/ui/button";
 
-type ContactFormData = {
-  fullName: string;
-  email: string;
-  phone: string;
-  subject: string;
-  message: string;
-};
+//zod validations
+const validationSchema = z.object({
+  fullName: z.string().min(1, "Full name is required"),
+  email: z.string().email("Invalid email").min(1, "Email is required"),
+  phoneNo: z
+    .string()
+    .min(10, "Phone must be 10 digits")
+    .max(10, "Phone must be 10 digits"),
+  subject: z.string().min(1, "Subject is required"),
+  message: z.string().min(10, "Message must be at least 10 characters"),
+});
+
+type ContactFormData = z.infer<typeof validationSchema>;
 
 const Contactpage = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
-  } = useForm<ContactFormData>();
+  } = useForm<ContactFormData>({
+    resolver: zodResolver(validationSchema),
+  });
+
+  // ✅ service hook
+  const { mutate: createContact } = useCreateContact({
+    onSuccess: (res: any) => {
+      toast.success(res?.message || "Your message has been sent!");
+      reset();
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message || "Something went wrong!");
+    },
+  });
 
   const onSubmit = (data: ContactFormData) => {
-    console.log("Form submitted:", data);
+    createContact(data);
   };
 
   return (
@@ -80,10 +105,10 @@ const Contactpage = () => {
 
             <TextInput
               label="Mobile Number (WhatsApp)"
-              name="phone"
+              name="phoneNo"
               type="tel"
               register={register}
-              error={errors.phone}
+              error={errors.phoneNo}
             />
 
             <TextInput
@@ -91,7 +116,6 @@ const Contactpage = () => {
               name="subject"
               register={register}
               error={errors.subject}
-              
             />
 
             <div>
@@ -99,7 +123,7 @@ const Contactpage = () => {
                 Your Message
               </label>
               <textarea
-                {...register("message", { required: "Message is required" })}
+                {...register("message")}
                 rows={5}
                 className="w-full border border-gray-300 px-4 py-3 rounded-md shadow-sm resize-none focus:outline-none focus:ring-2 focus:ring-green-500"
               />
@@ -110,12 +134,11 @@ const Contactpage = () => {
               )}
             </div>
 
-            <button
+            <LoaderButton
               type="submit"
-              className="bg-green-600 hover:bg-green-700 transition text-white font-medium py-3 px-6 rounded-md shadow-lg w-full sm:w-auto"
-            >
-              Send Message
-            </button>
+              text="Send Message"
+              className="bg-green-600 text-white px-6 py-2 rounded-[5px] hover:bg-green-700 font-semibold cursor-pointer"
+            />
           </form>
         </div>
 

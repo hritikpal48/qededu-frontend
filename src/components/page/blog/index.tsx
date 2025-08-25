@@ -1,7 +1,5 @@
-import Image from "@/components/ui/Image";
+
 import React from "react";
-import { SiSpreadshirt } from "react-icons/si";
-import { FaRegHeart } from "react-icons/fa";
 import Link from "next/link";
 import AppImages from "@/config/constant/app.images";
 import { BlogPostType } from "@/types/blog";

@@ -4,8 +4,6 @@ import { ProductPriceSection } from "./ProductPriceSection";
 import { ChartUnavailable } from "./ChartUnavailable";
 import { TimeRangeSelector } from "./TimeRangeSelector";
 import { FundamentalsCard } from "./FundamentalsCard";
-import { FinancialTabs } from "./FinancialTabs";
-import { DownloadSection, EventsTable, PromotersTable, ShareholdingPattern } from "./Shareholding";
 import { BuySellBox, CreateAlert, DownloadApp, ValuationMeter } from "./RightShareSidebar";
 import { useSearchParams } from 'next/navigation';
 import { useFetchStockDetails } from "@/services/stock.service";
