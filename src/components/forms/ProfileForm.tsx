@@ -26,6 +26,8 @@ const ProfileEditForm = ({
   defaultValues: FormData;
   onComplete: () => void;
 }) => {
+
+    
   const onError = (err: any) => {
     const message = err?.response?.data?.message ?? "Update failed";
     toast.error(message);
@@ -63,9 +65,10 @@ const ProfileEditForm = ({
     defaultValues.dob ? new Date(defaultValues.dob) : null
   );
 
-  const onSubmit = (data: FormData) => {
-    updateMutate(data);
-  };
+const onSubmit = (data: FormData) => {
+  const { email, ...cleanData } = data;
+  updateMutate(cleanData);
+};
 
   return (
     <form id="profileEditForm" onSubmit={handleSubmit(onSubmit)}>
@@ -140,7 +143,7 @@ const ProfileEditForm = ({
           <LoaderButton
             type="submit"
             text={isLoginPendding ? "Saving..." : "Save Changes"}
-            className="bg-green-600 text-white px-6 py-2 rounded-[5px] hover:bg-green-700 font-semibold cursor-pointer"
+            className="bg-green-600 hover:bg-green-700 text-white disabled:bg-gray-400"
           />
         </div>
       </div>

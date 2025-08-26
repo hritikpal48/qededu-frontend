@@ -2,22 +2,21 @@
 
 import React, { useRef, useState, useCallback, useEffect } from "react";
 import Image from "@/components/ui/Image";
-import Cropper from "react-easy-crop";
-import { getCroppedImg } from "./cropImageHelper";
 import { environmentVariables } from "@/config/image.config";
 import userImg from "../../../../../public/images/user.png";
-import { GrDocumentTransfer } from "react-icons/gr";
-import { CgWebsite } from "react-icons/cg"; // ✅ added
-import { TbUserScan } from "react-icons/tb"; // ✅ added
-import { LiaListUlSolid } from "react-icons/lia"; // ✅ added
-import { BiTransfer } from "react-icons/bi"; // ✅ added
-import { FaRegUserCircle } from "react-icons/fa";
-import {
-  useUpdateUserAvatar,
-  useFetchUserProfile,
+import { 
+  useUpdateUserAvatar, 
+  useFetchUserProfile 
 } from "@/services/user.service";
 import toast from "react-hot-toast";
 import { FiEdit } from "react-icons/fi";
+import ImageCropper from "@/components/ImageCropper";
+import { FaRegUserCircle } from "react-icons/fa";
+import { CgWebsite } from "react-icons/cg";
+import { TbUserScan } from "react-icons/tb";
+import { LiaListUlSolid } from "react-icons/lia";
+import { BiTransfer } from "react-icons/bi";
+import { GrDocumentTransfer } from "react-icons/gr";
 
 type TabKey =
   | "profile"
@@ -27,231 +26,142 @@ type TabKey =
   | "myshare"
   | "external";
 
-type CropArea = {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-};
-
 interface SidebarProps {
   activeTab: TabKey;
   onTabChange: (key: TabKey) => void;
-  isPending: boolean | undefined
-  avatar: string | undefined
+  isPending: boolean | undefined;
+  avatar: string | undefined;
 }
 
+const tabs: { key: TabKey; label: string; icon: React.ReactElement }[] = [
+  { key: "profile", label: "My Profile", icon: <FaRegUserCircle /> },
+  { key: "portfolio", label: "My Portfolio", icon: <CgWebsite /> },
+  { key: "kyc", label: "KYC", icon: <TbUserScan /> },
+  { key: "myshare", label: "My Share", icon: <LiaListUlSolid /> },
+  { key: "transactions", label: "Transactions", icon: <BiTransfer /> },
+  { key: "external", label: "External Transactions", icon: <GrDocumentTransfer /> },
+];
+
 export default function Sidebar({ activeTab, onTabChange, isPending, avatar }: SidebarProps) {
-  // Fetch user profile data using hook
-  const {
-    data: user,
-    refetch: refetchUser,
-    isLoading: isUserLoading,
-  } = useFetchUserProfile();
-
-  const [preview, setPreview] = useState<string | null>(null);
-  const [crop, setCrop] = useState({ x: 0, y: 0 });
-  const [zoom, setZoom] = useState(1);
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState<CropArea | null>(
-    null
-  );
-
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const { data: user, isLoading: isUserLoading } = useFetchUserProfile();
   const [selectedFileUrl, setSelectedFileUrl] = useState<string | null>(null);
-
   const [showCropper, setShowCropper] = useState(false);
-
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Create object URL for preview when file selected
-  useEffect(() => {
-    if (!selectedFile) {
-      setSelectedFileUrl(null);
-      return;
-    }
-    const url = URL.createObjectURL(selectedFile);
-    setSelectedFileUrl(url);
-
-    return () => {
-      URL.revokeObjectURL(url);
-    };
-  }, [selectedFile]);
-
-  // Cleanup preview URL on unmount or change
+  // Cleanup URLs on unmount
   useEffect(() => {
     return () => {
-      if (preview) {
-        URL.revokeObjectURL(preview);
+      if (selectedFileUrl) {
+        URL.revokeObjectURL(selectedFileUrl);
       }
     };
-  }, [preview]);
+  }, [selectedFileUrl]);
 
-  // Mutation hook for updating avatar
-
-  const onSuccess = (data: any) => {
+  const onSuccess = useCallback(() => {
     toast.success("Profile updated successfully!");
     setShowCropper(false);
-    setSelectedFile(null);
     setSelectedFileUrl(null);
-    setPreview(null);
-    refetchUser(); // Refresh user data after update
-  };
+  }, []);
 
-  const onError = (err: any) => {
+  const onError = useCallback((err: any) => {
     toast.error("Failed to update profile.");
     console.error("Failed to update avatar", err);
-  };
+  }, []);
 
-  // const { mutate: updateAvatar } = updateUserAvatarMutation;
   const { mutate: updateAvatar, isPending: isUpdating } = useUpdateUserAvatar({
     onError,
     onSuccess,
   });
 
-  const onCropComplete = useCallback(
-    (croppedArea: CropArea, croppedAreaPixels: CropArea) => {
-      setCroppedAreaPixels(croppedAreaPixels);
-    },
-    []
-  );
-
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      setSelectedFile(file);
+      const url = URL.createObjectURL(file);
+      setSelectedFileUrl(url);
       setShowCropper(true);
     }
   };
 
-  const handleUploadCroppedImage = async () => {
-    if (!selectedFile || !selectedFileUrl || !croppedAreaPixels) return;
+  const handleCropComplete = useCallback((croppedFile: File) => {
+    updateAvatar({ avatar: croppedFile });
+  }, [updateAvatar]);
 
-    try {
-      const croppedBlob = await getCroppedImg(
-        selectedFileUrl,
-        croppedAreaPixels
-      );
-
-      if (!croppedBlob) throw new Error("Failed to crop image");
-
-      const croppedFile = new File([croppedBlob], selectedFile.name, {
-        type: selectedFile.type,
-      });
-
-      setPreview(URL.createObjectURL(croppedFile));
-
-      updateAvatar({ avatar: croppedFile });
-    } catch (err) {
-      console.error(err);
-      toast.error("Error cropping or uploading image.");
+  const handleCancelCrop = useCallback(() => {
+    setShowCropper(false);
+    if (selectedFileUrl) {
+      URL.revokeObjectURL(selectedFileUrl);
+      setSelectedFileUrl(null);
     }
-  };
+  }, [selectedFileUrl]);
 
-  const tabs: { key: TabKey; label: string; icon: React.ReactElement }[] = [
-    { key: "profile", label: "My Profile", icon: <FaRegUserCircle /> },
-    { key: "portfolio", label: "My Portfolio", icon: <CgWebsite /> },
-    { key: "kyc", label: "KYC", icon: <TbUserScan /> },
-    { key: "myshare", label: "My Share", icon: <LiaListUlSolid /> },
-    { key: "transactions", label: "Transactions", icon: <BiTransfer /> },
-
-    {
-      key: "external",
-      label: "External Transactions",
-      icon: <GrDocumentTransfer />,
-    },
-  ];
-  if (isUserLoading) {
-    return (
-      <aside className="w-full md:w-80 bg-white border-r border-[#efefef] p-6 flex justify-center items-center">
-        Loading user profile...
-      </aside>
-    );
-  }
+  const avatarUrl = avatar 
+    ? `${environmentVariables.UPLOAD_URL}/profile/${avatar}`
+    : userImg;
 
   return (
-    <aside className="w-full md:w-80 bg-white border-r border-[#efefef] p-6">
+    <aside className="w-full md:w-80 bg-white border-r border-[#efefef] px-6 pb-5 md:pt-5 pt-0">
       <div className="flex flex-col items-center mb-6 pb-4 border-b border-[#efefef] relative">
         <div className="relative w-40 h-40">
-          <div className="overflow-hidden h-40 w-40 rounded-full group cursor-pointer">
-            <Image
-              src={
-                preview ||
-                (avatar
-                  ? `${environmentVariables.UPLOAD_URL}/profile/${avatar}`
-                  : userImg)
-              }
-              alt="User"
-              // width={160}
-              // height={160}
-              className="object-cover w-full h-full transition-transform duration-300 ease-in-out group-hover:scale-105"
-            />
-          </div>
-          <button
-            onClick={() => fileInputRef.current?.click()}
-            className="absolute bottom-[10px] right-[0px] z-10 bg-black bg-opacity-60 p-2 rounded-full text-white
-               opacity-70 group-hover:opacity-100
-               transform translate-y-0 group-hover:-translate-y-1
-               cursor-pointer
-               transition-all duration-300 ease-in-out"
-            title="Change Avatar"
-          >
-            <FiEdit size={18} />
-          </button>
-          <input
-            type="file"
-            ref={fileInputRef}
-            className="hidden"
-            accept="image/*"
-            onChange={handleImageChange}
-          />
+          {isUserLoading ? (
+            <div className="w-40 h-40 rounded-full bg-gray-200 animate-pulse flex items-center justify-center">
+              <span className="text-gray-400">Loading...</span>
+            </div>
+          ) : (
+            <>
+              <div className="overflow-hidden h-40 w-40 rounded-full group cursor-pointer">
+                <Image
+                  src={avatarUrl}
+                  alt="User"
+                  className="object-cover w-full h-full transition-transform duration-300 ease-in-out group-hover:scale-105"
+                />
+              </div>
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                className="absolute bottom-[10px] right-[0px] z-10 bg-black bg-opacity-60 p-2 rounded-full text-white
+                  opacity-70 group-hover:opacity-100
+                  transform translate-y-0 group-hover:-translate-y-1
+                  cursor-pointer
+                  transition-all duration-300 ease-in-out"
+                title="Change Avatar"
+              >
+                <FiEdit size={18} />
+              </button>
+              <input
+                type="file"
+                ref={fileInputRef}
+                className="hidden"
+                accept="image/*"
+                onChange={handleImageChange}
+              />
+            </>
+          )}
         </div>
 
-        <h2 className="text-gray-700 font-semibold text-2xl mt-3">
-          {user?.name}
-        </h2>
-        <p className="text-lg text-gray-500">{user?.email}</p>
+        {isUserLoading ? (
+          <>
+            <div className="h-7 w-40 bg-gray-200 animate-pulse rounded mt-3"></div>
+            <div className="h-5 w-56 bg-gray-200 animate-pulse rounded mt-2"></div>
+          </>
+        ) : (
+          <>
+            <h2 className="text-gray-700 font-semibold text-2xl mt-3">
+              {user?.name}
+            </h2>
+            <p className="text-lg text-gray-500">{user?.email}</p>
+          </>
+        )}
       </div>
 
-      {/* Cropper Modal */}
-      {showCropper && selectedFile && selectedFileUrl && (
-        <div className="fixed inset-0 z-50 bg-black bg-opacity-70 flex items-center justify-center p-4">
-          <div className="relative w-full max-w-sm h-[350px] bg-white rounded-md p-4 flex flex-col">
-            <Cropper
-              image={selectedFileUrl}
-              crop={crop}
-              zoom={zoom}
-              aspect={1}
-              cropShape="round"
-              onCropChange={setCrop}
-              onZoomChange={setZoom}
-              onCropComplete={onCropComplete}
-            />
-
-            <div className="flex justify-between mt-4">
-              <button
-                className="px-4 py-2 bg-gray-200 rounded"
-                onClick={() => {
-                  setShowCropper(false);
-                  setSelectedFile(null);
-                  setSelectedFileUrl(null);
-                }}
-                disabled={isUpdating}
-              >
-                Cancel
-              </button>
-              <button
-                className="px-4 py-2 bg-green-600 text-white rounded"
-                onClick={handleUploadCroppedImage}
-                disabled={isUpdating}
-              >
-                {isUpdating ? "Uploading..." : "Crop & Upload"}
-              </button>
-            </div>
-          </div>
-        </div>
+      {showCropper && selectedFileUrl && (
+        <ImageCropper
+          imageSrc={selectedFileUrl}
+          onCropComplete={handleCropComplete}
+          onCancel={handleCancelCrop}
+          isUploading={isUpdating}
+        />
       )}
-
-      <nav className="space-y-2 mt-6">
+      
+      <nav className="space-y-2 mt-6 md:block flex flex-nowrap text-nowrap overflow-auto">
         {tabs.map((tab) => (
           <button
             key={tab.key}

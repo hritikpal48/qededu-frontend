@@ -31,3 +31,17 @@ export const useFetchStockDetails = (id: string | null) =>
     queryFn: () => getStockDetails(id ?? ""),
     enabled: id ? true : false,
   });
+
+//slug api
+
+const getStockBySlug = async (slug: string): Promise<StockData> => {
+  const res = await HttpService.get(`/stock/slug/${slug}`);
+  return res?.data?.data;
+};
+
+export const useFetchStockBySlug = (slug: string | null) =>
+  useQueryHook({
+    queryKey: ["stock_details_slug", slug ?? ""],
+    queryFn: () => getStockBySlug(slug ?? ""),
+    enabled: !!slug,
+  });

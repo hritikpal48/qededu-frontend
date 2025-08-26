@@ -16,6 +16,7 @@ export interface UserProfile {
   otp: string;
   avatar?: string;
   name?: string;
+  kycStatus?: number;
 }
 
 export interface UpdateAvatarPayload {
@@ -26,6 +27,6 @@ export interface UpdateAvatarPayload {
 export type updateUserProfileData ={
     fname: string;
   lname: string;
-  email: string;
+  // email: string;
   dob:string;
 }

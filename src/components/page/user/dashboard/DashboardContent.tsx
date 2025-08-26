@@ -7,6 +7,7 @@ import KycTab from "./tabs/KycTab";
 import MyShareTab from "./tabs/MyShareTab";
 import ProfileTab from "./tabs/ProfileTab.tsx";
 import KycAlertTab from "./KycAlertTab";
+import { UserProfile } from "@/types/userprofileType";
 
 export type TabKey =
   | "profile"
@@ -16,16 +17,6 @@ export type TabKey =
   | "myshare"
   | "kyc";
 
-export type UserProfile = {
-  _id: string;
-  fname?: string;
-  lname?: string;
-  email?: string;
-  phoneNumber?: string;
-  dob?: string;        // ISO string from API
-  avatar?: string;
-  // add other fields if you use them
-};
 
 type Props = {
   activeTab: TabKey;
@@ -42,7 +33,8 @@ export default function DashboardContent({
 }: Props) {
   return (
     <section className="flex-1 p-6">
-      <KycAlertTab />
+      {userProfile?.kycStatus === 0 && <KycAlertTab />}
+      
       {activeTab === "profile" && (
         <ProfileTab
           userProfile={userProfile}

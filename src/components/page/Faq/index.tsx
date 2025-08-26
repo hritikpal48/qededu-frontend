@@ -5,6 +5,9 @@ import Image from "next/image";
 import { FaMinus, FaPlus } from "react-icons/fa";
 import Link from "next/link";
 
+const customLoader = ({ src }: { src: string }) =>
+    src.startsWith("http") ? src : `${src}`;
+
 const faqData = [
   {
     category: "About Unlisted/Pre-IPO Shares",
@@ -70,6 +73,7 @@ const FaqPage = () => {
               alt="Looking for an Answer Illustration"
               width={500}
               height={500}
+              loader={customLoader}
             />
           </div>
         </div>

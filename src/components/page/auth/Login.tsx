@@ -27,7 +27,7 @@ export default function LoginForm() {
         toast.error(message);
     };
     const onSuccess = (token: string | undefined) => {
-        console.log('token:-', token);
+        // console.log('token:-', token);
 
         if (token) {
             setCookie(token, {

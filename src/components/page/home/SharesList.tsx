@@ -15,7 +15,6 @@ interface LatestShares {
   offerings: ShareItem[];
 }
 
-
 const latestShares: LatestShares = {
   all: [
     {
@@ -119,11 +118,19 @@ const latestShares: LatestShares = {
   ],
 };
 
-const ShareCard = ({ image, name, category, href }: { image: string, name: string, category: string, href: string }) => {
+const ShareCard = ({
+  image,
+  name,
+  category,
+  href,
+}: {
+  image: string;
+  name: string;
+  category: string;
+  href: string;
+}) => {
   return (
-    <div
-      className="shadow-lg rounded overflow-hidden bg-white hover:scale-[1.02] transition"
-    >
+    <div className="shadow-lg rounded overflow-hidden bg-white hover:scale-[1.02] transition">
       <div className="flex items-center justify-center h-44 bg-white">
         <Image
           src={image}
@@ -135,22 +142,20 @@ const ShareCard = ({ image, name, category, href }: { image: string, name: strin
       </div>
       <div className="bg-black text-white p-4 text-center">
         <div className="text-[#59C20F] text-xs mb-1">{category}</div>
-        <h4 className="font-semibold text-lg leading-tight">
-          {name}
-        </h4>
+        <h4 className="font-semibold text-lg leading-tight">{name}</h4>
         <a
-          href={href ?? '#'}
+          href={href ?? "#"}
           className="text-white text-sm inline-block mt-2 hover:underline"
         >
           Learn More ›
         </a>
       </div>
     </div>
-  )
-}
+  );
+};
 
 const SharesList = () => {
-  const [tab, setTab] = useState<'offerings' | 'all'>("all");
+  const [tab, setTab] = useState<"offerings" | "all">("all");
 
   return (
     <section className="max-w-7xl mx-auto px-4 pt-10 pb-25">
@@ -162,19 +167,21 @@ const SharesList = () => {
       <div className="flex justify-center gap-8 mb-8 text-sm font-medium">
         <button
           onClick={() => setTab("all")}
-          className={`pb-2 cursor-pointer ${tab === "all"
-            ? "border-b-2 border-black text-black"
-            : "text-gray-400"
-            }`}
+          className={`pb-2 cursor-pointer ${
+            tab === "all"
+              ? "border-b-2 border-black text-black"
+              : "text-gray-400"
+          }`}
         >
           ALL
         </button>
         <button
           onClick={() => setTab("offerings")}
-          className={`pb-2 cursor-pointer ${tab === "offerings"
-            ? "border-b-2 border-black text-black"
-            : "text-gray-400"
-            }`}
+          className={`pb-2 cursor-pointer ${
+            tab === "offerings"
+              ? "border-b-2 border-black text-black"
+              : "text-gray-400"
+          }`}
         >
           LATEST OFFERINGS
         </button>
@@ -182,7 +189,15 @@ const SharesList = () => {
 
       {/* Cards */}
       <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {latestShares[tab].map((item, index) => (<ShareCard image={item?.logo} name={item?.name} category={item?.category} href={item?.link} key={index} />))}
+        {latestShares[tab].map((item, index) => (
+          <ShareCard
+            image={item?.logo}
+            name={item?.name}
+            category={item?.category}
+            href={item?.link}
+            key={index}
+          />
+        ))}
       </div>
     </section>
   );

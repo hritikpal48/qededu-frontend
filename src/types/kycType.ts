@@ -12,6 +12,7 @@ export interface AadharDetails {
   address: string;
   pincode: string;
   country: string;
+  state: string;
   aadharFrontImage: string;
   aadharBackImage: string;
 }
@@ -23,8 +24,9 @@ export interface BankDetails {
   branch: string;
   phone: string;
   address: string;
-  district: string;
   country: string;
+  state: string;
+  city: string;
   bankImage: string;
 }
 export interface PanDetails {
@@ -38,17 +40,17 @@ export interface KycData {
   userId: string;
   aadharDetails: AadharDetails;
   bankDetails: BankDetails;
+  rejectionReason: string;
   panDetails: PanDetails;
   status: number;
   createdAt: string;
   updatedAt: string;
 }
 
-
 export enum KYC_STATUS {
   APPROVED = 1,
   PENDING = 2,
   REJECTED = 3,
   SUBMITTED = 4,
-  INPROGRESS = 5
+  INPROGRESS = 5,
 }

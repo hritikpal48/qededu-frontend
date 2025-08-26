@@ -1,5 +1,4 @@
 "use client";
-
 import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -14,7 +13,6 @@ import TextInput from "@/components/ui/input/TextInput";
 import { useCreateContact } from "@/services/contact.service";
 import toast from "react-hot-toast";
 import { LoaderButton } from "@/components/ui/button";
-
 //zod validations
 const validationSchema = z.object({
   fullName: z.string().min(1, "Full name is required"),
@@ -26,9 +24,7 @@ const validationSchema = z.object({
   subject: z.string().min(1, "Subject is required"),
   message: z.string().min(10, "Message must be at least 10 characters"),
 });
-
 type ContactFormData = z.infer<typeof validationSchema>;
-
 const Contactpage = () => {
   const {
     register,
@@ -38,9 +34,8 @@ const Contactpage = () => {
   } = useForm<ContactFormData>({
     resolver: zodResolver(validationSchema),
   });
-
-  // ✅ service hook
-  const { mutate: createContact } = useCreateContact({
+  // :white_check_mark: service hook
+  const { mutate: createContact, isPending } = useCreateContact({
     onSuccess: (res: any) => {
       toast.success(res?.message || "Your message has been sent!");
       reset();
@@ -49,11 +44,9 @@ const Contactpage = () => {
       toast.error(error?.response?.data?.message || "Something went wrong!");
     },
   });
-
   const onSubmit = (data: ContactFormData) => {
     createContact(data);
   };
-
   return (
     <section className="py-16 px-4 md:px-8 max-w-7xl mx-auto">
       {/* Heading */}
@@ -66,7 +59,6 @@ const Contactpage = () => {
           We’re here to answer any questions you may have.
         </p>
       </div>
-
       {/* Form & Info Grid */}
       <div className="grid md:grid-cols-3 gap-10 bg-white shadow-lg rounded-2xl overflow-hidden">
         {/* Contact Form */}
@@ -84,7 +76,6 @@ const Contactpage = () => {
               info@qededu.com
             </a>
           </p>
-
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <TextInput
@@ -93,7 +84,6 @@ const Contactpage = () => {
                 register={register}
                 error={errors.fullName}
               />
-
               <TextInput
                 label="Email Address"
                 name="email"
@@ -102,7 +92,6 @@ const Contactpage = () => {
                 error={errors.email}
               />
             </div>
-
             <TextInput
               label="Mobile Number (WhatsApp)"
               name="phoneNo"
@@ -110,14 +99,12 @@ const Contactpage = () => {
               register={register}
               error={errors.phoneNo}
             />
-
             <TextInput
               label="Subject"
               name="subject"
               register={register}
               error={errors.subject}
             />
-
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Your Message
@@ -133,15 +120,14 @@ const Contactpage = () => {
                 </span>
               )}
             </div>
-
             <LoaderButton
               type="submit"
               text="Send Message"
+              loading={isPending}
               className="bg-green-600 text-white px-6 py-2 rounded-[5px] hover:bg-green-700 font-semibold cursor-pointer"
             />
           </form>
         </div>
-
         {/* Contact Info */}
         <div className="bg-green-50 p-8 flex flex-col justify-center">
           <h4 className="text-xl font-semibold text-gray-800 mb-6">
@@ -189,5 +175,4 @@ const Contactpage = () => {
     </section>
   );
 };
-
 export default Contactpage;
