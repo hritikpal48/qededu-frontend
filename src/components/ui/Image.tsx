@@ -3,15 +3,10 @@
 import { StaticImport } from "next/dist/shared/lib/get-img-props";
 import Image, { ImageProps } from "next/image";
 import { useEffect, useState } from "react";
-// const customLoader = ({ src }: { src: string }) => src;
 
 interface CustomImageProps extends ImageProps {
   key?: string;
 }
-
-const customLoader = ({ src }: { src: string }) => {
-  return src.startsWith("http") ? src : `${src}`;
-};
 
 const isValidImageSrc = (src: string): boolean => {
   // Trim trailing whitespace
@@ -69,7 +64,6 @@ const NextImage = ({ src, alt, ...rest }: CustomImageProps) => {
       src={imgSrc}
       alt={alt}
       onError={handleError}
-      loader={customLoader}
     />
   );
 };
