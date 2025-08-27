@@ -4,6 +4,7 @@ import { useState } from "react";
 import ProfileEditForm from "@/components/forms/ProfileForm";
 import { dateFormat } from "@/utils";
 import { LoaderButton } from "@/components/ui/button";
+import Skeleton from "@/components/ui/SkeletonLoader";
 
 type UserProfile = {
   _id: string;
@@ -39,9 +40,9 @@ export default function ProfileTab({
   };
 
   // Skeleton component (small helper to keep JSX tidy)
-  const Skeleton = ({ className = "" }: { className?: string }) => (
-    <div className={`bg-gray-200 animate-pulse rounded ${className}`} />
-  );
+  // const Skeleton = ({ className = "" }: { className?: string }) => (
+  //   <div className={`bg-gray-200 animate-pulse rounded ${className}`} />
+  // );
 
   return (
     <>

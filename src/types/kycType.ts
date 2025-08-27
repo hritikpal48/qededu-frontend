@@ -40,17 +40,17 @@ export interface KycData {
   userId: string;
   aadharDetails: AadharDetails;
   bankDetails: BankDetails;
+  rejectionReason: string;
   panDetails: PanDetails;
   status: number;
   createdAt: string;
   updatedAt: string;
 }
 
-
 export enum KYC_STATUS {
   APPROVED = 1,
   PENDING = 2,
   REJECTED = 3,
   SUBMITTED = 4,
-  INPROGRESS = 5
+  INPROGRESS = 5,
 }

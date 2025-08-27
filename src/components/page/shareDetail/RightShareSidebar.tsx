@@ -2,57 +2,144 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+
 import { FaInfoCircle } from "react-icons/fa";
 import appStore from "../../../../public/images/app-store-apple.png";
 import playStore from "../../../../public/images/google-store.png";
 import valuationImg from "../../../../public/images/valuations.png";
 import needleImg from "../../../../public/images/needle.png";
+import { useEffect, useState } from "react";
+import TextInput from "@/components/ui/input/TextInput";
+import TextAreaInput from "@/components/ui/input/TextAreaInput";
+import { useCreateOrder } from "@/services/myshare.service";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import toast from "react-hot-toast";
 
-export const BuySellBox = () => {
-  const [tab, setTab] = useState("Buy");
+const orderSchema = z.object({
+  quantity: z.string().nonempty("Quantity is required"),
+  message: z
+    .string()
+    .min(5, "Message must be at least 5 characters")
+    .max(200, "Message cannot exceed 200 characters"),
+});
+type OrderFormValues = z.infer<typeof orderSchema>;
+
+export const BuySellBox = ({
+  stockId,
+  minQuantity,
+  price,
+  name,
+}: {
+  stockId?: string;
+  minQuantity?: number;
+  price?: number;
+  name?: string;
+}) => {
+  // ✅ tab ko 1 (Buy) aur 2 (Sell) rakha
+  const [tab, setTab] = useState<1 | 2>(1);
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<OrderFormValues>({ resolver: zodResolver(orderSchema) });
+
+  const onError = (err: any) => {
+    console.log("err", err);
+    if (err.status === 401) {
+      return toast.error("Please login or register to place an order.");
+    }
+    const message = err?.response?.data?.message ?? "Failed to create order";
+    toast.error(message);
+  };
+  const onSuccess = (data: any | undefined) => {
+    toast.success(data?.message);
+
+    reset();
+  };
+
+  const { mutate: orderMutate } = useCreateOrder({
+    onError,
+    onSuccess,
+  });
+
+  const onSubmit = (data: OrderFormValues) => {
+    orderMutate({
+      ...data,
+      quantity: Number(data.quantity),
+      stockId: stockId ?? "",
+      orderType: tab, // ✅ orderType = 1 or 2
+    });
+  };
+
+  // map text ke liye
+  const tabLabels: Record<1 | 2, string> = { 1: "Buy", 2: "Sell" };
 
   return (
     <div className="border border-[#e8e8e8] rounded-md p-4 w-full bg-white mb-4">
+      {/* Tabs */}
       <div className="flex mb-4">
-        {["Buy", "Sell"].map((t) => (
-          <button
-            key={t}
-            onClick={() => setTab(t)}
-            className={`w-1/2 py-2 text-sm font-medium border-b-2 transition cursor-pointer ${
-              tab === t
-                ? "border-green-600 text-green-600"
-                : "border-gray-200 text-gray-500"
-            }`}
-          >
-            {t}
-          </button>
-        ))}
+        {(Object.keys(tabLabels) as Array<"1" | "2">).map((key) => {
+          const numKey = Number(key) as 1 | 2;
+          const isDisabled = numKey === 2;
+          return (
+            <button
+              key={numKey}
+              onClick={() => setTab(numKey)}
+              type="button"
+              disabled={isDisabled}
+              className={`w-1/2 py-2 text-sm font-medium border-b-2 transition cursor-pointer 
+          ${
+            tab === numKey
+              ? "border-green-600 text-green-600"
+              : "border-gray-200 text-gray-500"
+          }
+          ${isDisabled ? "cursor-not-allowed opacity-50" : ""}
+        `}
+            >
+              {tabLabels[numKey]}
+            </button>
+          );
+        })}
       </div>
 
-      <h3 className="font-semibold text-gray-800 text-sm mb-1">
-        A V Thomas & Co. Limited Unlisted Shares
-      </h3>
-      <p className="text-sm text-gray-700 mb-3">₹12500</p>
+      {/* Share Info */}
+      <h3 className="font-semibold text-gray-800 text-sm mb-1">{name}</h3>
+      <p className="text-sm text-gray-700 mb-3">{price || 0}</p>
 
-      <input
-        type="text"
-        placeholder="Buy Min (10) Quantity"
-        className="w-full border px-3 py-2 text-sm rounded mb-3 border-[#d7d7d7]"
-      />
+      {/* Form */}
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <TextInput
+          label="Quantity"
+          placeholder={`Buy Min (${minQuantity || 0}) Quantity `}
+          name="quantity"
+          error={errors?.quantity}
+          register={register}
+          className="w-full mb-3"
+        />
 
-      <textarea
-        placeholder="Message :"
-        className="w-full border px-3 py-2 text-sm rounded mb-3 border-[#d7d7d7]"
-      ></textarea>
+        <TextAreaInput
+          label="Message"
+          placeholder="Message"
+          name="message"
+          error={errors?.message}
+          register={register}
+          className="w-full mb-3"
+        />
 
-      <button className="bg-green-600 hover:bg-green-700 text-white w-full py-2 rounded text-sm cursor-pointer">
-        {tab}
-      </button>
+        <button
+          type="submit"
+          className="bg-green-600 hover:bg-green-700 text-white w-full py-2 rounded text-sm cursor-pointer"
+        >
+          {tabLabels[tab]} {/* ✅ button text Buy/Sell */}
+        </button>
+      </form>
     </div>
   );
 };
-
 export const CreateAlert = () => {
   return (
     <div className="border border-[#e8e8e8] rounded-md p-4 w-full bg-white mb-4">
@@ -94,7 +181,7 @@ export const ValuationMeter = () => {
     }, 2000);
 
     return () => clearInterval(interval);
-  }, []); 
+  }, []);
 
   const getRotation = () => {
     switch (position) {

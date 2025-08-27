@@ -7,7 +7,7 @@ import Image from "next/image";
 import dummyImg from "../../../../../../public/images/dummyImg.jpg";
 import { useFetchKycDetails } from "@/services/kyc.service";
 import SpinnerLoader from "@/components/ui/loader/SpinerLoader";
-import { canEditKYC, getKYCStatusClasses, getKYCStatusText } from "@/utils";
+import { canEditKYC, getKYCStatusIconColor, getKYCStatusText } from "@/utils";
 import { LoaderButton } from "@/components/ui/button";
 import { environmentVariables } from "@/config/app.config";
 
@@ -68,18 +68,44 @@ export default function KycTab() {
       {/* Status Display */}
       <div className="w-[100%] mb-5">
         {!isEditMode && (
-          <div className="w-full">
-            <p
-              className={`${getKYCStatusClasses(
-                kycData.status
-              )} px-4 py-3 rounded-[5px] text-sm font-bold w-full block`}
+          <div className="w-full flex items-center justify-center gap-3">
+            {/* Static Circle Check Icon with dynamic color */}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className={`w-8 h-8 ${getKYCStatusIconColor(kycData.status)}`}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+              strokeLinecap="round"
+              strokeLinejoin="round"
             >
-              <span className="text-black">Our KYC Status is</span> :{" "}
+              <circle cx="12" cy="12" r="10" />
+              <path d="M9 12l2 2 4-4" />
+            </svg>
+
+            <p
+              className={`${getKYCStatusIconColor(
+                kycData.status
+              )} px-4 py-2 rounded-[5px] text-sm font-bold text-center`}
+            >
               {getKYCStatusText(kycData.status)}
             </p>
           </div>
         )}
       </div>
+
+      {/* Rejection Reason Alert */}
+      {kycData.rejectionReason && (
+        <div className="w-[100%] mb-5">
+          <div className="w-full">
+            <p className="bg-red-100 text-red-800 px-4 py-3 rounded-[5px] text-sm font-bold w-full block">
+              <span className="text-black">Rejection Reason:</span>{" "}
+              {kycData.rejectionReason}
+            </p>
+          </div>
+        </div>
+      )}
 
       <div className="flex justify-between gap-1.5 items-center">
         {!isEditMode && (

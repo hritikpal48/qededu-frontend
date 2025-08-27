@@ -1,22 +1,22 @@
-import { KYC_STATUS } from '@/types/kycType';
-import moment from 'moment';
+import { KYC_STATUS } from "@/types/kycType";
+import moment from "moment";
 
 export function dateFormat(value: string): string {
-  return moment(value).format('DD MMMM YYYY');
+  return moment(value).format("DD MMMM YYYY");
 }
 
 // Check if user can edit KYC based on status
 export const canEditKYC = (status?: number): boolean => {
   if (!status) return true; // No status means KYC not submitted yet
-  
+
   return [KYC_STATUS.REJECTED, KYC_STATUS.SUBMITTED].includes(status);
 };
 
 // Get status text for display
 export const getKYCStatusText = (status?: number): string => {
   if (!status) return "Not Submitted";
-  
-  switch(status) {
+
+  switch (status) {
     case KYC_STATUS.APPROVED:
       return "Approved";
     case KYC_STATUS.PENDING:
@@ -32,21 +32,62 @@ export const getKYCStatusText = (status?: number): string => {
   }
 };
 
-export const getKYCStatusClasses = (status?: number): string => {
-  if (!status) return "bg-gray-100 text-gray-800";
+// export const getKYCStatusClasses = (status?: number): string => {
+//   if (!status) return "bg-gray-100 text-gray-800";
 
-  switch(status) {
+//   switch (status) {
+//     case KYC_STATUS.APPROVED:
+//       return "bg-green-100 text-green-800";
+//     case KYC_STATUS.PENDING:
+//       return "bg-yellow-100 text-yellow-600";
+//     case KYC_STATUS.REJECTED:
+//       return "bg-red-100 text-red-800";
+//     case KYC_STATUS.SUBMITTED:
+//       return "bg-blue-100 text-blue-800";
+//     case KYC_STATUS.INPROGRESS:
+//       return "bg-purple-100 text-purple-800";
+//     default:
+//       return "bg-gray-100 text-gray-800";
+//   }
+// };
+
+export const getKYCStatusIconColor = (status?: number): string => {
+  switch (status) {
     case KYC_STATUS.APPROVED:
-      return "bg-green-100 text-green-800";
+      return "text-green-600";
     case KYC_STATUS.PENDING:
-      return "bg-yellow-100 text-yellow-600";
+      return "text-yellow-600";
     case KYC_STATUS.REJECTED:
-      return "bg-red-100 text-red-800";
+      return "text-red-600";
     case KYC_STATUS.SUBMITTED:
-      return "bg-blue-100 text-blue-800";
+      return "text-blue-600";
     case KYC_STATUS.INPROGRESS:
-      return "bg-purple-100 text-purple-800";
+      return "text-purple-600";
     default:
-      return "bg-gray-100 text-gray-800";
+      return "text-gray-600";
+  }
+};
+
+const ORDER_STATUS = {
+  PENDING: 1,
+  SUCCESS: 2,
+  FAILED: 3,
+} as const;
+
+type StatusInfo = {
+  label: string;
+  color: string;
+};
+
+export const getOrderStatusInfo = (status?: number): StatusInfo => {
+  switch (status) {
+    case ORDER_STATUS.SUCCESS:
+      return { label: "Success", color: "bg-green-600 text-white" };
+    case ORDER_STATUS.FAILED:
+      return { label: "Failed", color: "bg-red-600 text-white" };
+    case ORDER_STATUS.PENDING:
+      return { label: "Pending", color: "bg-yellow-600 text-black" };
+    default:
+      return { label: "N/A", color: "bg-gray-500 text-white" };
   }
 };

@@ -34,6 +34,7 @@ const Header = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
   const router = useRouter();
 
   const toggleMenu = () => setIsOpen(!isOpen);
@@ -43,7 +44,7 @@ const Header = () => {
     toast.error(message);
   };
 
-  const onSuccess = (result: any) => {
+  const onSuccess = () => {
     deleteCookie(); // ✅ Remove access_token cookie
     toast.success("Logged out successfully");
     router.push("/auth/login");
@@ -94,6 +95,7 @@ const Header = () => {
         {/* Right Side (Desktop) */}
         <div className="flex items-center space-x-4">
           {!isLoggedIn ? (
+            // If not logged in → show Login + Sign Up
             <>
               <Link href="/auth/login">
                 <button className="border border-white text-white px-4 py-1 rounded hover:bg-white hover:text-black transition cursor-pointer text-[14px] md:text-[16px]">
@@ -107,13 +109,47 @@ const Header = () => {
               </Link>
             </>
           ) : (
-            <button
-              onClick={() => logoutMutate({})}
-              disabled={isLogoutPending}
-              className="bg-green-600 px-4 py-1 rounded text-white hover:bg-green-700 transition cursor-pointer disabled:opacity-50"
+            // If logged in → show account dropdown
+            <div
+              ref={dropdownRef}
+              className="relative inline-block text-center pt-2"
             >
-              {isLogoutPending ? "Logging out..." : "Logout"}
-            </button>
+              <button onClick={() => setOpen(!open)} className="cursor-pointer">
+                <RiAccountCircleLine className="w-8 h-8 text-white" />
+              </button>
+
+              {open && (
+                <div className="absolute right-0 mt-2 w-52 bg-white border border-gray-200 rounded-lg shadow-lg z-50 p-3">
+                  <ul className="flex flex-col text-gray-700">
+                    {/* Profile */}
+                    <li>
+                      <Link
+                        href="/user/dashboard"
+                        className="flex items-center gap-2 px-4 py-2 hover:bg-green-700 hover:text-white rounded-lg transition"
+                        onClick={() => setOpen(false)}
+                      >
+                        <FaUser /> Profile
+                      </Link>
+                    </li>
+
+                    {/* Logout */}
+                    <li>
+                      <button
+                        onClick={() => {
+                          logoutMutate({});
+                          setOpen(false);
+                        }}
+                        disabled={isLogoutPending}
+                        className="flex items-center gap-2 w-full text-left px-4 py-2 hover:bg-green-700 hover:text-white rounded-lg transition disabled:opacity-50"
+                      >
+                        <FiLogOut />
+                        {isLogoutPending ? "Logging out..." : "Logout"}
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              )}
+            </div>
           )}
 
           {/* Hamburger Icon for Mobile */}
@@ -126,38 +162,6 @@ const Header = () => {
             <span className="w-6 h-0.5 bg-white" />
             <span className="w-6 h-0.5 bg-white" />
           </button>
-
-          {/* DropDown After Login */}
-          <div ref={dropdownRef} className="relative inline-block text-center pt-2">
-            <button onClick={() => setOpen(!open)} className="cursor-pointer">
-              <RiAccountCircleLine className="w-8 h-8 text-white" />
-            </button>
-
-            {open && (
-              <div className="absolute right-0 mt-2 w-52 bg-white border border-gray-200 rounded-lg shadow-lg z-50 p-3">
-                <ul className="flex flex-col text-gray-700">
-                  <li>
-                    <Link
-                      href="/profile"
-                      className="flex items-center gap-2 px-4 py-2 hover:bg-green-700 hover:text-white rounded-lg transition"
-                      onClick={() => setOpen(false)}
-                    >
-                      <FaUser /> Profile
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/logout"
-                      className="flex items-center gap-2 px-4 py-2 hover:bg-green-700 hover:text-white rounded-lg transition"
-                      onClick={() => setOpen(false)}
-                    >
-                      <FiLogOut /> Logout
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-            )}
-          </div>
         </div>
       </nav>
 
@@ -190,15 +194,22 @@ const Header = () => {
                 </Link>
               </>
             ) : (
-              <button
-                onClick={() => {
-                  logoutMutate({});
-                  setIsOpen(false);
-                }}
-                className="w-full bg-green-600 py-2 rounded text-white hover:bg-green-500 transition"
-              >
-                Logout
-              </button>
+              <>
+                <Link href="/user/dashboard" className="w-full">
+                  <button className="w-full border border-white text-white py-2 rounded hover:bg-white hover:text-black transition">
+                    Profile
+                  </button>
+                </Link>
+                <button
+                  onClick={() => {
+                    logoutMutate({});
+                    setIsOpen(false);
+                  }}
+                  className="w-full bg-green-600 py-2 rounded text-white hover:bg-green-500 transition"
+                >
+                  Logout
+                </button>
+              </>
             )}
           </div>
         </div>

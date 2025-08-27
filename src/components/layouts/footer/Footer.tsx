@@ -21,8 +21,14 @@ const quickLinks = [
   { name: "Signup", url: "/auth/signup" },
   { name: "Blog", url: "/blog" },
   { name: "Investor Resources", url: "/investor-resources" },
-  { name: "PAN & ISIN of Unlisted Shares", url: "/investor-resources/pan-isin-unlisted-shares/" },
-  { name: "How to get Client Master List from different brokers", url: "/investor-resources/how-to-get-client-master-list-from-different-brokers" },
+  {
+    name: "PAN & ISIN of Unlisted Shares",
+    url: "/investor-resources/pan-isin-unlisted-shares/",
+  },
+  {
+    name: "How to get Client Master List from different brokers",
+    url: "/investor-resources/how-to-get-client-master-list-from-different-brokers",
+  },
 ];
 
 const unlistedZoneLinks = [
@@ -61,9 +67,18 @@ const Footer = () => {
             India’s No.1 Platform for Buying and Selling Unlisted Shares.
           </p>
 
-          <div className="flex gap-2 mb-4 flex-wrap">
-            <Link href="/"><Image src={appstore} alt="App Store" width={140} height={60} /></Link>
-            <Link href="/"><Image src={playstore} alt="Google Play" width={140} height={60} /></Link>
+          {/* <div className="flex gap-2 mb-4 flex-wrap">
+            <Link href="/">
+              <Image src={appstore} alt="App Store" width={140} height={60} />
+            </Link>
+            <Link href="/">
+              <Image
+                src={playstore}
+                alt="Google Play"
+                width={140}
+                height={60}
+              />
+            </Link>
           </div>
 
           <Link href="/">
@@ -74,7 +89,7 @@ const Footer = () => {
               height={70}
               className="rounded-md w-full max-w-xs"
             />
-          </Link>
+          </Link> */}
         </div>
 
         {/* Unlisted Zone Info */}

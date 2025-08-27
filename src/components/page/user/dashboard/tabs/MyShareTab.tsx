@@ -1,203 +1,224 @@
-'use client'
+"use client";
+import { useState, useEffect } from "react";
+import { useForm, Controller } from "react-hook-form";
+import SpinnerLoader from "@/components/ui/loader/SpinerLoader";
+import { useFetchMyshareDetails } from "@/services/myshare.service";
+import { getOrderStatusInfo } from "@/utils";
+import TextInput from "@/components/ui/input/TextInput";
+import SelectInput from "@/components/ui/input/SelectInput";
+import Skeleton from "@/components/ui/SkeletonLoader";
 
-import { useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { FaRegEye } from "react-icons/fa";
-import placeholderimage from "../../../../../../public/images/placeholderImage.png";
-
-const customLoader = ({ src }: { src: string }) => {
-  return src.startsWith("http") ? src : `${src}`;
+type FilterFormValues = {
+  keyword: string;
+  orderStatus?: string;
+  paymentStatus?: string;
 };
 
 export default function MyShareTab() {
-    const [activeSubTab, setActiveSubTab] = useState<"buy" | "sell">("buy");
+  const [activeSubTab, setActiveSubTab] = useState<"buy" | "sell">("buy");
+  const [page, setPage] = useState(1);
+  const limit = 10;
 
+  const orderType = activeSubTab === "buy" ? 1 : 2;
 
-    return (
-        <div>
-          {/* Tabs */}
-          <div className="flex border-b border-gray-200 mb-10">
+  const { control, watch } = useForm<FilterFormValues>({
+    defaultValues: {
+      keyword: "",
+      orderStatus: "",
+      paymentStatus: "",
+    },
+  });
+
+  const filters = watch();
+
+  const { data, isLoading, refetch } = useFetchMyshareDetails({
+    orderType,
+    keyword: filters.keyword,
+    orderStatus: filters.orderStatus ? Number(filters.orderStatus) : undefined,
+    paymentStatus: filters.paymentStatus
+      ? Number(filters.paymentStatus)
+      : undefined,
+    page,
+    limit,
+  });
+
+  useEffect(() => {
+    refetch();
+  }, [activeSubTab, filters, page]);
+
+  const renderTableRows = (orders: any[]) =>
+    orders.map((order) => (
+      <tr key={order._id} className="hover:bg-gray-50">
+        <td className="px-4 py-3 text-sm">{order.stock?.name || "N/A"}</td>
+        <td className="px-4 py-3 text-sm">{order.stockPrice || "N/A"}</td>
+        <td className="px-4 py-3 text-sm">{order.quantity || "N/A"}</td>
+        <td className="px-4 py-3 text-sm">{order.totalPrice || "N/A"}</td>
+        <td className="px-4 py-3 text-sm">
+          <span
+            className={`px-2 py-1 rounded ${
+              getOrderStatusInfo(order.orderStatus).color
+            }`}
+          >
+            {getOrderStatusInfo(order.orderStatus).label}
+          </span>
+        </td>
+        <td className="px-4 py-3 text-sm">
+          <span
+            className={`px-2 py-1 rounded ${
+              getOrderStatusInfo(order.paymentStatus).color
+            }`}
+          >
+            {getOrderStatusInfo(order.paymentStatus).label}
+          </span>
+        </td>
+      </tr>
+    ));
+
+  return (
+    <div>
+      {/* Tabs */}
+      <div className="flex border-b border-gray-200 mb-4">
+        <button
+          className={`px-4 py-2 font-medium w-[50%] cursor-pointer ${
+            activeSubTab === "buy"
+              ? "border-b-2 bg-[#E9F7E8] text-green-500"
+              : "text-gray-600 hover:text-green-500"
+          }`}
+          onClick={() => setActiveSubTab("buy")}
+        >
+          Buy
+        </button>
+        <button
+          className={`px-4 py-2 font-medium w-[50%] cursor-pointer ${
+            activeSubTab === "sell"
+              ? "border-b-2 bg-[#FFF6E0] text-yellow-600"
+              : "text-gray-600 hover:text-yellow-600"
+          }`}
+          onClick={() => setActiveSubTab("sell")}
+        >
+          Sell
+        </button>
+      </div>
+
+      {/* Filters */}
+      <div className="flex gap-4 mb-4 flex-wrap">
+        {/* Keyword */}
+        <Controller
+          name="keyword"
+          control={control}
+          render={({ field }) => (
+            <TextInput
+              label="Search"
+              name={field.name}
+              register={() => field}
+            />
+          )}
+        />
+
+        {/* Order Status */}
+        <Controller
+          name="orderStatus"
+          control={control}
+          render={({ field }) => (
+            <SelectInput
+              label="Order Status"
+              name={field.name}
+              value={field.value ?? ""}
+              onChange={field.onChange}
+              options={["Pending", "Success", "Failed"]}
+              valueMap={{
+                Pending: "1",
+                Success: "2",
+                Failed: "3",
+              }}
+            />
+          )}
+        />
+
+        {/* Payment Status */}
+        <Controller
+          name="paymentStatus"
+          control={control}
+          render={({ field }) => (
+            <SelectInput
+              label="Payment Status"
+              name={field.name}
+              value={field.value ?? ""}
+              onChange={field.onChange}
+              options={["Pending", "Success", "Failed"]}
+              valueMap={{
+                Pending: "1",
+                Success: "2",
+                Failed: "3",
+              }}
+            />
+          )}
+        />
+      </div>
+
+      {/* Table */}
+      {isLoading ? (
+        <Skeleton className="h-8 w-24" />
+      ) : (
+        <div className="overflow-x-auto border-t border-gray-200">
+          <table className="min-w-full text-sm text-left">
+            <thead className="bg-gray-100 text-left">
+              <tr>
+                <th className="px-4 py-3 font-bold text-sm text-gray-700">
+                  Company Name
+                </th>
+                <th className="px-4 py-3 font-bold text-sm text-gray-700">
+                  Share Price
+                </th>
+                <th className="px-4 py-3 font-bold text-sm text-gray-700">
+                  Qty
+                </th>
+                <th className="px-4 py-3 font-bold text-sm text-gray-700">
+                  Price
+                </th>
+                <th className="px-4 py-3 font-bold text-sm text-gray-700">
+                  Order Status
+                </th>
+                <th className="px-4 py-3 font-bold text-sm text-gray-700">
+                  Payment Status
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100">
+              {data?.data && data.data.length > 0 ? (
+                renderTableRows(data.data)
+              ) : (
+                <tr>
+                  <td colSpan={6} className="text-center py-5 text-gray-500">
+                    No data found
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+
+          {/* Pagination */}
+          <div className="flex justify-end items-center gap-3 mt-4">
             <button
-              className={`px-4 py-2 font-medium w-[50%] cursor-pointer ${
-                activeSubTab === "buy"
-                  ? "border-b-2 bg-[#E9F7E8] text-green-500"
-                  : "text-gray-600 hover:text-green-500"
-              }`}
-              onClick={() => setActiveSubTab("buy")}
+              disabled={page === 1}
+              className="px-3 py-1 border rounded disabled:opacity-50"
+              onClick={() => setPage((prev) => prev - 1)}
             >
-              Buy
+              Previous
             </button>
+            <span>
+              Page {page} of {data?.totalPages || 1}
+            </span>
             <button
-              className={`px-4 py-2 font-medium w-[50%] cursor-pointer ${
-                activeSubTab === "sell"
-                  ? "border-b-2 bg-[#E9F7E8] text-green-500"
-                  : "text-gray-600 hover:text-green-500"
-              }`}
-              onClick={() => setActiveSubTab("sell")}
+              disabled={page === data?.totalPages}
+              className="px-3 py-1 border rounded disabled:opacity-50"
+              onClick={() => setPage((prev) => prev + 1)}
             >
-              Sell
+              Next
             </button>
           </div>
-
-          {/* Buy Tab Content */}
-          {activeSubTab === "buy" && (
-            <>
-              <h2 className="text-[22px] font-semibold mb-4">
-                My Share - <span className="text-green-600">Buy</span>
-              </h2>
-              <div className="overflow-x-auto border-t border-gray-200">
-                <table className="min-w-full text-sm text-left">
-                  <thead className="bg-gray-100 text-left">
-                    <tr>
-                      <th className="px-4 py-3 font-bold text-sm text-gray-700">
-                        Company Name
-                      </th>
-                      <th className="px-4 py-3 font-bold text-sm text-gray-700">
-                        Unlisted Share Price
-                      </th>
-                      <th className="px-4 py-3 font-bold text-sm text-gray-700">
-                        IPO Price{" "}
-                      </th>
-                      <th className="px-4 py-3 font-bold text-sm text-gray-700">
-                        CMP
-                      </th>
-                      <th className="px-4 py-3 font-bold text-sm text-gray-700">
-                        Gain or Loss
-                      </th>
-                      <th className="px-4 py-3 font-bold text-sm text-gray-700">
-                        <button>Details</button>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-100">
-                    <tr className="hover:bg-gray-50">
-                      <td className="px-4 py-3 flex items-center gap-2">
-                        <Image
-                          src={placeholderimage.src}
-                          alt="placeholderimage"
-                          width={24}
-                          height={24}
-                          className="rounded-sm"
-                          loader={customLoader}
-                        />
-                        <Link
-                          href="/"
-                          className="ml-2 text-sm font-medium text-dark hover:underline"
-                        >
-                          Kitra Rosario test
-                        </Link>
-                      </td>
-                      <td className="px-4 py-3 text-sm">877</td>
-                      <td className="px-4 py-3 text-sm">877</td>
-                      <td className="px-4 py-3 text-sm">877</td>
-                      <td className="px-4 py-3 text-sm">
-                        <span className="px-3 py-1 rounded-full text-sm font-semibold inline-flex items-center gap-2 bg-green-100 text-green-700">
-                          <svg
-                            stroke="currentColor"
-                            fill="currentColor"
-                            strokeWidth="0"
-                            viewBox="0 0 512 512"
-                            height="1em"
-                            width="1em"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM385 215c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-71-71L280 392c0 13.3-10.7 24-24 24s-24-10.7-24-24l0-214.1-71 71c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9L239 103c9.4-9.4 24.6-9.4 33.9 0L385 215z"></path>
-                          </svg>{" "}
-                          877%
-                        </span>
-                      </td>
-                      <td className="px-4 py-3 text-sm">
-                        <Link href="">
-                          <FaRegEye />
-                        </Link>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </>
-          )}
-
-          {/* Sell Tab Content */}
-          {activeSubTab === "sell" && (
-            <>
-              <h2 className="text-[22px] font-semibold mb-4">
-                My Share - <span className="text-yellow-600">Sell</span>
-              </h2>
-              <div className="overflow-x-auto border-t border-gray-200">
-                <table className="min-w-full text-sm text-left">
-                  <thead className="bg-gray-100 text-left">
-                    <tr>
-                      <th className="px-4 py-3 font-bold text-sm text-gray-700">
-                        Company Name
-                      </th>
-                      <th className="px-4 py-3 font-bold text-sm text-gray-700">
-                        Unlisted Share Price
-                      </th>
-                      <th className="px-4 py-3 font-bold text-sm text-gray-700">
-                        IPO Price{" "}
-                      </th>
-                      <th className="px-4 py-3 font-bold text-sm text-gray-700">
-                        CMP
-                      </th>
-                      <th className="px-4 py-3 font-bold text-sm text-gray-700">
-                        Gain or Loss
-                      </th>
-                      <th className="px-4 py-3 font-bold text-sm text-gray-700">
-                        <button>Details</button>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-100">
-                    <tr className="hover:bg-gray-50">
-                      <td className="px-4 py-3 flex items-center gap-2">
-                        <Image
-                          src={placeholderimage}
-                          alt="placeholderimage"
-                          width={24}
-                          height={24}
-                          className="rounded-sm"
-                          loader={customLoader}
-                        />
-                        <Link
-                          href="/"
-                          className="ml-2 text-sm font-medium text-dark hover:underline"
-                        >
-                          Kitra Rosario test
-                        </Link>
-                      </td>
-                      <td className="px-4 py-3 text-sm">877</td>
-                      <td className="px-4 py-3 text-sm">877</td>
-                      <td className="px-4 py-3 text-sm">877</td>
-                      <td className="px-4 py-3 text-sm">
-                        <span className="px-3 py-1 rounded-full text-sm font-semibold inline-flex items-center gap-2 bg-green-100 text-green-700">
-                          <svg
-                            stroke="currentColor"
-                            fill="currentColor"
-                            strokeWidth="0"
-                            viewBox="0 0 512 512"
-                            height="1em"
-                            width="1em"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM385 215c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-71-71L280 392c0 13.3-10.7 24-24 24s-24-10.7-24-24l0-214.1-71 71c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9L239 103c9.4-9.4 24.6-9.4 33.9 0L385 215z"></path>
-                          </svg>{" "}
-                          877%
-                        </span>
-                      </td>
-                      <td className="px-4 py-3 text-sm">
-                        <Link href="">
-                          <FaRegEye />
-                        </Link>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </>
-          )}
         </div>
-    );
-  }
-  
+      )}
+    </div>
+  );
+}
