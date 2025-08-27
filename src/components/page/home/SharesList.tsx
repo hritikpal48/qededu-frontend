@@ -1,161 +1,80 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Image from "@/components/ui/Image";
-import AppImages from "@/config/constant/app.images";
-interface ShareItem {
+import { environmentVariables } from "@/config/app.config";
+import Link from "next/link";
+
+interface StockItem {
+  _id: string;
   name: string;
-  logo: string;
-  category: string;
-  link: string;
+  image: string;
+  type: number; // 1 = unlisted, 4 = IPO, etc.
+  link?: string;
+  slug: string;
 }
 
-interface LatestShares {
-  all: ShareItem[];
-  offerings: ShareItem[];
+interface SharesListProps {
+  data: StockItem[];
+  isLoading: boolean;
 }
-
-const latestShares: LatestShares = {
-  all: [
-    {
-      name: "NSDL Unlisted Shares",
-      logo: AppImages.share.share1,
-      category: "FINANCIAL SERVICES · LATEST OFFERINGS",
-      link: "#",
-    },
-    {
-      name: "NSE Unlisted Shares",
-      logo: AppImages.share.share1,
-      category: "EXCHANGES · FINANCIAL SERVICES · LATEST OFFERINGS",
-      link: "#",
-    },
-    {
-      name: "Onix Renewable Unlisted Shares",
-      logo: AppImages.share.share2,
-      category: "LATEST OFFERINGS · MANUFACTURING · OTHERS · POWER",
-      link: "#",
-    },
-    {
-      name: "NSDL Unlisted Shares",
-      logo: AppImages.share.share3,
-      category: "FINANCIAL SERVICES · LATEST OFFERINGS",
-      link: "#",
-    },
-    {
-      name: "NSE Unlisted Shares",
-      logo: AppImages.share.share4,
-      category: "EXCHANGES · FINANCIAL SERVICES · LATEST OFFERINGS",
-      link: "#",
-    },
-    {
-      name: "Onix Renewable Unlisted Shares",
-      logo: AppImages.share.share5,
-      category: "LATEST OFFERINGS · MANUFACTURING · OTHERS · POWER",
-      link: "#",
-    },
-    {
-      name: "NSDL Unlisted Shares",
-      logo: AppImages.share.share6,
-      category: "FINANCIAL SERVICES · LATEST OFFERINGS",
-      link: "#",
-    },
-    {
-      name: "NSE Unlisted Shares",
-      logo: AppImages.share.share7,
-      category: "EXCHANGES · FINANCIAL SERVICES · LATEST OFFERINGS",
-      link: "#",
-    },
-  ],
-  offerings: [
-    {
-      name: "CAMS Investor Services",
-      logo: AppImages.share.share8,
-      category: "FINANCIAL SERVICES · LATEST OFFERINGS",
-      link: "#",
-    },
-    {
-      name: "India INX Exchange",
-      logo: AppImages.share.share2,
-      category: "EXCHANGES · FINANCIAL SERVICES · LATEST OFFERINGS",
-      link: "#",
-    },
-    {
-      name: "ReNew Power Ventures",
-      logo: AppImages.share.share3,
-      category: "LATEST OFFERINGS · MANUFACTURING · OTHERS · POWER",
-      link: "#",
-    },
-    {
-      name: "Karvy Stock Broking",
-      logo: AppImages.share.share4,
-      category: "FINANCIAL SERVICES · LATEST OFFERINGS",
-      link: "#",
-    },
-    {
-      name: "Metropolitan Stock Exchange",
-      logo: AppImages.share.share5,
-      category: "EXCHANGES · FINANCIAL SERVICES · LATEST OFFERINGS",
-      link: "#",
-    },
-    {
-      name: "Adani Green Energy",
-      logo: AppImages.share.share6,
-      category: "LATEST OFFERINGS · MANUFACTURING · OTHERS · POWER",
-      link: "#",
-    },
-    {
-      name: "HDFC Securities",
-      logo: AppImages.share.share7,
-      category: "FINANCIAL SERVICES · LATEST OFFERINGS",
-      link: "#",
-    },
-    {
-      name: "Bombay Stock Exchange Tech",
-      logo: AppImages.share.share8,
-      category: "EXCHANGES · FINANCIAL SERVICES · LATEST OFFERINGS",
-      link: "#",
-    },
-  ],
-};
 
 const ShareCard = ({
   image,
   name,
-  category,
+  // category,
   href,
 }: {
   image: string;
   name: string;
-  category: string;
-  href: string;
+  // category: string;
+  href?: string;
 }) => {
   return (
     <div className="shadow-lg rounded overflow-hidden bg-white hover:scale-[1.02] transition">
       <div className="flex items-center justify-center h-44 bg-white">
         <Image
-          src={image}
+          src={`${environmentVariables.UPLOAD_URL}/stocks/${image}`}
           alt={name}
           width={150}
           height={100}
-          objectFit="contain"
         />
       </div>
       <div className="bg-black text-white p-4 text-center">
-        <div className="text-[#59C20F] text-xs mb-1">{category}</div>
+        {/* <div className="text-[#59C20F] text-xs mb-1">{category}</div> */}
         <h4 className="font-semibold text-lg leading-tight">{name}</h4>
-        <a
-          href={href ?? "#"}
-          className="text-white text-sm inline-block mt-2 hover:underline"
+        <Link
+          href={`/share/${href}`}
+          className="ml-2 text-sm font-medium text-dark hover:underline"
         >
-          Learn More ›
-        </a>
+          Learn More
+        </Link>
       </div>
     </div>
   );
 };
 
-const SharesList = () => {
-  const [tab, setTab] = useState<"offerings" | "all">("all");
+const SharesList = ({ data, isLoading }: SharesListProps) => {
+  const [tab, setTab] = useState<"all" | "offerings">("all");
+
+  // Filter data based on tab
+  const filteredData = useMemo(() => {
+    if (tab === "all") {
+      // "all" could be unlisted stocks (type === 1)
+      return data.filter((item) => item.type === 1);
+    } else {
+      // "offerings" could be latest IPO or offerings (type === 4)
+      return data.filter((item) => item.type === 1);
+    }
+  }, [tab, data]);
+
+  if (isLoading) {
+    return <div className="text-center py-10">Loading...</div>;
+  }
+
+  if (!filteredData.length) {
+    return <div className="text-center py-10">No shares available.</div>;
+  }
 
   return (
     <section className="max-w-7xl mx-auto px-4 pt-10 pb-25">
@@ -189,13 +108,13 @@ const SharesList = () => {
 
       {/* Cards */}
       <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {latestShares[tab].map((item, index) => (
+        {filteredData.map((item) => (
           <ShareCard
-            image={item?.logo}
-            name={item?.name}
-            category={item?.category}
-            href={item?.link}
-            key={index}
+            key={item._id}
+            image={item.image}
+            name={item.name}
+            // category={item.category}
+            href={item.slug}
           />
         ))}
       </div>

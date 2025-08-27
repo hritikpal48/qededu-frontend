@@ -11,7 +11,8 @@ export type Stock = {
 export type GetStockListApiParams = {
   limit: number;
   page: number;
-  keyword: string;
+  keyword?: string;
+  type?: number;
 };
 
 export type StockFundamental = {
@@ -49,6 +50,7 @@ export type StockData = {
   createdAt: string;
   updatedAt: string;
   slug: string;
+  type: number;
   buyMinQuantity: number;
 };
 

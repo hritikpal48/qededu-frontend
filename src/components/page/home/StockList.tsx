@@ -4,16 +4,29 @@ import StockTable from "@/components/ui/table/StockListTable";
 import { GetStockListApiParams } from "@/types/stock";
 import { useFetchStockList } from "@/services/stock.service";
 import { useDebounce } from "@/hooks/useDebounce";
+
 type Props = {
   searchKeyword?: string;
 };
-export default function StockList({ searchKeyword }: Props) {
+interface SharesListProps {
+  data: Props[];
+  isLoading: boolean;
+  searchKeyword?: string;
+}
+
+export default function StockList({
+  data,
+  isLoading,
+  searchKeyword,
+}: SharesListProps) {
   const [params, setParams] = useState<GetStockListApiParams>({
     page: 1,
     limit: 10,
     keyword: searchKeyword ?? "",
   });
+
   const debouncedSearch = useDebounce(params, 400);
+
   const handlePageChnage = (page: number) =>
     setParams((curr) => ({ ...curr, page }));
 
@@ -22,9 +35,12 @@ export default function StockList({ searchKeyword }: Props) {
 
   const handleSearchChnage = (keyword: string) =>
     setParams((curr) => ({ ...curr, keyword }));
-  const { data, isLoading, refetch } = useFetchStockList(debouncedSearch);
 
-  console.log("dsandjlksad", data);
+  const {
+    data: stockData,
+    isLoading: stockLoading,
+    refetch,
+  } = useFetchStockList(debouncedSearch);
 
   useEffect(() => {
     handleSearchChnage(searchKeyword ?? "");
@@ -33,15 +49,16 @@ export default function StockList({ searchKeyword }: Props) {
   useEffect(() => {
     refetch();
   }, [debouncedSearch]);
+
   return (
     <StockTable
-      data={data?.data ?? []}
+      data={stockData?.data ?? []}
       page={params?.page}
       perPage={params?.limit}
-      totalPage={data?.totalItems ?? 0}
+      totalPage={stockData?.totalItems ?? 0}
       setPage={handlePageChnage}
       setPerPage={handleLimitChnage}
-      loading={isLoading}
+      loading={stockLoading}
     />
   );
 }

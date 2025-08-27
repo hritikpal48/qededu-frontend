@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Image from "@/components/ui/Image";
 import Link from "next/link";
 import { FaCircleArrowUp, FaCircleArrowDown } from "react-icons/fa6";
@@ -8,7 +8,7 @@ import TablePagination from "./TablePagination";
 import { StockData } from "@/types/stock";
 import { TableLoadingBody } from "./TableSkeleton";
 import { environmentVariables } from "@/config/app.config";
-import StockList from "@/components/page/home/StockList";
+
 type Props = {
   data: StockData[];
   page: number;
@@ -51,6 +51,11 @@ const StockTable = ({
   totalPage,
   loading,
 }: Props) => {
+  // ✅ Filter only IPO stocks (type = 4)
+  const ipoData = useMemo(() => {
+    return data.filter((stock) => stock.type === 3);
+  }, [data]);
+
   return (
     <section className="bg-[#f7f7f7] py-12 px-4 md:px-10 rounded-lg">
       <div className="max-w-7xl mx-auto">
@@ -80,32 +85,42 @@ const StockTable = ({
               <TableLoadingBody />
             ) : (
               <tbody className="divide-y divide-gray-100">
-                {data.map((stock) => (
-                  <tr key={stock.name} className="hover:bg-gray-50">
-                    <td className="px-4 py-3 flex items-center gap-2">
-                      <Image
-                        src={`${environmentVariables.UPLOAD_URL}/stocks/${stock.image}`}
-                        alt={stock?.name}
-                        width={24}
-                        height={24}
-                        className="rounded-sm"
-                      />
-                      <Link
-                        href={`/share/${stock.slug}`}
-                        className="ml-2 text-sm font-medium text-dark hover:underline"
-                      >
-                        {stock.name}
-                      </Link>
-                    </td>
-                    <td className="px-4 py-3 text-sm">{stock.price}</td>
-                    {/* <td className="px-4 py-3 text-sm">{stock._id}</td> */}
-                    <td className="px-4 py-3 text-sm">{stock.price}</td>
-                    <td className="px-4 py-3 text-sm">{stock.price}</td>
-                    <td className="px-4 py-3 text-sm">
-                      <GainLossBadge value={stock.price} />
+                {ipoData.length === 0 ? (
+                  <tr>
+                    <td
+                      colSpan={TABLE_HEADERS.length}
+                      className="px-4 py-6 text-center text-gray-500"
+                    >
+                      No IPO data found
                     </td>
                   </tr>
-                ))}
+                ) : (
+                  ipoData.map((stock) => (
+                    <tr key={stock._id} className="hover:bg-gray-50">
+                      <td className="px-4 py-3 flex items-center gap-2">
+                        <Image
+                          src={`${environmentVariables.UPLOAD_URL}/stocks/${stock.image}`}
+                          alt={stock?.name}
+                          width={24}
+                          height={24}
+                          className="rounded-sm"
+                        />
+                        <Link
+                          href={`/share/${stock.slug}`}
+                          className="ml-2 text-sm font-medium text-dark hover:underline"
+                        >
+                          {stock.name}
+                        </Link>
+                      </td>
+                      <td className="px-4 py-3 text-sm">{stock.price}</td>
+                      <td className="px-4 py-3 text-sm">{stock.price}</td>
+                      <td className="px-4 py-3 text-sm">{stock.price}</td>
+                      <td className="px-4 py-3 text-sm">
+                        <GainLossBadge value={stock.price} />
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             )}
           </table>

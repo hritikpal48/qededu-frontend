@@ -15,16 +15,17 @@ const getStockList = async (
   return res?.data;
 };
 
-const getStockDetails = async (id: string): Promise<StockData> => {
-  const res = await HttpService.get(`/stock/${id}`);
-  return res?.data?.data;
-};
-
 export const useFetchStockList = (params: GetStockListApiParams) =>
   useQueryHook({
     queryKey: ["stock_lits", params?.page?.toString()],
     queryFn: () => getStockList(params),
   });
+
+const getStockDetails = async (id: string): Promise<StockData> => {
+  const res = await HttpService.get(`/stock/${id}`);
+  return res?.data?.data;
+};
+
 export const useFetchStockDetails = (id: string | null) =>
   useQueryHook({
     queryKey: ["stock_details", id ?? ""],
