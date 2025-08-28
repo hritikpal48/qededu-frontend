@@ -1,71 +1,89 @@
-
 import React from "react";
 import Link from "next/link";
-import AppImages from "@/config/constant/app.images";
-import { BlogPostType } from "@/types/blog";
 import BlogCard from "@/components/ui/card/Blogcard";
-const BlogPage = () => {
-  const blogPosts: BlogPostType[] = [
-    {
-      id: "1",
-      blogImg: AppImages.blogImg.blog1,
-      altblog: "blog1",
-      url: "",
-      category: "CLOUD KITCHEN",
-      date: "28 Jul. 2025.",
-      title:
-        "EatClub Secures Rs 185 Crore in Funding Led by Tiger Global: A Strong Signal for the Cloud Kitchen Sector",
-      excerpt:
-        "EatClub Secures Rs 185 Crore in Funding Led by Tiger Global: A Strong Signal for the Cloud Kitchen Sector A) Introduction: EatClub’s Major Fundraise and Strategic Reorganization Mumbai-based cloud kitchen...",
-      content: "Full content would go here...",
-    },
-    {
-      id: "2",
-      blogImg: AppImages.blogImg.blog2,
-      altblog: "blog2",
-      url: "",
-      category: "HDFC SECURITIES",
-      date: "26 Jul. 2025.",
-      title:
-        "HDFC Securities Q1 FY26 Results: Revenue & Profit Decline Amid SEBI’s F&O Curbs",
-      excerpt:
-        "HDFC Securities Limited, one of India's leading stock broking firms, has announced its unaudited financial results for Q1 FY26. The numbers reveal a concerning trend: both revenue and profit...",
-      content: "Full content would go here...",
-    },
-    {
-      id: "3",
-      blogImg: AppImages.blogImg.blog3,
-      altblog: "blog3",
-      url: "",
-      category: "Apollo Green",
-      date: "26 Jul. 2025.",
-      title:
-        "Apollo Green Energy Fundraise: From Bold Announcements to Fragmented Allotments",
-      excerpt:
-        "Apollo Green Energy Fundraise: From Bold Announcements to Fragmented Allotments Apollo Green Energy Limited (formerly Apollo International Limited), a company eyeing growth in India's renewable...",
-      content: "Full content would go here...",
-    },
-  ];
+import { BlogRespone, BlogList } from "@/types/blogType";
 
-  return (
-    <>
+interface BlogPageProps {
+  blogData?: BlogList | BlogRespone; // Accept both formats
+  blogLoading: boolean;
+  isHomePage: boolean; // To differentiate between home and blog page
+  onLoadMore?: () => void; // Function to load more data
+  hasMore?: boolean; // Whether more data is available
+  onRefresh?: () => void;
+}
+
+const BlogPage: React.FC<BlogPageProps> = ({ 
+  blogData, 
+  blogLoading, 
+  isHomePage = false,
+  onLoadMore,
+  hasMore = true,
+  onRefresh
+}) => {
+
+    const blogPosts: BlogList = Array.isArray(blogData) ? blogData : blogData?.data ?? [];
+
+  // Show loading state
+  if (blogLoading && !isHomePage) {
+    return (
       <div className="max-w-7xl mx-auto py-10 px-4">
         <h2 className="text-4xl font-bold text-center pb-10">
           Unlisted Shares in News
         </h2>
         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {blogPosts.map((post, key) => (
-            <BlogCard blogData={post} key={key} />
+          {/* Loading skeleton */}
+          {[...Array(6)].map((_, index) => (
+            <div key={index} className="animate-pulse">
+              <div className="bg-gray-300 h-48 rounded-lg mb-4"></div>
+              <div className="bg-gray-300 h-4 rounded mb-2"></div>
+              <div className="bg-gray-300 h-4 rounded w-3/4"></div>
+            </div>
           ))}
         </div>
+      </div>
+    );
+  }
 
+
+  return (
+    <>
+      <div className="max-w-7xl mx-auto py-10 px-4">
+        <h2 className="text-4xl font-bold text-center pb-10">
+          {isHomePage? 'Unlisted Shares in News':'Blog/News'}
+        </h2>
+        
+        {blogPosts.length > 0 ? (
+          <>
+            <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+              {(isHomePage ? blogPosts.slice(0, 6) : blogPosts).map((post) => (
+                <BlogCard blogData={post} key={post._id} />
+              ))}
+            </div>
         <div className="mt-8 text-center">
-          <Link href="/">
-            <button className="bg-green-600 hover:bg-green-700 text-white px-10 py-3 rounded-full font-medium transition cursor-pointer">
-              View More
+          {isHomePage ? (
+            <Link
+              href="/blog"
+              className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-full font-medium transition inline-block cursor-pointer"
+            >
+              View All Blogs
+            </Link>
+          ) : hasMore ? (
+            <button
+              onClick={onLoadMore}
+              className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-full font-medium transition cursor-pointer"
+            >
+              Load More
             </button>
-          </Link>
+          ) : (
+            <div className="text-gray-500">No more Blogs!</div>
+          )}
         </div>
+          </>
+        ) : (
+          <div className="text-center py-10">
+            <p className="text-gray-500 text-lg">No blog posts available at the moment.</p>
+          </div>
+        )}
       </div>
     </>
   );

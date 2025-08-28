@@ -31,7 +31,7 @@ const PanUnlistedShare = () => {
         </div>
       </div>
 
-      <StockList />
+      {/* <StockList /> */}
 
       <div className="bg-white px-4 md:px-10 py-12 max-w-7xl mx-auto">
         <div className="text-center bg-green-600 text-white py-6 px-4 rounded-md">

@@ -1,5 +1,6 @@
 "use client";
-import BlogCard from "../blog";
+import { BLOG_TYPE, STOCK_TYPE } from "@/utils/constant";
+import BlogPage from "../blog";
 import ExploreInvest from "./ExploreInvest";
 import HeroBanner from "./HeroBanner";
 import InfoSection from "./InfoSection";
@@ -8,7 +9,9 @@ import SharesList from "./SharesList";
 import StockList from "./StockList";
 import { useFetchStockList } from "@/services/stock.service";
 import { GetStockListApiParams, StockData } from "@/types/stock";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
+import { BlogData, GetBlogListApiParams } from "@/types/blogType";
+import { useFetchBlogList } from "@/services/blog.service";
 
 const Home = () => {
   const [params, setParams] = useState<GetStockListApiParams>({
@@ -17,34 +20,65 @@ const Home = () => {
     keyword: "",
   });
 
+    const [blogParams, setBlogParams] = useState<GetBlogListApiParams>({
+    page: 1,
+    limit: 10,
+    // keyword: "",
+    type:3
+  });
+
   const { data, isLoading, refetch } = useFetchStockList(params);
 
-  // Filter data for unlisted (type 1)
+  const { data:blogData, isLoading:blogLoading, refetch:blogRefetch } = useFetchBlogList(blogParams);
+
+
+  const handlePageChange = useCallback((page: number) => {
+    setParams((p) => ({ ...p, page }));
+  }, []);
+
+  const handleLimitChange = useCallback((limit: number) => {
+    setParams((p) => ({ ...p, limit, page: 1 }));
+  }, []);
+
   const unlistedData = useMemo(() => {
-    return data?.data?.filter((item: StockData) => item.type === 1) || [];
+    return data?.data?.filter((item: StockData) => item.type === STOCK_TYPE.UNLISTED) || [];
   }, [data]);
 
-  // Filter data for IPO (type 4)
   const ipoData = useMemo(() => {
-    return data?.data?.filter((item: StockData) => item.type === 3) || [];
+    return data?.data?.filter((item: StockData) => item.type === STOCK_TYPE.ISO) || [];
   }, [data]);
+
+const blogDataFilter = useMemo(() => {
+  if (Array.isArray(blogData)) {
+    return blogData.filter((item: BlogData) => item.type === BLOG_TYPE.NEWS);
+  }
+  return [];
+}, [blogData]);
+
 
   return (
     <>
       <HeroBanner />
       <InfoSection />
 
-      {/* Pass filtered unlisted data */}
       <SharesList data={unlistedData} isLoading={isLoading} />
 
       <ExploreInvest />
       <ProcessSteps />
 
-      {/* Pass filtered IPO data */}
-      <StockList data={ipoData} isLoading={isLoading} />
+      <StockList
+        data={ipoData}
+        loading={isLoading}
+        page={params.page}
+        perPage={params.limit}
+        totalItems={ipoData?.length ?? 0}
+        setPage={handlePageChange}
+        setPerPage={handleLimitChange}
+      />
 
-      <BlogCard />
-    </>
+<BlogPage blogData={blogDataFilter} blogLoading={blogLoading} isHomePage={true} /> 
+
+   </>
   );
 };
 

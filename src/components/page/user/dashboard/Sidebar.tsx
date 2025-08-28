@@ -38,8 +38,8 @@ const tabs: { key: TabKey; label: string; icon: React.ReactElement }[] = [
   { key: "portfolio", label: "My Portfolio", icon: <CgWebsite /> },
   { key: "kyc", label: "KYC", icon: <TbUserScan /> },
   { key: "myshare", label: "My Share", icon: <LiaListUlSolid /> },
-  { key: "transactions", label: "Transactions", icon: <BiTransfer /> },
-  { key: "external", label: "External Transactions", icon: <GrDocumentTransfer /> },
+  // { key: "transactions", label: "Transactions", icon: <BiTransfer /> },
+  // { key: "external", label: "External Transactions", icon: <GrDocumentTransfer /> },
 ];
 
 export default function Sidebar({ activeTab, onTabChange, isPending, avatar }: SidebarProps) {

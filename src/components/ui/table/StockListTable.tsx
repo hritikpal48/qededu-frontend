@@ -51,10 +51,7 @@ const StockTable = ({
   totalPage,
   loading,
 }: Props) => {
-  // ✅ Filter only IPO stocks (type = 4)
-  const ipoData = useMemo(() => {
-    return data.filter((stock) => stock.type === 3);
-  }, [data]);
+
 
   return (
     <section className="bg-[#f7f7f7] py-12 px-4 md:px-10 rounded-lg">
@@ -85,7 +82,7 @@ const StockTable = ({
               <TableLoadingBody />
             ) : (
               <tbody className="divide-y divide-gray-100">
-                {ipoData.length === 0 ? (
+                {data.length === 0 ? (
                   <tr>
                     <td
                       colSpan={TABLE_HEADERS.length}
@@ -95,7 +92,7 @@ const StockTable = ({
                     </td>
                   </tr>
                 ) : (
-                  ipoData.map((stock) => (
+                  data.map((stock) => (
                     <tr key={stock._id} className="hover:bg-gray-50">
                       <td className="px-4 py-3 flex items-center gap-2">
                         <Image

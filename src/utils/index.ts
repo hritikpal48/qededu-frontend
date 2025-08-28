@@ -1,5 +1,6 @@
 import { KYC_STATUS } from "@/types/kycType";
 import moment from "moment";
+import { ORDER_STATUS } from "./constant";
 
 export function dateFormat(value: string): string {
   return moment(value).format("DD MMMM YYYY");
@@ -68,11 +69,7 @@ export const getKYCStatusIconColor = (status?: number): string => {
   }
 };
 
-const ORDER_STATUS = {
-  PENDING: 1,
-  SUCCESS: 2,
-  FAILED: 3,
-} as const;
+
 
 type StatusInfo = {
   label: string;
@@ -89,5 +86,17 @@ export const getOrderStatusInfo = (status?: number): StatusInfo => {
       return { label: "Pending", color: "bg-yellow-600 text-black" };
     default:
       return { label: "N/A", color: "bg-gray-500 text-white" };
+  }
+};
+
+
+export const getClientIp = async (): Promise<string> => {
+  try {
+    const res = await fetch("https://api.ipify.org?format=json");
+    const data = await res.json();
+    return data.ip || "0.0.0.0";
+  } catch (error) {
+    console.error("Error fetching IP:", error);
+    return "0.0.0.0";
   }
 };

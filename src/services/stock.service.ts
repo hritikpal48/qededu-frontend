@@ -10,14 +10,12 @@ const getStockList = async (
   params: GetStockListApiParams
 ): Promise<StockListApiRespone> => {
   const res = await HttpService.get("/stock", { params });
-  console.log("dddd", res);
-
   return res?.data;
 };
 
 export const useFetchStockList = (params: GetStockListApiParams) =>
   useQueryHook({
-    queryKey: ["stock_lits", params?.page?.toString()],
+    queryKey: ["stock_list", params?.page?.toString()],
     queryFn: () => getStockList(params),
   });
 
