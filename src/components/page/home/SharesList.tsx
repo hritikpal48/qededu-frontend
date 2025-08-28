@@ -54,25 +54,26 @@ const ShareCard = ({
   );
 };
 
-const SharesList = ({ data, isLoading }: SharesListProps) => {
+const SharesList = ({ data, isLoading, isHomePage }: SharesListProps & { isHomePage?: boolean }) => {
   const [tab, setTab] = useState<"all" | "offerings">("all");
 
   // Filter data based on tab
   const filteredData = useMemo(() => {
     if (tab === "all") {
-      // "all" could be unlisted stocks (type === 1)
       return data.filter((item) => item.type === 1);
     } else {
-      // "offerings" could be latest IPO or offerings (type === 4)
-      return data.filter((item) => item.type === 1);
+      return data.filter((item) => item.type === 1); // offerings = IPO
     }
   }, [tab, data]);
+
+  // ✅ If homepage, only show first 6 items
+  const visibleData = isHomePage ? filteredData.slice(0, 6) : filteredData;
 
   if (isLoading) {
     return <div className="text-center py-10">Loading...</div>;
   }
 
-  if (!filteredData.length) {
+  if (!visibleData.length) {
     return <div className="text-center py-10">No shares available.</div>;
   }
 
@@ -108,12 +109,11 @@ const SharesList = ({ data, isLoading }: SharesListProps) => {
 
       {/* Cards */}
       <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {filteredData.map((item) => (
+        {visibleData.map((item) => (
           <ShareCard
             key={item._id}
             image={item.image}
             name={item.name}
-            // category={item.category}
             href={item.slug}
           />
         ))}

@@ -18,6 +18,7 @@ const Home = () => {
     page: 1,
     limit: 10,
     keyword: "",
+    type:1
   });
 
     const [blogParams, setBlogParams] = useState<GetBlogListApiParams>({
@@ -40,6 +41,7 @@ const Home = () => {
     setParams((p) => ({ ...p, limit, page: 1 }));
   }, []);
 
+
   const unlistedData = useMemo(() => {
     return data?.data?.filter((item: StockData) => item.type === STOCK_TYPE.UNLISTED) || [];
   }, [data]);
@@ -55,13 +57,15 @@ const blogDataFilter = useMemo(() => {
   return [];
 }, [blogData]);
 
+console.log('unlistedData', unlistedData)
+
 
   return (
     <>
       <HeroBanner />
       <InfoSection />
 
-      <SharesList data={unlistedData} isLoading={isLoading} />
+      <SharesList data={unlistedData} isLoading={isLoading} isHomePage={true} />
 
       <ExploreInvest />
       <ProcessSteps />
