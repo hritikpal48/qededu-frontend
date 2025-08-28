@@ -37,7 +37,7 @@ export default function BlogDetails({ slug }: BlogDetailsProps) {
             try {
                 const ip = await getClientIp();
                 setCurrentUserIp(ip);
-                
+
                 // Check if current user has already liked this blog
                 if (blogData?.likedByIps) {
                     const hasLiked = blogData.likedByIps.includes(ip);
@@ -47,31 +47,31 @@ export default function BlogDetails({ slug }: BlogDetailsProps) {
                 console.error('Error getting IP:', error);
             }
         };
-        
+
         if (blogData) {
             getCurrentIp();
         }
     }, [blogData?.likedByIps]);
-    
+
     const onError = (err: any) => {
         const message = err?.response?.data?.message;
         console.error('View update error:', message);
     };
-    
+
     const onSuccess = (data: any) => {
         console.log('View updated successfully');
         // Optionally refetch if needed
     };
-    
+
     const { mutate: updateViewMutation, isPending } = useUpdateViewBlog({
         onError,
         onSuccess,
     });
-    
+
     const onLikeError = (err: any) => {
         const message = err?.response?.data?.message;
         console.error('Like update error:', message);
-        
+
         // Revert the optimistic update on error
         if (blogData) {
             setBlogData(prev => prev ? {
@@ -82,17 +82,17 @@ export default function BlogDetails({ slug }: BlogDetailsProps) {
             setIsLiked(false);
         }
     };
-    
+
     const onLikeSuccess = (data: any) => {
         console.log('Like updated successfully');
         // The optimistic update is already done
     };
-    
+
     const { mutate: updateLikeMutation, isPending: isLikePending } = useUpdateLikeBlog({
         onError: onLikeError,
         onSuccess: onLikeSuccess,
     });
-    
+
     const handleLike = async () => {
         // Prevent multiple clicks and already liked posts
         if (isLikePending || !currentUserIp || isLiked || !blogData) return;
@@ -112,7 +112,7 @@ export default function BlogDetails({ slug }: BlogDetailsProps) {
             console.error('Error getting IP or updating like:', error);
         }
     };
-    
+
     // Update views once when component mounts
     useEffect(() => {
         const updateViews = async () => {
@@ -126,14 +126,14 @@ export default function BlogDetails({ slug }: BlogDetailsProps) {
                 console.error('Error getting IP or updating views:', error);
             }
         };
-        
+
         if (blogData && !hasViewUpdated) {
             updateViews();
         }
     }, [blogData, hasViewUpdated, isPending, updateViewMutation]);
 
-    const imageSrc = blogData?.image 
-        ? `${environmentVariables.UPLOAD_URL}/blog/${blogData.image}` 
+    const imageSrc = blogData?.image
+        ? `${environmentVariables.UPLOAD_URL}/blog/${blogData.image}`
         : AppImages.blogImg.blog1;
 
     // While hook is loading -> show Skeleton
@@ -186,16 +186,15 @@ export default function BlogDetails({ slug }: BlogDetailsProps) {
                                     <SiSpreadshirt className="text-gray-600" />
                                     <span className="text-xs text-gray-700">{blogData?.views || 0}</span>
                                 </div>
-                                
+
                                 {/* Likes */}
-                                <div 
-                                    className={`flex items-center gap-1 px-2 py-1 rounded-lg transition-all duration-200 ${
-                                        isLiked 
-                                            ? 'bg-red-50 cursor-not-allowed' 
-                                            : isLikePending 
-                                                ? 'opacity-50 cursor-not-allowed' 
+                                <div
+                                    className={`flex items-center gap-1 px-2 py-1 rounded-lg transition-all duration-200 ${isLiked
+                                            ? 'bg-red-50 cursor-not-allowed'
+                                            : isLikePending
+                                                ? 'opacity-50 cursor-not-allowed'
                                                 : 'cursor-pointer hover:bg-red-50'
-                                    }`}
+                                        }`}
                                     onClick={handleLike}
                                     title={isLiked ? "You already liked this post" : "Like this post"}
                                 >
@@ -204,9 +203,8 @@ export default function BlogDetails({ slug }: BlogDetailsProps) {
                                     ) : (
                                         <FaRegHeart className="text-gray-600 hover:text-red-500 transition-colors duration-200" />
                                     )}
-                                    <span className={`text-xs transition-colors duration-200 ${
-                                        isLiked ? 'text-red-700' : 'text-gray-700'
-                                    }`}>
+                                    <span className={`text-xs transition-colors duration-200 ${isLiked ? 'text-red-700' : 'text-gray-700'
+                                        }`}>
                                         {blogData?.likes || 0}
                                     </span>
                                 </div>
@@ -233,9 +231,10 @@ export default function BlogDetails({ slug }: BlogDetailsProps) {
                             <h2 className="text-2xl font-semibold text-gray-800 mb-4">
                                 Details
                             </h2>
-                            <div className="text-gray-700 leading-relaxed whitespace-pre-line">
-                                {blogData?.description}
-                            </div>
+                            <div
+                                className="text-gray-700 leading-relaxed"
+                                dangerouslySetInnerHTML={{ __html: blogData?.description || "" }}
+                            />
                         </section>
                     </div>
                 </article>
