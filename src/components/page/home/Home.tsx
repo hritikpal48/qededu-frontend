@@ -45,7 +45,7 @@ const Home = () => {
   }, [data]);
 
   const ipoData = useMemo(() => {
-    return data?.data?.filter((item: StockData) => item.type === STOCK_TYPE.ISO) || [];
+    return data?.data?.filter((item: StockData) => item.type === STOCK_TYPE.IPO) || [];
   }, [data]);
 
 const blogDataFilter = useMemo(() => {
