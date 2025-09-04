@@ -27,7 +27,10 @@ const CommonHighChart: React.FC<StockChartProps> = ({
     // :white_check_mark: Validate & sort data
     const validSeries = Array.isArray(series)
       ? series
-          .filter(([timestamp, price]) => Number.isFinite(timestamp) && Number.isFinite(price))
+          .filter(
+            ([timestamp, price]) =>
+              Number.isFinite(timestamp) && Number.isFinite(price)
+          )
           .sort(([a], [b]) => a - b)
       : [];
     if (validSeries.length === 0) {
@@ -72,7 +75,7 @@ const CommonHighChart: React.FC<StockChartProps> = ({
         showInLegend: false,
         tooltip: {
           pointFormat: "<b>{point.title}</b><br/>{point.text}",
-          useHTML: true
+          useHTML: true,
         },
       } as Highcharts.SeriesFlagsOptions);
     }
@@ -126,15 +129,17 @@ const CommonHighChart: React.FC<StockChartProps> = ({
           },
         ],
       },
-tooltip: {
+      tooltip: {
         shared: false, // Changed to false so flags can have their own tooltip
         useHTML: true,
         formatter: function () {
           const point = this as any; // Type assertion to avoid TS errors
-          if (point.series?.type === 'flags') {
+          if (point.series?.type === "flags") {
             // Custom formatting for flags
             return `<div style="text-align:center;">
-              <div style="margin-top:4px;">${point.point?.text || 'No description'}</div>
+              <div style="margin-top:4px;">${
+                point.point?.text || "No description"
+              }</div>
               <div style="font-size:10px;color:#666;margin-top:4px;">
                 ${Highcharts.dateFormat("%d %b %Y", point.x as number)}
               </div>
@@ -142,8 +147,13 @@ tooltip: {
           }
           // Default formatting for price series
           return `<div style="text-align:center;">
-            <div style="font-weight:bold;">${Highcharts.dateFormat("%d %b %Y", point.x as number)}</div>
-            <div style="color:#22c55e;font-weight:bold;">₹${point.y?.toFixed(2)}</div>
+            <div style="font-weight:bold;">${Highcharts.dateFormat(
+              "%d %b %Y",
+              point.x as number
+            )}</div>
+            <div style="color:#22c55e;font-weight:bold;">₹${point.y?.toFixed(
+              2
+            )}</div>
           </div>`;
         },
       },
@@ -154,14 +164,20 @@ tooltip: {
   }, [name, series, flags]);
   if (!series || series.length === 0) {
     return (
-      <div className={`${className} flex items-center justify-center bg-gray-50 border rounded-lg`}>
+      <div
+        className={`${className} flex items-center justify-center bg-gray-50 border rounded-lg`}
+      >
         <span className="text-gray-400 text-sm">No chart data available</span>
       </div>
     );
   }
   return (
     <div className={className}>
-      <HighchartsReact highcharts={Highcharts} constructorType="stockChart" options={chartOptions} />
+      <HighchartsReact
+        highcharts={Highcharts}
+        constructorType="stockChart"
+        options={chartOptions}
+      />
     </div>
   );
 };

@@ -10,8 +10,8 @@ const nextConfig = {
       {
         protocol: "http",
         hostname: "localhost", // ✅ allow localhost
-        port: "**",            // allow any port (3000, 4000 etc.)
-        pathname: "/**",       // allow all image paths
+        port: "**", // allow any port (3000, 4000 etc.)
+        pathname: "/**", // allow all image paths
       },
       {
         protocol: "http",
