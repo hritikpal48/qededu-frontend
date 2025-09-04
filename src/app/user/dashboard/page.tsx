@@ -12,10 +12,9 @@ export default function DashboardPage() {
 
   const { data: userProfile, isPending, refetch } = useFetchUserProfile();
 
-  useEffect(()=>{
-    refetch()
-  },[])
-
+  useEffect(() => {
+    refetch();
+  }, []);
 
   return (
     <main className="md:py-20 py-10 flex flex-col md:flex-row max-w-7xl mx-auto">

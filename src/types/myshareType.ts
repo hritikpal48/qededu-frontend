@@ -68,3 +68,66 @@ export type OrderResponse = {
   message: string;
   data: Order;
 };
+
+// types/holdingsType.ts
+
+export type Holding = {
+  _id: string;
+  stockId: string;
+  userId: string;
+  avgPrice: number;
+  createdAt: string; // ISO Date string
+  quantity: number;
+  totalInvestment: number;
+  currentValue: number;
+  pnl: number;
+  name: string;
+  slug: string;
+};
+
+export type GetUserHoldingsResponse = {
+  statusCode: number;
+  message: string;
+  data: Holding[];
+  totalItems: number;
+  totalPages: number;
+  currentPage: number;
+  perPage: number;
+};
+
+export type GetUserHoldingsParams = {
+  keyword?: string;
+  page?: number;
+  limit?: number;
+};
+
+export interface StockChartFlag {
+  x: number;       // timestamp (ms)
+  title: string;   // flag label (e.g. C)
+  text: string;    // description
+}
+
+export enum ChartRange { ONE_DAY = '1d', ONE_WEEK = '1w', ONE_MONTH = '1m', SIX_MONTHS = '6m', ONE_YEAR = '1y', MAX = 'max', }
+
+export interface StockChartStats {
+  latest: number;
+  changeAbs: number;
+  changePct: number;
+}
+
+export interface StockChartData {
+  stockId: string;
+  slug: string;
+  name: string;
+  range: string;
+  series: [number, number][]; // [timestamp, price]
+  flags: StockChartFlag[];
+  stats: StockChartStats;
+}
+
+export interface StockChartResponse {
+  statusCode: number;
+  message: string;
+  data: StockChartData;
+}
+

@@ -12,7 +12,6 @@ import { GetStockListApiParams, StockData } from "@/types/stock";
 import { useState, useMemo, useCallback } from "react";
 import { BlogData, GetBlogListApiParams } from "@/types/blogType";
 import { useFetchBlogList } from "@/services/blog.service";
-
 const Home = () => {
   // SharesList ke liye params (type: 1)
   const [sharesParams, setSharesParams] = useState<GetStockListApiParams>({
@@ -62,7 +61,6 @@ const Home = () => {
     }
     return [];
   }, [blogData]);
-
   return (
     <>
       <HeroBanner />
@@ -72,7 +70,6 @@ const Home = () => {
 
       <ExploreInvest />
       <ProcessSteps />
-
       <StockList
         data={stockData?.data ?? []}
         loading={stockLoading}
