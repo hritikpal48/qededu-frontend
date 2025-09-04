@@ -9,7 +9,7 @@ import { SettingData } from "@/types/settingsType";
 
 const defaultSettings: SettingData = {
   _id: "",
-  logo: null,
+  logo: "default-logo.png",
   phoneNo: "",
   email: "",
   address: "",
@@ -25,7 +25,7 @@ const HomeLayout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <>
-      <Header />
+      <Header data={settings ?? defaultSettings} isLoading={SettingsLoading} />
       <main>{children}</main>
       <Footer data={settings ?? defaultSettings} isLoading={SettingsLoading} />
       <Toaster position="top-right" />

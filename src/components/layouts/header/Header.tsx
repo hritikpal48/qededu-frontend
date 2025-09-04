@@ -10,7 +10,7 @@ import { RiAccountCircleLine } from "react-icons/ri";
 import { FaUser } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
 import { SettingData } from "@/types/settingsType";
-import { EnvironmentVariables } from "@/types/app";
+import { environmentVariables } from "@/config/app.config";
 import Image from "next/image";
 interface FooterProps {
   data: SettingData;
@@ -19,7 +19,7 @@ interface FooterProps {
 const Header = ({ data, isLoading }: FooterProps) => {
   const { value: token, deleteCookie } = useCookie("access_token");
   const isLoggedIn = !!token;
-
+  //console.log("datatest", data);
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -42,7 +42,6 @@ const Header = ({ data, isLoading }: FooterProps) => {
   }, []);
 
   const router = useRouter();
-  const uploadUrl = process.env.NEXT_PUBLIC_UPLOAD_URL;
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -80,21 +79,23 @@ const Header = ({ data, isLoading }: FooterProps) => {
         <Link href="/" className="flex items-center space-x-2">
           <div className="flex items-center space-x-2">
             {/* Logo (conditionally rendered if available) */}
-            {/* {data.logo && (
+            {data?.logo && (
               <Image
-                src={`${uploadUrl}/setting/${data.logo}`}
+                src={`${environmentVariables.UPLOAD_URL}/setting/${data?.logo}`}
                 alt="Logo"
+                width={70}
+                height={70}
                 className="h-10 w-10 object-contain"
               />
-            )} */}
+            )}
 
             {/* Text next to the logo */}
-            <div className="text-white font-bold text-2xl flex items-center">
+            {/* <div className="text-white font-bold text-2xl flex items-center">
               <span className="text-blue-700 text-3xl font-bold">Q</span>
               <span className="text-yellow-400 text-3xl font-bold">E</span>
               <span className="text-green-400 text-3xl font-bold">D</span>
               <span className="ml-2 text-white">Edu</span>
-            </div>
+            </div> */}
           </div>
         </Link>
 
