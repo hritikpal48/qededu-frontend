@@ -68,3 +68,35 @@ export type OrderResponse = {
   message: string;
   data: Order;
 };
+
+// types/holdingsType.ts
+
+export type Holding = {
+  _id: string;
+  stockId: string;
+  userId: string;
+  avgPrice: number;
+  createdAt: string; // ISO Date string
+  quantity: number;
+  totalInvestment: number;
+  currentValue: number;
+  pnl: number;
+  name: string;
+  slug: string;
+};
+
+export type GetUserHoldingsResponse = {
+  statusCode: number;
+  message: string;
+  data: Holding[];
+  totalItems: number;
+  totalPages: number;
+  currentPage: number;
+  perPage: number;
+};
+
+export type GetUserHoldingsParams = {
+  keyword?: string;
+  page?: number;
+  limit?: number;
+};

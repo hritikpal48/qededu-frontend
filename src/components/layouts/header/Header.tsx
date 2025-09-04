@@ -9,8 +9,14 @@ import toast from "react-hot-toast";
 import { RiAccountCircleLine } from "react-icons/ri";
 import { FaUser } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
-
-const Header = () => {
+import { SettingData } from "@/types/settingsType";
+import { EnvironmentVariables } from "@/types/app";
+import Image from "next/image";
+interface FooterProps {
+  data: SettingData;
+  isLoading: boolean;
+}
+const Header = ({ data, isLoading }: FooterProps) => {
   const { value: token, deleteCookie } = useCookie("access_token");
   const isLoggedIn = !!token;
 
@@ -36,6 +42,7 @@ const Header = () => {
   }, []);
 
   const router = useRouter();
+  const uploadUrl = process.env.NEXT_PUBLIC_UPLOAD_URL;
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -71,11 +78,23 @@ const Header = () => {
       <nav className="bg-black text-white px-4 py-3 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center space-x-2">
-          <div className="text-white font-bold text-2xl flex items-center">
-            <span className="text-blue-700 text-3xl font-bold">Q</span>
-            <span className="text-yellow-400 text-3xl font-bold">E</span>
-            <span className="text-green-400 text-3xl font-bold">D</span>
-            <span className="ml-2 text-white">Edu</span>
+          <div className="flex items-center space-x-2">
+            {/* Logo (conditionally rendered if available) */}
+            {/* {data.logo && (
+              <Image
+                src={`${uploadUrl}/setting/${data.logo}`}
+                alt="Logo"
+                className="h-10 w-10 object-contain"
+              />
+            )} */}
+
+            {/* Text next to the logo */}
+            <div className="text-white font-bold text-2xl flex items-center">
+              <span className="text-blue-700 text-3xl font-bold">Q</span>
+              <span className="text-yellow-400 text-3xl font-bold">E</span>
+              <span className="text-green-400 text-3xl font-bold">D</span>
+              <span className="ml-2 text-white">Edu</span>
+            </div>
           </div>
         </Link>
 

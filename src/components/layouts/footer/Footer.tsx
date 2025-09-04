@@ -10,12 +10,21 @@ import {
   FaTelegramPlane,
   FaMapMarkerAlt,
   FaEnvelope,
+  FaFacebook,
+  FaLinkedin,
+  FaTelegram,
 } from "react-icons/fa";
 import appstore from "../../../../public/images/app-store-apple.png";
 import playstore from "../../../../public/images/google-store.png";
 import whatsapp from "../../../../public/images/whats.webp";
-
 // Define menu links as objects
+import { SettingData } from "@/types/settingsType";
+import { IconType } from "react-icons";
+
+interface FooterProps {
+  data: SettingData;
+  isLoading: boolean;
+}
 const quickLinks = [
   { name: "Login", url: "/auth/login" },
   { name: "Signup", url: "/auth/signup" },
@@ -40,15 +49,17 @@ const unlistedZoneLinks = [
   { name: "Contact us", url: "/contact-us", badge: "" },
 ];
 
-const socialIcons = [
-  { icon: FaFacebookF, url: "#" },
-  { icon: FaTwitter, url: "#" },
-  { icon: FaLinkedinIn, url: "#" },
-  { icon: FaTelegramPlane, url: "#" },
-  { icon: FaInstagram, url: "#" },
-];
+const Footer = ({ data, isLoading }: FooterProps) => {
+  const socialIcons = [
+    { icon: FaFacebook, url: data.facebook },
+    { icon: FaTwitter, url: data.twitter },
+    { icon: FaLinkedin, url: data.linkedin },
+    { icon: FaTelegram, url: data.telegram },
+    { icon: FaInstagram, url: data.instagram },
+  ].filter((item): item is { icon: IconType; url: string } =>
+    Boolean(item.url)
+  );
 
-const Footer = () => {
   return (
     <footer className="bg-[#000] text-white py-20 px-4 md:px-10">
       <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
@@ -136,11 +147,11 @@ const Footer = () => {
           <h4 className="font-semibold text-lg mb-4">Our Office</h4>
           <div className="flex items-start gap-2 mb-3 text-sm">
             <FaMapMarkerAlt className="mt-1" />
-            <p>SCO-44, Sector 5-MDC, Panchkula, Haryana</p>
+            <p>{data.address}</p>
           </div>
           <div className="flex items-center gap-2 mb-3 text-sm">
             <FaEnvelope />
-            <span>sales@qededu.com</span>
+            <span>{data.email}</span>
           </div>
 
           {/* Social Icons */}
@@ -150,6 +161,8 @@ const Footer = () => {
                 href={url}
                 key={idx}
                 className="hover:text-[#00e676] transition"
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 <Icon />
               </Link>

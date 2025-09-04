@@ -11,9 +11,11 @@ import {
 } from "react-icons/fa";
 import TextInput from "@/components/ui/input/TextInput";
 import { useCreateContact } from "@/services/contact.service";
+import { useSettingsDetails } from "@/services/settings.service";
 import toast from "react-hot-toast";
 import { LoaderButton } from "@/components/ui/button";
-//zod validations
+
+// zod validations
 const validationSchema = z.object({
   fullName: z.string().min(1, "Full name is required"),
   email: z.string().email("Invalid email").min(1, "Email is required"),
@@ -25,7 +27,9 @@ const validationSchema = z.object({
   message: z.string().min(10, "Message must be at least 10 characters"),
 });
 type ContactFormData = z.infer<typeof validationSchema>;
+
 const Contactpage = () => {
+  // form
   const {
     register,
     handleSubmit,
@@ -34,7 +38,8 @@ const Contactpage = () => {
   } = useForm<ContactFormData>({
     resolver: zodResolver(validationSchema),
   });
-  // :white_check_mark: service hook
+
+  // :white_check_mark: contact form service
   const { mutate: createContact, isPending } = useCreateContact({
     onSuccess: (res: any) => {
       toast.success(res?.message || "Your message has been sent!");
@@ -44,9 +49,14 @@ const Contactpage = () => {
       toast.error(error?.response?.data?.message || "Something went wrong!");
     },
   });
+
+  // :white_check_mark: settings service for dynamic contact info
+  const { data: settings, isLoading } = useSettingsDetails();
+
   const onSubmit = (data: ContactFormData) => {
     createContact(data);
   };
+
   return (
     <section className="py-16 px-4 md:px-8 max-w-7xl mx-auto">
       {/* Heading */}
@@ -59,6 +69,7 @@ const Contactpage = () => {
           We’re here to answer any questions you may have.
         </p>
       </div>
+
       {/* Form & Info Grid */}
       <div className="grid md:grid-cols-3 gap-10 bg-white shadow-lg rounded-2xl overflow-hidden">
         {/* Contact Form */}
@@ -70,12 +81,13 @@ const Contactpage = () => {
             Have a question or feedback? Fill out the form and we’ll get back to
             you. Or drop an email at{" "}
             <a
-              href="mailto:info@qededu.com"
+              href={`mailto:${settings?.email || "info@example.com"}`}
               className="text-green-600 underline"
             >
-              info@qededu.com
+              {settings?.email || "info@example.com"}
             </a>
           </p>
+
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <TextInput
@@ -128,51 +140,59 @@ const Contactpage = () => {
             />
           </form>
         </div>
+
         {/* Contact Info */}
         <div className="bg-green-50 p-8 flex flex-col justify-center">
           <h4 className="text-xl font-semibold text-gray-800 mb-6">
             Contact Info
           </h4>
-          <div className="space-y-6 text-sm text-gray-700">
-            <div className="flex items-start gap-4">
-              <FaPhoneAlt className="text-green-500 mt-1" />
-              <div>
-                <p className="font-medium">Phone</p>
-                <p>+91 9999999999</p>
+          {isLoading ? (
+            <p className="text-gray-500">Loading contact info...</p>
+          ) : (
+            <div className="space-y-6 text-sm text-gray-700">
+              <div className="flex items-start gap-4">
+                <FaPhoneAlt className="text-green-500 mt-1" />
+                <div>
+                  <p className="font-medium">Phone</p>
+                  <p>{settings?.phoneNo || "+91 0000000000"}</p>
+                </div>
               </div>
-            </div>
-            <div className="flex items-start gap-4">
-              <FaEnvelope className="text-green-500 mt-1" />
-              <div>
-                <p className="font-medium">Email</p>
-                <p>info@qededu.com</p>
+              <div className="flex items-start gap-4">
+                <FaEnvelope className="text-green-500 mt-1" />
+                <div>
+                  <p className="font-medium">Email</p>
+                  <p>{settings?.email || "info@example.com"}</p>
+                </div>
               </div>
-            </div>
-            <div className="flex items-start gap-4">
-              <FaMapMarkerAlt className="text-green-500 mt-1" />
-              <div>
-                <p className="font-medium">Address</p>
-                <p>1036, Behind Vidhikendra, Adipur-Kutch – 370205, Gujarat</p>
+              <div className="flex items-start gap-4">
+                <FaMapMarkerAlt className="text-green-500 mt-1" />
+                <div>
+                  <p className="font-medium">Address</p>
+                  <p>{settings?.address || "Default address"}</p>
+                </div>
               </div>
+              {/* {settings?.whatsappLink && (
+                <div className="flex items-start gap-4">
+                  <FaWhatsapp className="text-green-600 mt-1" />
+                  <div>
+                    <p className="font-medium">WhatsApp Group</p>
+                    <a
+                      href={settings?.whatsappLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-green-700 underline"
+                    >
+                      Join WhatsApp Group
+                    </a>
+                  </div>
+                </div>
+              )} */}
             </div>
-            <div className="flex items-start gap-4">
-              <FaWhatsapp className="text-green-600 mt-1" />
-              <div>
-                <p className="font-medium">WhatsApp Group</p>
-                <a
-                  href="#"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-green-700 underline"
-                >
-                  Join QedEdu's WhatsApp Group
-                </a>
-              </div>
-            </div>
-          </div>
+          )}
         </div>
       </div>
     </section>
   );
 };
+
 export default Contactpage;

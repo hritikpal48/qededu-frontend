@@ -10,5 +10,10 @@ const nextConfig: NextConfig = {
     styledComponents: true,
   },
 };
+// next.config.js
 
-export default nextConfig;
+module.exports = {
+  images: {
+    domains: ["192.168.1.55"],
+  },
+};

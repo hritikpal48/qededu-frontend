@@ -21,7 +21,7 @@ const orderSchema = z.object({
   quantity: z.string().nonempty("Quantity is required"),
   message: z
     .string()
-    .min(5, "Message must be at least 5 characters")
+    .min(3, "Message must be at least 3 characters")
     .max(200, "Message cannot exceed 200 characters"),
 });
 type OrderFormValues = z.infer<typeof orderSchema>;
@@ -84,7 +84,7 @@ export const BuySellBox = ({
       <div className="flex mb-4">
         {(Object.keys(tabLabels) as Array<"1" | "2">).map((key) => {
           const numKey = Number(key) as 1 | 2;
-          const isDisabled = numKey === 2;
+          const isDisabled = false; // <--- disable nothing
           return (
             <button
               key={numKey}
@@ -97,7 +97,6 @@ export const BuySellBox = ({
               ? "border-green-600 text-green-600"
               : "border-gray-200 text-gray-500"
           }
-          ${isDisabled ? "cursor-not-allowed opacity-50" : ""}
         `}
             >
               {tabLabels[numKey]}
@@ -112,14 +111,25 @@ export const BuySellBox = ({
 
       {/* Form */}
       <form onSubmit={handleSubmit(onSubmit)}>
-        <TextInput
-          label="Quantity"
-          placeholder={`Buy Min (${minQuantity || 0}) Quantity `}
-          name="quantity"
-          error={errors?.quantity}
-          register={register}
-          className="w-full mb-3"
-        />
+        {tab === 1 ? (
+          <TextInput
+            label="Quantity"
+            placeholder={`Buy Min (${minQuantity || 0}) Quantity `}
+            name="quantity"
+            error={errors?.quantity}
+            register={register}
+            className="w-full mb-3"
+          />
+        ) : (
+          <TextInput
+            label="Quantity"
+            placeholder={`Sell Quantity `}
+            name="quantity"
+            error={errors?.quantity}
+            register={register}
+            className="w-full mb-3"
+          />
+        )}
 
         <TextAreaInput
           label="Message"
