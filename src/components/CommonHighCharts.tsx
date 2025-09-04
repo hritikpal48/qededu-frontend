@@ -88,7 +88,7 @@ const CommonHighChart: React.FC<StockChartProps> = ({
       },
       rangeSelector: { enabled: false },
       navigator: {
-        enabled: false,
+        enabled: true,
         height: 20,
         maskFill: "rgba(34, 197, 94, 0.2)",
         series: {
@@ -117,7 +117,6 @@ const CommonHighChart: React.FC<StockChartProps> = ({
         gridLineColor: "#F3F4F6",
         plotLines: [
           {
-            value: currentPrice,
             color: "#22C55E",
             width: 1,
             dashStyle: "Dot",
