@@ -12,11 +12,8 @@ import { FiLogOut } from "react-icons/fi";
 import { SettingData } from "@/types/settingsType";
 import { environmentVariables } from "@/config/app.config";
 import Image from "next/image";
-interface FooterProps {
-  data: SettingData;
-  isLoading: boolean;
-}
-const Header = ({ data, isLoading }: FooterProps) => {
+
+const Header = ({ logo }: { logo: string }) => {
   const { value: token, deleteCookie } = useCookie("access_token");
   const isLoggedIn = !!token;
   //console.log("datatest", data);
@@ -79,13 +76,13 @@ const Header = ({ data, isLoading }: FooterProps) => {
         <Link href="/" className="flex items-center space-x-2">
           <div className="flex items-center space-x-2">
             {/* Logo (conditionally rendered if available) */}
-            {data?.logo && (
+            {logo && (
               <Image
-                src={`${environmentVariables.UPLOAD_URL}/setting/${data?.logo}`}
+                src={`${environmentVariables.UPLOAD_URL}/setting/${logo}`}
                 alt="Logo"
-                width={70}
-                height={70}
-                className="h-10 w-10 object-contain"
+                width={110}
+                height={100}
+                // className="h-30 w-30 object-contain"
               />
             )}
 

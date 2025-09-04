@@ -20,6 +20,7 @@ import whatsapp from "../../../../public/images/whats.webp";
 // Define menu links as objects
 import { SettingData } from "@/types/settingsType";
 import { IconType } from "react-icons";
+import { environmentVariables } from "@/config/app.config";
 
 interface FooterProps {
   data: SettingData;
@@ -66,14 +67,15 @@ const Footer = ({ data, isLoading }: FooterProps) => {
         {/* Brand & Apps */}
         <div>
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2 pb-3">
-            <div className="text-white font-bold text-2xl flex items-center">
-              <span className="text-blue-700 text-3xl font-extrabold">Q</span>
-              <span className="text-yellow-400 text-3xl font-extrabold">E</span>
-              <span className="text-green-400 text-3xl font-extrabold">D</span>
-              <span className="ml-2 text-white">Edu</span>
-            </div>
-          </Link>
+
+          {data.logo && (
+            <Image
+              src={`${environmentVariables.UPLOAD_URL}/setting/${data.logo}`}
+              alt="Logo"
+              className="h-30 w-30 object-contain" // controls actual size
+            />
+          )}
+
           <p className="text-sm mb-4">
             India’s No.1 Platform for Buying and Selling Unlisted Shares.
           </p>

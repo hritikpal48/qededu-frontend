@@ -7,27 +7,18 @@ import { Toaster } from "react-hot-toast";
 import { useSettingsDetails } from "@/services/settings.service";
 import { SettingData } from "@/types/settingsType";
 
-const defaultSettings: SettingData = {
-  _id: "",
-  logo: "default-logo.png",
-  phoneNo: "",
-  email: "",
-  address: "",
-  facebook: "",
-  twitter: "",
-  linkedin: "",
-  telegram: "",
-  instagram: "",
-};
-
 const HomeLayout = ({ children }: { children: React.ReactNode }) => {
   const { data: settings, isLoading: SettingsLoading } = useSettingsDetails();
+  const logo = settings?.logo ?? "default-logo.png";
 
   return (
     <>
-      <Header data={settings ?? defaultSettings} isLoading={SettingsLoading} />
+      <Header logo={logo} />
       <main>{children}</main>
-      <Footer data={settings ?? defaultSettings} isLoading={SettingsLoading} />
+      <Footer
+        data={settings ?? ({} as SettingData)}
+        isLoading={SettingsLoading}
+      />
       <Toaster position="top-right" />
     </>
   );

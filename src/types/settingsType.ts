@@ -21,7 +21,7 @@ export interface MediaData {
 
 export interface SettingData {
   _id: string;
-  logo: string | null;
+  logo: string;
   phoneNo: string;
   email: string;
   address: string;
