@@ -1,10 +1,8 @@
 "use client";
-
 import { useState, useMemo } from "react";
 import Image from "@/components/ui/Image";
 import { environmentVariables } from "@/config/app.config";
 import Link from "next/link";
-
 interface StockItem {
   _id: string;
   name: string;
@@ -13,12 +11,10 @@ interface StockItem {
   link?: string;
   slug: string;
 }
-
 interface SharesListProps {
   data: StockItem[];
   isLoading: boolean;
 }
-
 const ShareCard = ({
   image,
   name,
@@ -31,32 +27,36 @@ const ShareCard = ({
   href?: string;
 }) => {
   return (
-    <div className="shadow-lg rounded overflow-hidden bg-white hover:scale-[1.02] transition">
-      <div className="flex items-center justify-center h-44 bg-white">
-        <Image
-          src={`${environmentVariables.UPLOAD_URL}/stocks/${image}`}
-          alt={name}
-          width={150}
-          height={100}
-        />
-      </div>
-      <div className="bg-black text-white p-4 text-center">
-        {/* <div className="text-[#59C20F] text-xs mb-1">{category}</div> */}
-        <h4 className="font-semibold text-lg leading-tight">{name}</h4>
-        <Link
-          href={`/share/${href}`}
-          className="ml-2 text-sm font-medium text-dark hover:underline"
-        >
-          Learn More
-        </Link>
-      </div>
-    </div>
+ <div className="group flex  shadow-lg rounded-xl overflow-hidden bg-white hover:shadow-2xl hover:scale-[1.009] transition-all duration-300">
+  {/* Image section */}
+  <div className="flex-shrink-0 w-40 h-full bg-gray-50  overflow-hidden shadow-xl">
+    <Image
+      src={`${environmentVariables.UPLOAD_URL}/stocks/${image}`}
+      alt={name}
+      className="object-cover h-full w-full transition-transform duration-300 group-hover:scale-110"
+    />
+  </div>
+  {/* Content section */}
+  <div className="flex flex-col p-6 pt-3 flex-1">
+    {/* Optional category badge */}
+    {/* <div className="inline-block px-3 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-600 mb-2">
+      {category}
+    </div> */}
+    <h4 className="font-semibold text-lg text-gray-800 group-hover:text-black transition">
+      {name}
+    </h4>
+    <Link
+      href={`/share/${href}`}
+      className="mt-3 inline-block text-sm font-medium text-green-600 hover:underline"
+    >
+      Learn More →
+    </Link>
+  </div>
+</div>
   );
 };
-
 const SharesList = ({ data, isLoading, isHomePage }: SharesListProps & { isHomePage?: boolean }) => {
   const [tab, setTab] = useState<"all" | "offerings">("all");
-
   // Filter data based on tab
   const filteredData = useMemo(() => {
     if (tab === "all") {
@@ -65,24 +65,19 @@ const SharesList = ({ data, isLoading, isHomePage }: SharesListProps & { isHomeP
       return data.filter((item) => item.type === 1); // offerings = IPO
     }
   }, [tab, data]);
-
-  // ✅ If homepage, only show first 6 items
+  // :white_check_mark: If homepage, only show first 6 items
   const visibleData = isHomePage ? filteredData.slice(0, 6) : filteredData;
-
   if (isLoading) {
     return <div className="text-center py-10">Loading...</div>;
   }
-
   if (!visibleData.length) {
     return <div className="text-center py-10">No shares available.</div>;
   }
-
   return (
     <section className="max-w-7xl mx-auto px-4 pt-10 pb-25">
       <h2 className="text-4xl font-bold text-center mb-4">
         Latest Unlisted Shares
       </h2>
-
       {/* Tabs */}
       <div className="flex justify-center gap-8 mb-8 text-sm font-medium">
         <button
@@ -106,7 +101,6 @@ const SharesList = ({ data, isLoading, isHomePage }: SharesListProps & { isHomeP
           LATEST OFFERINGS
         </button>
       </div>
-
       {/* Cards */}
       <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
         {visibleData.map((item) => (
@@ -121,5 +115,4 @@ const SharesList = ({ data, isLoading, isHomePage }: SharesListProps & { isHomeP
     </section>
   );
 };
-
 export default SharesList;
