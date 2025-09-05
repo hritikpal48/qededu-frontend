@@ -12,6 +12,7 @@ export type BlogData = {
     createdAt?: string;
     description: string;
     type: BLOG_TYPE;
+    link?:string,
     likedByIps: string[]
 };
 

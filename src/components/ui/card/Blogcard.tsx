@@ -1,7 +1,6 @@
 import Image from "@/components/ui/Image";
 import React, { useState, useEffect } from "react";
-import { SiSpreadshirt } from "react-icons/si";
-import { FaRegHeart, FaHeart } from "react-icons/fa";
+import { FaRegHeart, FaHeart, FaRegEye } from "react-icons/fa";
 import Link from "next/link";
 import { BlogData } from "@/types/blogType";
 import { environmentVariables } from "@/config/app.config";
@@ -108,7 +107,7 @@ const BlogCard = (props: Props) => {
                 <div className="flex gap-2 items-center">
                     {/* Views */}
                     <div className="flex items-center gap-1 bg-gray-200 px-2 py-1 rounded-2xl">
-                        <SiSpreadshirt className="text-gray-600" />
+                        <FaRegEye className="text-gray-600" />
                         <span className="text-xs text-gray-700">{blogData.views || 0}</span>
                     </div>
                     

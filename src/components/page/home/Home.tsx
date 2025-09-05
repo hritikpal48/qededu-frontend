@@ -33,7 +33,7 @@ const Home = () => {
     page: 1,
     limit: 10,
     // keyword: "",
-    type: 3
+    type: BLOG_TYPE.NEWS
   });
 
   // SharesList ke liye API call
