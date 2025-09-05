@@ -2,15 +2,7 @@
 import React, { useMemo } from "react";
 import Highcharts from "highcharts/highstock";
 import HighchartsReact from "highcharts-react-official";
-// :white_check_mark: Safely initialize annotations module
-try {
-  const AnnotationsModule = require("highcharts/modules/annotations");
-  if (typeof AnnotationsModule === "function") {
-    AnnotationsModule(Highcharts);
-  }
-} catch (error) {
-  console.warn("Annotations module could not be loaded:", error);
-}
+
 type StockChartProps = {
   name: string;
   series: Array<[number, number]> | null | undefined;
@@ -88,8 +80,8 @@ const CommonHighChart: React.FC<StockChartProps> = ({
       },
       rangeSelector: { enabled: false },
       navigator: {
-        enabled: false,
-        height: 20,
+        enabled: true,
+        height: 40,
         maskFill: "rgba(34, 197, 94, 0.2)",
         series: {
           type: "area",
@@ -101,9 +93,10 @@ const CommonHighChart: React.FC<StockChartProps> = ({
       },
       scrollbar: { enabled: false },
       title: {
-        text: `${name} <span style="color:#22c55e;font-size:16px;font-weight:bold;">₹${currentPrice.toFixed(
-          2
-        )}</span>`,
+        text: "",
+        // text: `${name} <span style="color:#22c55e;font-size:16px;font-weight:bold;">₹${currentPrice.toFixed(
+        //   2
+        // )}</span>`,
         useHTML: true,
         align: "left",
       },
@@ -113,8 +106,21 @@ const CommonHighChart: React.FC<StockChartProps> = ({
         crosshair: { width: 1, color: "#9CA3AF", dashStyle: "Dash" },
       },
       yAxis: {
-        opposite: false,
-        gridLineColor: "#F3F4F6",
+        lineWidth: 1, // ✅ Ek single vertical line draw karega
+        lineColor: "#ccc", // ✅ Line ka color
+        tickWidth: 0.5,
+        opposite: false, // ✅ Ensures Y-axis is on the LEFT side
+        gridLineWidth: 1,
+        gridLineColor: "#E5E7EB",
+        gridLineDashStyle: "Solid", // Optional: you can use "Dash" or "Dot"
+        labels: {
+          align: "right", // ✅ Align labels to the right of axis
+          x: -5, // ✅ Bring labels closer to line
+          style: {
+            color: "#6B7280", // Tailwind gray-500 for a clean look
+            fontSize: "12px",
+          },
+        },
         plotLines: [
           {
             value: currentPrice,
@@ -129,6 +135,7 @@ const CommonHighChart: React.FC<StockChartProps> = ({
           },
         ],
       },
+
       tooltip: {
         shared: false, // Changed to false so flags can have their own tooltip
         useHTML: true,

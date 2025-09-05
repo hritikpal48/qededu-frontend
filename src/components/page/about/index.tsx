@@ -5,8 +5,12 @@ import Link from "next/link";
 import AppImages from "@/config/constant/app.images";
 import BlogCard from "@/components/ui/card/Blogcard";
 import { useFetchBlogList } from "@/services/blog.service";
-import { useState } from "react";
-import { GetBlogListApiParams } from "@/types/blogType";
+import { useEffect, useState } from "react";
+import { BlogList, GetBlogListApiParams } from "@/types/blogType";
+import { useFetchAbout } from "@/services/settings.service";
+import SkeletonLoader from "@/components/ui/SkeletonLoader";
+import { environmentVariables } from "@/config/app.config";
+import { BLOG_TYPE } from "@/utils/constant";
 
 const mediaArticles = [
   {
@@ -81,24 +85,29 @@ const blogPosts: any[] = [
 const AboutPage = () => {
   const [blogParams, setBlogParams] = useState<GetBlogListApiParams>({
     page: 1,
-    limit: 10,
+    limit: 3,
     keyword: "",
-    // type:1 Optional
+    type: BLOG_TYPE.BLOG,
   });
 
-  const { data: blogData } = useFetchBlogList(blogParams);
+  const {
+    data: blogData,
+    isLoading: blogLoading,
+    refetch: blogRefetch,
+  } = useFetchBlogList(blogParams);
+
+  const { data: aboutData, isLoading: aboutLoading } = useFetchAbout();
 
   return (
     <>
       <section className="max-w-7xl mx-auto py-10 bg-white text-gray-800">
         <div className="px-4">
           <h1 className="text-[30px] font-bold mb-3">About Us</h1>
-          <p className="pb-10">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam
-            excepturi dolores id tenetur dolorem dolore et sapiente eligendi! In
-            possimus impedit cupiditate commodi! Magnam dignissimos placeat
-            architecto quo voluptate harum?
-          </p>
+          {aboutLoading ? (
+            <SkeletonLoader className="h-6 w-full mb-4" /> // <-- loader height & width set kare
+          ) : (
+            <p className="pb-10">{aboutData?.description}</p>
+          )}
         </div>
 
         <div className="bg-green-50 p-6 md:p-10 rounded-lg">
@@ -107,8 +116,13 @@ const AboutPage = () => {
               <h2 className="text-2xl md:text-3xl font-semibold mb-4">
                 Our Journey
               </h2>
-              <p className="text-sm md:text-base mb-4 leading-relaxed">
-                <strong>QedEdu</strong> was founded in <strong>2023</strong> by
+              {aboutLoading ? (
+                <SkeletonLoader className="h-6 w-full mb-4" /> // <-- loader height & width set kare
+              ) : (
+                <>
+                  <p className="text-sm md:text-base mb-4 leading-relaxed">
+                    {aboutData?.history}
+                    {/* <strong>QedEdu</strong> was founded in <strong>2023</strong> by
                 a group of passionate professionals –
                 <span className="text-green-700 font-semibold">
                   {" "}
@@ -117,19 +131,27 @@ const AboutPage = () => {
                 – with a vision to reshape digital learning. Recognizing the gap
                 in personalized, accessible education, QedEdu was created to
                 empower learners with high-quality content, mentorship, and
-                real-world exposure.
-              </p>
-              <p className="text-sm md:text-base leading-relaxed">
-                With deep experience in finance, marketing, and operations, our
+                real-world exposure. */}
+                  </p>
+
+                  <p className="text-sm md:text-base leading-relaxed">
+                    {aboutData?.history2}
+                    {/* With deep experience in finance, marketing, and operations, our
                 founders have combined their strengths to build a
                 learner-centric EdTech platform. QedEdu focuses on transparency,
                 upskilling, and personalized outcomes—enabling students to learn
-                smart, not just hard.
-              </p>
+                smart, not just hard. */}
+                  </p>
+                </>
+              )}
             </div>
             <div className="flex justify-center">
               <Image
-                src={AppImages.about.aboutImg}
+                src={
+                  aboutData?.image1 && aboutData.image1.trim() !== ""
+                    ? `${environmentVariables.UPLOAD_URL}/about/${aboutData.image1}`
+                    : AppImages.about.aboutImg
+                }
                 alt="Journey Illustration"
                 width={300}
                 height={300}
@@ -152,46 +174,16 @@ const AboutPage = () => {
       </section>
 
       <section className="bg-white text-gray-800">
-        {/* In the Media */}
-        <div className="max-w-7xl mx-auto py-14 px-4 md:px-10">
-          <div className="flex items-center justify-between flex-wrap gap-4 mb-8">
-            <h2 className="text-2xl md:text-3xl font-semibold">In the Media</h2>
-            <Link
-              href="#"
-              className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition text-sm font-medium"
-            >
-              Read More
-            </Link>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-6">
-            {mediaArticles.map((item, idx) => (
-              <div
-                key={idx}
-                className="border border-[#d2d2d2] rounded-lg px-8 text-center py-10 hover:shadow-md transition"
-              >
-                <div className=" flex justify-center align-center mb-3">
-                  <Image
-                    src={item.logo}
-                    alt={item.source}
-                    width={40}
-                    height={40}
-                    className="mb-3"
-                  />
-                </div>
-                <h4 className="font-semibold text-base mb-1">{item.source}</h4>
-                <p className="text-sm text-gray-600">{item.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-
         {/* Life at QedEdu */}
         <div className="bg-[#F0FDF4] py-14">
           <div className="max-w-7xl mx-auto px-4 md:px-10 grid md:grid-cols-2 gap-8 items-center">
             <div>
               <Image
-                src={AppImages.about.lifeCompany}
+                src={
+                  aboutData?.image2 && aboutData.image2.trim() !== ""
+                    ? `${environmentVariables.UPLOAD_URL}/about/${aboutData.image2}`
+                    : AppImages.about.lifeCompany
+                }
                 alt="QedEdu Team"
                 width={600}
                 height={400}
@@ -202,23 +194,32 @@ const AboutPage = () => {
               <h2 className="text-2xl md:text-3xl font-semibold mb-4">
                 Life at QedEdu
               </h2>
-              <p className="text-sm md:text-base mb-3 leading-relaxed text-gray-700">
-                Life at <strong>QedEdu</strong> thrives on innovation,
+              {aboutLoading ? (
+                <SkeletonLoader className="h-6 w-full mb-4" /> // <-- loader height & width set kare
+              ) : (
+                <>
+                  <p className="text-sm md:text-base mb-3 leading-relaxed text-gray-700">
+                    {aboutData?.summary}
+                    {/* Life at <strong>QedEdu</strong> thrives on innovation,
                 collaboration, and purpose-driven learning. We embrace
                 technology to reshape how education is accessed and delivered,
-                ensuring inclusivity and excellence.
-              </p>
-              <p className="text-sm md:text-base leading-relaxed text-gray-700">
-                From software engineers to curriculum designers, every team
+                ensuring inclusivity and excellence. */}
+                  </p>
+                  <p className="text-sm md:text-base leading-relaxed text-gray-700">
+                    {aboutData?.summary2}
+                    {/* From software engineers to curriculum designers, every team
                 member plays a vital role in transforming the EdTech landscape.
                 Our culture values curiosity, transparency, and continuous
-                improvement.
-              </p>
-              <p className="text-sm md:text-base leading-relaxed text-gray-700 mt-3">
-                At QedEdu, we’re not just building a platform—we’re building a
+                improvement. */}
+                  </p>
+                  <p className="text-sm md:text-base leading-relaxed text-gray-700 mt-3">
+                    {aboutData?.summary3}
+                    {/* At QedEdu, we’re not just building a platform—we’re building a
                 movement. Join us and be part of an environment that values both
-                professional growth and personal development.
-              </p>
+                professional growth and personal development. */}
+                  </p>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -227,11 +228,9 @@ const AboutPage = () => {
       <div className="max-w-7xl mx-auto py-10 px-4">
         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
           {Array.isArray(blogData) &&
-            blogData
-              .slice(0, 3)
-              .map((post, key) => (
-                <BlogCard blogData={post} key={post._id ?? key} />
-              ))}
+            blogData.map((post, key) => (
+              <BlogCard blogData={post} key={post._id ?? key} />
+            ))}
         </div>
       </div>
     </>

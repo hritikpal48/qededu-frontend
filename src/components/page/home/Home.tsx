@@ -12,13 +12,16 @@ import { GetStockListApiParams, StockData } from "@/types/stock";
 import { useState, useMemo, useCallback } from "react";
 import { BlogData, GetBlogListApiParams } from "@/types/blogType";
 import { useFetchBlogList } from "@/services/blog.service";
+import { useSettingsDetails } from "@/services/settings.service";
+import { SettingData } from "@/types/settingsType";
+
 const Home = () => {
   // SharesList ke liye params (type: 1)
   const [sharesParams, setSharesParams] = useState<GetStockListApiParams>({
     page: 1,
     limit: 10,
     keyword: "",
-    type: STOCK_TYPE.UNLISTED
+    type: STOCK_TYPE.UNLISTED,
   });
 
   // StockList ke liye params (type: 4)
@@ -26,24 +29,37 @@ const Home = () => {
     page: 1,
     limit: 10,
     keyword: "",
-    type: STOCK_TYPE.IPO
+    type: STOCK_TYPE.IPO,
   });
 
   const [blogParams, setBlogParams] = useState<GetBlogListApiParams>({
     page: 1,
     limit: 10,
     // keyword: "",
-    type: 3
+    type: BLOG_TYPE.NEWS,
   });
 
+  const { data: settings, isLoading: SettingsLoading } = useSettingsDetails();
   // SharesList ke liye API call
-  const { data: sharesData, isLoading: sharesLoading, refetch: sharesRefetch } = useFetchStockList(sharesParams);
+  const {
+    data: sharesData,
+    isLoading: sharesLoading,
+    refetch: sharesRefetch,
+  } = useFetchStockList(sharesParams);
 
   // StockList ke liye API call
-  const { data: stockData, isLoading: stockLoading, refetch: stockRefetch } = useFetchStockList(stockParams);
+  const {
+    data: stockData,
+    isLoading: stockLoading,
+    refetch: stockRefetch,
+  } = useFetchStockList(stockParams);
 
   // Blog data ke liye API call
-  const { data: blogData, isLoading: blogLoading, refetch: blogRefetch } = useFetchBlogList(blogParams);
+  const {
+    data: blogData,
+    isLoading: blogLoading,
+    refetch: blogRefetch,
+  } = useFetchBlogList(blogParams);
 
   const handleStockPageChange = useCallback((page: number) => {
     setStockParams((p) => ({ ...p, page }));
@@ -53,8 +69,6 @@ const Home = () => {
     setStockParams((p) => ({ ...p, limit, page: 1 }));
   }, []);
 
-
-
   const blogDataFilter = useMemo(() => {
     if (Array.isArray(blogData)) {
       return blogData.filter((item: BlogData) => item.type === BLOG_TYPE.NEWS);
@@ -63,10 +77,18 @@ const Home = () => {
   }, [blogData]);
   return (
     <>
-      <HeroBanner />
+      <HeroBanner
+        data={settings ?? ({} as SettingData)}
+        isLoading={SettingsLoading}
+      />
+
       <InfoSection />
 
-      <SharesList data={sharesData?.data ?? []} isLoading={sharesLoading} isHomePage={true} />
+      <SharesList
+        data={sharesData?.data ?? []}
+        isLoading={sharesLoading}
+        isHomePage={true}
+      />
 
       <ExploreInvest />
       <ProcessSteps />
@@ -80,8 +102,11 @@ const Home = () => {
         setPerPage={handleStockLimitChange}
       />
 
-      <BlogPage blogData={blogDataFilter} blogLoading={blogLoading} isHomePage={true} /> 
-
+      <BlogPage
+        blogData={blogDataFilter}
+        blogLoading={blogLoading}
+        isHomePage={true}
+      />
     </>
   );
 };

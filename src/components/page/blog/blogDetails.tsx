@@ -7,8 +7,7 @@ import { useFetchBlogDetail, useUpdateLikeBlog, useUpdateViewBlog } from "@/serv
 import Skeleton from "@/components/ui/SkeletonLoader";
 import { environmentVariables } from "@/config/app.config";
 import { dateFormat, getClientIp } from "@/utils";
-import { FaRegHeart, FaHeart } from "react-icons/fa";
-import { SiSpreadshirt } from "react-icons/si";
+import { FaRegHeart, FaHeart, FaRegEye } from "react-icons/fa";
 
 type BlogDetailsProps = {
     slug: string;
@@ -183,7 +182,7 @@ export default function BlogDetails({ slug }: BlogDetailsProps) {
                             <div className="flex items-center space-x-4">
                                 {/* Views */}
                                 <div className="flex items-center gap-1">
-                                    <SiSpreadshirt className="text-gray-600" />
+                                    <FaRegEye className="text-gray-600" />
                                     <span className="text-xs text-gray-700">{blogData?.views || 0}</span>
                                 </div>
 

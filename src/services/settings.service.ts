@@ -1,19 +1,25 @@
 import HttpService from "./http.service";
 import { useQueryHook } from "@/hooks/useMutationHook";
-import { FaqData, ProcessData, SettingData } from "@/types/settingsType";
+import {
+  FaqData,
+  ProcessData,
+  MediaData,
+  SettingData,
+  AboutResponse,
+} from "@/types/settingsType";
 
 // ========================
 // Get Fqa API
 // ========================
-const getFqaDetails = async (): Promise<FaqData> => {
+const getFaqDetails = async (): Promise<FaqData> => {
   const res = await HttpService.get("/faq");
   return res?.data?.data;
 };
 
-export const useFqaDetails = () =>
+export const useFaqDetails = () =>
   useQueryHook({
-    queryKey: ["fqa_details"],
-    queryFn: () => getFqaDetails(),
+    queryKey: ["faq"],
+    queryFn: () => getFaqDetails(),
   });
 
 // =======================
@@ -27,7 +33,7 @@ const getProcessDetails = async (): Promise<ProcessData> => {
 
 export const useProcessDetails = () =>
   useQueryHook({
-    queryKey: ["process_details"],
+    queryKey: ["process"],
     queryFn: () => getProcessDetails(),
   });
 
@@ -35,16 +41,16 @@ export const useProcessDetails = () =>
 // Get Media API
 // ========================
 
-// const getMediaDetails = async (): Promise<MediaData> => {
-//   const res = await HttpService.get("/media");
-//   return res?.data?.data;
-// };
+const getMediaDetails = async (): Promise<MediaData> => {
+  const res = await HttpService.get("/media");
+  return res?.data?.data;
+};
 
-// export const useMediaDetails = () =>
-//   useQueryHook({
-//     queryKey: ["Media_details"],
-//     queryFn: () => getMediaDetails(),
-//   });
+export const useMediaDetails = () =>
+  useQueryHook({
+    queryKey: ["media"],
+    queryFn: () => getMediaDetails(),
+  });
 
 // =======================
 // Get Settings API
@@ -57,6 +63,21 @@ const getSettingDetails = async (): Promise<SettingData> => {
 
 export const useSettingsDetails = () =>
   useQueryHook({
-    queryKey: ["setting_details"],
+    queryKey: ["setting"],
     queryFn: () => getSettingDetails(),
+  });
+
+// =======================
+// Get About API
+// ========================
+
+const getAboutDetails = async (): Promise<AboutResponse> => {
+  const res = await HttpService.get("/about");
+  return res?.data?.data;
+};
+
+export const useFetchAbout = () =>
+  useQueryHook({
+    queryKey: ["about"],
+    queryFn: () => getAboutDetails(),
   });

@@ -19,6 +19,6 @@ export enum STOCK_TYPE {
 
 export enum BLOG_TYPE {
   BLOG = 1,
-  FEATURE = 2,
+  MEDIA = 2,
   NEWS = 3,
 }

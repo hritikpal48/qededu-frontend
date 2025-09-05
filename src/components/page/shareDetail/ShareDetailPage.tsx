@@ -4,7 +4,12 @@ import { ProductPriceSection } from "./ProductPriceSection";
 import { TimeRangeSelector } from "./TimeRangeSelector";
 import { FundamentalsCard } from "./FundamentalsCard";
 import SkeletonLoader from "@/components/ui/SkeletonLoader";
-import { BuySellBox } from "./RightShareSidebar";
+import {
+  BuySellBox,
+  CreateAlert,
+  DownloadApp,
+  ValuationMeter,
+} from "./RightShareSidebar";
 import { useFetchStockBySlug } from "@/services/stock.service";
 import { useFetchStockChart } from "@/services/myshare.service";
 import { ChartRange } from "@/types/myshareType";
@@ -102,7 +107,7 @@ const ShareDetailPage = ({ slug }: ShareDetailPageProps) => {
         {/* ✅ Price Section */}
         <ProductPriceSection
           name={stockData.name}
-          price={chartData?.stats?.latest || stockData.price || 0}
+          price={stockData.price || 0}
           // change={calculatePriceChange()}
           change="↑ 20 (1.62%)"
         />

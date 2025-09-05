@@ -45,6 +45,7 @@ const unlistedZoneLinks = [
 ];
 
 const Footer = ({ data, isLoading }: FooterProps) => {
+  console.log("datatest", data);
   const socialIcons = [
     { icon: FaFacebook, url: data.facebook },
     { icon: FaTwitter, url: data.twitter },
@@ -70,9 +71,7 @@ const Footer = ({ data, isLoading }: FooterProps) => {
             />
           )}
 
-          <p className="text-sm mb-4">
-            India’s No.1 Platform for Buying and Selling Unlisted Shares.
-          </p>
+          <p className="text-sm mb-4">{data.description}</p>
 
           {/* <div className="flex gap-2 mb-4 flex-wrap">
             <Link href="/">
