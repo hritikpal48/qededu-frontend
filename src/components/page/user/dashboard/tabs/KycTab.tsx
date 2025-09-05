@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import KycEditForm from "@/components/forms/KycEditForm";
 import KycCreateForm from "@/components/forms/KycCreateForm";
 import Image from "next/image";
@@ -22,7 +22,7 @@ export default function KycTab() {
   //   refetch();
   // }, []);
 
-  const handleCancel = () => setIsEditMode(false);
+  // const handleCancel = () => setIsEditMode(false);
   const handleStartKYC = () => setIsEditMode(true);
 
   if (isLoading) {

@@ -67,8 +67,7 @@ export const useSettingsDetails = () =>
     queryFn: () => getSettingDetails(),
   });
 
-
-  // =======================
+// =======================
 // Get About API
 // ========================
 

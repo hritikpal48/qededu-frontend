@@ -1,7 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
-import SpinnerLoader from "@/components/ui/loader/SpinerLoader";
 import { useFetchMyshareDetails } from "@/services/myshare.service";
 import { getOrderStatusInfo } from "@/utils";
 import TextInput from "@/components/ui/input/TextInput";

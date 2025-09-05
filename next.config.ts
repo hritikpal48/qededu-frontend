@@ -1,23 +1,24 @@
-// next.config.mjs
 import type { NextConfig } from "next";
 
-/** @type {NextConfig} */
-const nextConfig = {
+const nextConfig: NextConfig = {
   images: {
-    loader: "default",
-    loaderFile: "./src/utils/imageLoader.ts",
     remotePatterns: [
       {
         protocol: "http",
-        hostname: "localhost", // ✅ allow localhost
-        port: "**",            // allow any port (3000, 4000 etc.)
-        pathname: "/**",       // allow all image paths
+        hostname: "localhost",
+        port: "3000", // or whichever you use
+        pathname: "/**",
       },
       {
         protocol: "http",
-        hostname: "192.168.1.55", // ✅ allow LAN IP
-        port: "**",
+        hostname: "192.168.1.55",
+        port: "7001", // explicitly allow this port
         pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "qedwed.duckdns.org",
+        pathname: "/**", // allow all images from your production domain
       },
     ],
   },

@@ -29,10 +29,7 @@ export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) 
-
-
-{
+}>) {
   return (
     <html lang="en">
       <body
@@ -40,9 +37,7 @@ export default function RootLayout({
       >
         <Suspense fallback={""}>
           <ReactQueryProvider>
-            <HomeLayout>
-              {children}
-            </HomeLayout>
+            <HomeLayout>{children}</HomeLayout>
           </ReactQueryProvider>
         </Suspense>
       </body>

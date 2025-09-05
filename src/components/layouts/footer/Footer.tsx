@@ -3,20 +3,14 @@
 import Image from "@/components/ui/Image";
 import Link from "next/link";
 import {
-  FaFacebookF,
   FaInstagram,
   FaTwitter,
-  FaLinkedinIn,
-  FaTelegramPlane,
   FaMapMarkerAlt,
   FaEnvelope,
   FaFacebook,
   FaLinkedin,
   FaTelegram,
 } from "react-icons/fa";
-import appstore from "../../../../public/images/app-store-apple.png";
-import playstore from "../../../../public/images/google-store.png";
-import whatsapp from "../../../../public/images/whats.webp";
 // Define menu links as objects
 import { SettingData } from "@/types/settingsType";
 import { IconType } from "react-icons";
@@ -51,6 +45,7 @@ const unlistedZoneLinks = [
 ];
 
 const Footer = ({ data, isLoading }: FooterProps) => {
+  console.log("datatest", data);
   const socialIcons = [
     { icon: FaFacebook, url: data.facebook },
     { icon: FaTwitter, url: data.twitter },
@@ -76,9 +71,7 @@ const Footer = ({ data, isLoading }: FooterProps) => {
             />
           )}
 
-          <p className="text-sm mb-4">
-            India’s No.1 Platform for Buying and Selling Unlisted Shares.
-          </p>
+          <p className="text-sm mb-4">{data.description}</p>
 
           {/* <div className="flex gap-2 mb-4 flex-wrap">
             <Link href="/">

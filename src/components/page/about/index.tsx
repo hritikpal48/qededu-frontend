@@ -87,10 +87,14 @@ const AboutPage = () => {
     page: 1,
     limit: 3,
     keyword: "",
-    type:BLOG_TYPE.BLOG
+    type: BLOG_TYPE.BLOG,
   });
 
-  const { data: blogData, isLoading: blogLoading, refetch: blogRefetch } = useFetchBlogList(blogParams);
+  const {
+    data: blogData,
+    isLoading: blogLoading,
+    refetch: blogRefetch,
+  } = useFetchBlogList(blogParams);
 
   const { data: aboutData, isLoading: aboutLoading } = useFetchAbout();
 
@@ -102,9 +106,7 @@ const AboutPage = () => {
           {aboutLoading ? (
             <SkeletonLoader className="h-6 w-full mb-4" /> // <-- loader height & width set kare
           ) : (
-            <p className="pb-10">
-              {aboutData?.description}
-            </p>
+            <p className="pb-10">{aboutData?.description}</p>
           )}
         </div>
 
@@ -116,10 +118,11 @@ const AboutPage = () => {
               </h2>
               {aboutLoading ? (
                 <SkeletonLoader className="h-6 w-full mb-4" /> // <-- loader height & width set kare
-              ) : (<>
-                <p className="text-sm md:text-base mb-4 leading-relaxed">
-                  {aboutData?.history}
-                  {/* <strong>QedEdu</strong> was founded in <strong>2023</strong> by
+              ) : (
+                <>
+                  <p className="text-sm md:text-base mb-4 leading-relaxed">
+                    {aboutData?.history}
+                    {/* <strong>QedEdu</strong> was founded in <strong>2023</strong> by
                 a group of passionate professionals –
                 <span className="text-green-700 font-semibold">
                   {" "}
@@ -129,17 +132,18 @@ const AboutPage = () => {
                 in personalized, accessible education, QedEdu was created to
                 empower learners with high-quality content, mentorship, and
                 real-world exposure. */}
-                </p>
+                  </p>
 
-                <p className="text-sm md:text-base leading-relaxed">
-                  {aboutData?.history2}
-                  {/* With deep experience in finance, marketing, and operations, our
+                  <p className="text-sm md:text-base leading-relaxed">
+                    {aboutData?.history2}
+                    {/* With deep experience in finance, marketing, and operations, our
                 founders have combined their strengths to build a
                 learner-centric EdTech platform. QedEdu focuses on transparency,
                 upskilling, and personalized outcomes—enabling students to learn
                 smart, not just hard. */}
-                </p>
-              </>)}
+                  </p>
+                </>
+              )}
             </div>
             <div className="flex justify-center">
               <Image
@@ -167,12 +171,9 @@ const AboutPage = () => {
             </div>
           ))}
         </div>
-
       </section>
 
       <section className="bg-white text-gray-800">
-
-
         {/* Life at QedEdu */}
         <div className="bg-[#F0FDF4] py-14">
           <div className="max-w-7xl mx-auto px-4 md:px-10 grid md:grid-cols-2 gap-8 items-center">
@@ -195,28 +196,29 @@ const AboutPage = () => {
               </h2>
               {aboutLoading ? (
                 <SkeletonLoader className="h-6 w-full mb-4" /> // <-- loader height & width set kare
-              ) : (<>
-                <p className="text-sm md:text-base mb-3 leading-relaxed text-gray-700">
-                  {aboutData?.summary}
-                  {/* Life at <strong>QedEdu</strong> thrives on innovation,
+              ) : (
+                <>
+                  <p className="text-sm md:text-base mb-3 leading-relaxed text-gray-700">
+                    {aboutData?.summary}
+                    {/* Life at <strong>QedEdu</strong> thrives on innovation,
                 collaboration, and purpose-driven learning. We embrace
                 technology to reshape how education is accessed and delivered,
                 ensuring inclusivity and excellence. */}
-                </p>
-                <p className="text-sm md:text-base leading-relaxed text-gray-700">
-                  {aboutData?.summary2}
-                  {/* From software engineers to curriculum designers, every team
+                  </p>
+                  <p className="text-sm md:text-base leading-relaxed text-gray-700">
+                    {aboutData?.summary2}
+                    {/* From software engineers to curriculum designers, every team
                 member plays a vital role in transforming the EdTech landscape.
                 Our culture values curiosity, transparency, and continuous
                 improvement. */}
-                </p>
-                <p className="text-sm md:text-base leading-relaxed text-gray-700 mt-3">
-                  {aboutData?.summary3}
-                  {/* At QedEdu, we’re not just building a platform—we’re building a
+                  </p>
+                  <p className="text-sm md:text-base leading-relaxed text-gray-700 mt-3">
+                    {aboutData?.summary3}
+                    {/* At QedEdu, we’re not just building a platform—we’re building a
                 movement. Join us and be part of an environment that values both
                 professional growth and personal development. */}
-                </p>
-              </>
+                  </p>
+                </>
               )}
             </div>
           </div>

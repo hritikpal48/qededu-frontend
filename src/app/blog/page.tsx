@@ -14,7 +14,11 @@ const Page: React.FC = () => {
 
   // accumulated posts (flattened)
   const [allBlogData, setAllBlogData] = useState<BlogList>([]);
-  const { data: blogDataResponse, isLoading: blogLoading, refetch } = useFetchBlogList(blogParams);
+  const {
+    data: blogDataResponse,
+    isLoading: blogLoading,
+    refetch,
+  } = useFetchBlogList(blogParams);
 
   // When API response changes, normalize & append/replace
   useEffect(() => {
@@ -29,9 +33,9 @@ const Page: React.FC = () => {
       setAllBlogData(newPosts);
     } else {
       // Append but avoid duplicates (by _id)
-      setAllBlogData(prev => {
-        const existingIds = new Set(prev.map(p => p._id));
-        const filtered = newPosts.filter(p => !existingIds.has(p._id));
+      setAllBlogData((prev) => {
+        const existingIds = new Set(prev.map((p) => p._id));
+        const filtered = newPosts.filter((p) => !existingIds.has(p._id));
         return [...prev, ...filtered];
       });
     }
@@ -39,13 +43,13 @@ const Page: React.FC = () => {
 
   // Load more handler (memoized)
   const handleLoadMore = useCallback(() => {
-    setBlogParams(prev => ({ ...prev, page: prev.page + 1 }));
+    setBlogParams((prev) => ({ ...prev, page: prev.page + 1 }));
   }, []);
 
   // Optional: refresh / reset (for new search, type change)
-  const handleResetAndFetch = useCallback((nextParams: Partial<GetBlogListApiParams>) => {
-    setBlogParams(prev => ({ ...prev, page: 1, ...nextParams }));
-  }, []);
+  // const handleResetAndFetch = useCallback((nextParams: Partial<GetBlogListApiParams>) => {
+  //   setBlogParams(prev => ({ ...prev, page: 1, ...nextParams }));
+  // }, []);
 
   // Determine hasMore from API response (if resp is paginated)
   const hasMore = React.useMemo(() => {
@@ -68,7 +72,7 @@ const Page: React.FC = () => {
       hasMore={hasMore}
       onRefresh={() => {
         // optional: for UI refresh button
-        setBlogParams(p => ({ ...p, page: 1 }));
+        setBlogParams((p) => ({ ...p, page: 1 }));
         refetch();
       }}
     />

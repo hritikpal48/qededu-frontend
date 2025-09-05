@@ -44,4 +44,6 @@ export interface SettingData {
   linkedin?: string;
   telegram?: string;
   instagram?: string;
+  description?: string;
+  youtube?: string;
 }

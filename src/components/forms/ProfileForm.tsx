@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { useUpdateProfile } from "@/services/user.service";
 import "react-datepicker/dist/react-datepicker.css";
-import { DefaultButton, LoaderButton } from "../ui/button";
+import { LoaderButton } from "../ui/button";
 
 const validationSchema = z.object({
   fname: z.string().min(1, "First name is required."),
@@ -26,8 +26,6 @@ const ProfileEditForm = ({
   defaultValues: FormData;
   onComplete: () => void;
 }) => {
-
-    
   const onError = (err: any) => {
     const message = err?.response?.data?.message ?? "Update failed";
     toast.error(message);
@@ -65,10 +63,10 @@ const ProfileEditForm = ({
     defaultValues.dob ? new Date(defaultValues.dob) : null
   );
 
-const onSubmit = (data: FormData) => {
-  const { email, ...cleanData } = data;
-  updateMutate(cleanData);
-};
+  const onSubmit = (data: FormData) => {
+    const { email, ...cleanData } = data;
+    updateMutate(cleanData);
+  };
 
   return (
     <form id="profileEditForm" onSubmit={handleSubmit(onSubmit)}>
