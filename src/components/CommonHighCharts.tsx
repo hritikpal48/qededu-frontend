@@ -160,7 +160,7 @@ const CommonHighChart: React.FC<StockChartProps> = ({
   }, [name, series, flags]);
   if (!series || series.length === 0) {
     return (
-      <div className={`${className} flex items-center justify-center bg-gray-50 border rounded-lg`}>
+      <div className={`${className} flex items-center justify-center  bg-gray-50 border rounded-lg`}>
         <span className="text-gray-400 text-sm">No chart data available</span>
       </div>
     );
