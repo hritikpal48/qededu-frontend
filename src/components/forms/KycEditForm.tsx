@@ -15,18 +15,20 @@ import { LoaderButton } from "../ui/button";
 import { Country, State, City, IState, ICity } from "country-state-city";
 import { useUpdateKyc } from "@/services/kyc.service";
 
-const allowedFileTypes = ['image/jpeg', 'image/png', 'image/jpg', 'application/pdf'];
+const allowedFileTypes = [
+  "image/jpeg",
+  "image/png",
+  "image/jpg",
+  "application/pdf",
+];
 const maxFileSize = 5 * 1024 * 1024; // 5MB
 
 const fileSchema = z
   .instanceof(File)
-  .refine(
-    (file) => file.size <= maxFileSize,
-    'File size must be less than 5MB'
-  )
+  .refine((file) => file.size <= maxFileSize, "File size must be less than 5MB")
   .refine(
     (file) => allowedFileTypes.includes(file.type),
-    'Only .jpg, .jpeg, .png and .pdf files are allowed'
+    "Only .jpg, .jpeg, .png and .pdf files are allowed"
   )
   .optional();
 
@@ -48,13 +50,22 @@ const validationSchema = z.object({
     }),
     panDetails: z.object({
       name: z.string().min(1, "Name is required"),
-      panNo: z.string().min(10, "PAN must be 10 characters").max(10)
+      panNo: z
+        .string()
+        .min(10, "PAN must be 10 characters")
+        .max(10)
         .regex(/[A-Z]{5}[0-9]{4}[A-Z]{1}/, "Invalid PAN format"),
     }),
     bankDetails: z.object({
       name: z.string().min(1, "Account holder name is required"),
-      accountNo: z.string().min(9, "Account number must be 9-18 digits").max(18),
-      ifsc: z.string().min(11, "IFSC must be 11 characters").max(11)
+      accountNo: z
+        .string()
+        .min(9, "Account number must be 9-18 digits")
+        .max(18),
+      ifsc: z
+        .string()
+        .min(11, "IFSC must be 11 characters")
+        .max(11)
         .regex(/^[A-Z]{4}0[A-Z0-9]{6}$/, "Invalid IFSC format"),
       bankName: z.string().min(1, "Bank name is required"),
       branch: z.string().min(1, "Branch is required"),
@@ -63,8 +74,8 @@ const validationSchema = z.object({
       city: z.string().min(1, "City is required"),
       country: z.string().min(1, "Country is required"),
       state: z.string().min(1, "State is required"),
-    })
-  })
+    }),
+  }),
 });
 
 const customLoader = ({ src }: { src: string }) =>
@@ -110,22 +121,24 @@ interface KycFormProps {
   onComplete: () => void;
 }
 
-export default function KycEditForm({ defaultValues, onComplete }: KycFormProps) {
-  
+export default function KycEditForm({
+  defaultValues,
+  onComplete,
+}: KycFormProps) {
   const onError = (err: any) => {
     console.log("error", err);
     const message = err?.response?.data?.message ?? "Something went wrong";
     toast.error(message);
   };
   const onSuccess = () => {
-    
-     toast.success('✅ KYC details successfully updated and resubmitted for review.');
-     onComplete();
+    toast.success(
+      "✅ KYC details successfully updated and resubmitted for review."
+    );
+    onComplete();
   };
   const { mutate, isPending } = useUpdateKyc({ onError, onSuccess });
 
-
-const {
+  const {
     register,
     handleSubmit,
     setValue,
@@ -134,62 +147,64 @@ const {
     formState: { errors },
   } = useForm<FormKYCData>({
     resolver: zodResolver(validationSchema),
-    defaultValues: defaultValues ? {
-      kycData: {
-        aadharDetails: {
-          fullName: defaultValues.aadharDetails?.fullName || "",
-          aadharNo: defaultValues.aadharDetails?.aadharNo || "",
-          gender: defaultValues.aadharDetails?.gender || "",
-          dob: defaultValues.aadharDetails?.dob || "",
-          address: defaultValues.aadharDetails?.address || "",
-          pincode: defaultValues.aadharDetails?.pincode || "",
-          country: defaultValues.aadharDetails?.country || "",
-          state: defaultValues.aadharDetails?.state || "",
-        },
-        panDetails: {
-          name: defaultValues.panDetails?.name || "",
-          panNo: defaultValues.panDetails?.panNo || "",
-        },
-        bankDetails: {
-          name: defaultValues.bankDetails?.name || "",
-          accountNo: defaultValues.bankDetails?.accountNo || "",
-          ifsc: defaultValues.bankDetails?.ifsc || "",
-          bankName: defaultValues.bankDetails?.bankName || "",
-          branch: defaultValues.bankDetails?.branch || "",
-          phone: defaultValues.bankDetails?.phone || "",
-          address: defaultValues.bankDetails?.address || "",
-          city: defaultValues.bankDetails?.city || "",
-          country: defaultValues.bankDetails?.country || "",
-          state: defaultValues.bankDetails?.state || "",
+    defaultValues: defaultValues
+      ? {
+          kycData: {
+            aadharDetails: {
+              fullName: defaultValues.aadharDetails?.fullName || "",
+              aadharNo: defaultValues.aadharDetails?.aadharNo || "",
+              gender: defaultValues.aadharDetails?.gender || "",
+              dob: defaultValues.aadharDetails?.dob || "",
+              address: defaultValues.aadharDetails?.address || "",
+              pincode: defaultValues.aadharDetails?.pincode || "",
+              country: defaultValues.aadharDetails?.country || "",
+              state: defaultValues.aadharDetails?.state || "",
+            },
+            panDetails: {
+              name: defaultValues.panDetails?.name || "",
+              panNo: defaultValues.panDetails?.panNo || "",
+            },
+            bankDetails: {
+              name: defaultValues.bankDetails?.name || "",
+              accountNo: defaultValues.bankDetails?.accountNo || "",
+              ifsc: defaultValues.bankDetails?.ifsc || "",
+              bankName: defaultValues.bankDetails?.bankName || "",
+              branch: defaultValues.bankDetails?.branch || "",
+              phone: defaultValues.bankDetails?.phone || "",
+              address: defaultValues.bankDetails?.address || "",
+              city: defaultValues.bankDetails?.city || "",
+              country: defaultValues.bankDetails?.country || "",
+              state: defaultValues.bankDetails?.state || "",
+            },
+          },
         }
-      }
-    } : undefined,
+      : undefined,
   });
 
   const [dob, setDob] = useState<Date | null>(
-    defaultValues?.aadharDetails?.dob 
-      ? new Date(defaultValues.aadharDetails.dob) 
+    defaultValues?.aadharDetails?.dob
+      ? new Date(defaultValues.aadharDetails.dob)
       : null
   );
 
   // Image states
   const [aadhaarFront, setAadhaarFront] = useState<string | null>(
-    defaultValues?.aadharDetails?.aadharFrontImage 
+    defaultValues?.aadharDetails?.aadharFrontImage
       ? `${environmentVariables.UPLOAD_URL}/kyc/${defaultValues.aadharDetails.aadharFrontImage}`
       : null
   );
   const [aadhaarBack, setAadhaarBack] = useState<string | null>(
-    defaultValues?.aadharDetails?.aadharBackImage 
+    defaultValues?.aadharDetails?.aadharBackImage
       ? `${environmentVariables.UPLOAD_URL}/kyc/${defaultValues.aadharDetails.aadharBackImage}`
       : null
   );
   const [panImage, setPanImage] = useState<string | null>(
-    defaultValues?.panDetails?.panImage 
+    defaultValues?.panDetails?.panImage
       ? `${environmentVariables.UPLOAD_URL}/kyc/${defaultValues.panDetails.panImage}`
       : null
   );
   const [bankImage, setBankImage] = useState<string | null>(
-    defaultValues?.bankDetails?.bankImage 
+    defaultValues?.bankDetails?.bankImage
       ? `${environmentVariables.UPLOAD_URL}/kyc/${defaultValues.bankDetails.bankImage}`
       : null
   );
@@ -200,7 +215,6 @@ const {
   // Country & State options
   const countries = Country.getAllCountries();
   const [states, setStates] = useState<IState[]>([]);
-  const [cities, setCities] = useState<ICity[]>([]);
   const [bankStates, setBankStates] = useState<IState[]>([]);
   const [bankCities, setBankCities] = useState<ICity[]>([]);
 
@@ -211,20 +225,26 @@ const {
   // Initialize states when component loads with existing data
   useEffect(() => {
     if (defaultValues?.aadharDetails?.country) {
-      const countryCode = countries.find(c => c.name === defaultValues.aadharDetails.country)?.isoCode;
+      const countryCode = countries.find(
+        (c) => c.name === defaultValues.aadharDetails.country
+      )?.isoCode;
       if (countryCode) {
         setStates(State.getStatesOfCountry(countryCode));
       }
     }
-    
+
     if (defaultValues?.bankDetails?.country) {
-      const bankCountryCode = countries.find(c => c.name === defaultValues.bankDetails.country)?.isoCode;
+      const bankCountryCode = countries.find(
+        (c) => c.name === defaultValues.bankDetails.country
+      )?.isoCode;
       if (bankCountryCode) {
         setBankStates(State.getStatesOfCountry(bankCountryCode));
-        
+
         // Also load cities if state is available
         if (defaultValues.bankDetails.state) {
-          const stateCode = State.getStatesOfCountry(bankCountryCode).find(s => s.name === defaultValues.bankDetails.state)?.isoCode;
+          const stateCode = State.getStatesOfCountry(bankCountryCode).find(
+            (s) => s.name === defaultValues.bankDetails.state
+          )?.isoCode;
           if (stateCode) {
             setBankCities(City.getCitiesOfState(bankCountryCode, stateCode));
           }
@@ -236,9 +256,13 @@ const {
   // Update bank cities when bank state changes
   useEffect(() => {
     if (watchedBankCountry && watchedBankState) {
-      const countryCode = countries.find(c => c.name === watchedBankCountry)?.isoCode;
-      const stateCode = bankStates.find(s => s.name === watchedBankState)?.isoCode;
-      
+      const countryCode = countries.find(
+        (c) => c.name === watchedBankCountry
+      )?.isoCode;
+      const stateCode = bankStates.find(
+        (s) => s.name === watchedBankState
+      )?.isoCode;
+
       if (countryCode && stateCode) {
         setBankCities(City.getCitiesOfState(countryCode, stateCode));
       } else {
@@ -251,19 +275,20 @@ const {
 
   const onSubmit = (data: FormKYCData) => {
     const formData = new FormData();
-    
+
     // Append files if they exist
-    if (data.aadharImageFront) formData.append('aadharImageFront', data.aadharImageFront);
-    if (data.aadharImageBack) formData.append('aadharImageBack', data.aadharImageBack);
-    if (data.panImage) formData.append('panImage', data.panImage);
-    if (data.bankImage) formData.append('bankImage', data.bankImage);
-    
+    if (data.aadharImageFront)
+      formData.append("aadharImageFront", data.aadharImageFront);
+    if (data.aadharImageBack)
+      formData.append("aadharImageBack", data.aadharImageBack);
+    if (data.panImage) formData.append("panImage", data.panImage);
+    if (data.bankImage) formData.append("bankImage", data.bankImage);
+
     // Append the nested KYC data as JSON
-    formData.append('kycData', JSON.stringify(data.kycData));
-    
+    formData.append("kycData", JSON.stringify(data.kycData));
+
     console.log("Submitting KYC data:", data);
-        // mutate(formData);
-   
+    // mutate(formData);
   };
 
   const handleImageUpload = (
@@ -292,7 +317,9 @@ const {
     }
   };
 
-  const handleRemoveImage = (type: "aadhaarFront" | "aadhaarBack" | "pan" | "bank") => {
+  const handleRemoveImage = (
+    type: "aadhaarFront" | "aadhaarBack" | "pan" | "bank"
+  ) => {
     if (type === "aadhaarFront") {
       setAadhaarFront(null);
       setValue("aadharImageFront", undefined);
@@ -323,15 +350,15 @@ const {
         </span>
         {label}
       </div>
-      <input 
-        type="file" 
-        accept="image/*,.pdf" 
+      <input
+        type="file"
+        accept="image/*,.pdf"
         onChange={(e) => handleImageUpload(e, type)}
         className="hidden"
         id={`${type}-input`}
       />
-      <label 
-        htmlFor={`${type}-input`} 
+      <label
+        htmlFor={`${type}-input`}
         className="cursor-pointer text-center py-2 px-4 bg-gray-100 hover:bg-gray-200 rounded"
       >
         Choose File
@@ -440,15 +467,17 @@ const {
               value={field.value ?? ""}
               onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                 const selectedCountry = e.target.value;
-                 console.log('selectedCountry', selectedCountry)
-                const countryCode = countries.find(c => c.name === selectedCountry)?.isoCode;
+                console.log("selectedCountry", selectedCountry);
+                const countryCode = countries.find(
+                  (c) => c.name === selectedCountry
+                )?.isoCode;
                 field.onChange(selectedCountry); // Store country name, not code
                 if (countryCode) {
                   setStates(State.getStatesOfCountry(countryCode));
                 }
                 setValue("kycData.aadharDetails.state", "");
               }}
-              options={countries.map(c => c.name)}
+              options={countries.map((c) => c.name)}
               error={errors.kycData?.aadharDetails?.country}
             />
           )}
@@ -463,7 +492,7 @@ const {
               label="State"
               value={field.value ?? ""}
               onChange={field.onChange}
-              options={states.map(s => s.name)}
+              options={states.map((s) => s.name)}
               error={errors.kycData?.aadharDetails?.state}
               disabled={!states.length}
             />
@@ -481,16 +510,8 @@ const {
       {/* Aadhaar Upload */}
       <h2 className="text-[20px] font-semibold mt-6 mb-4">Upload Aadhaar</h2>
       <div className="grid md:grid-cols-2 gap-6">
-        {renderUploadBox(
-          "Upload Aadhaar Front",
-          aadhaarFront,
-          "aadhaarFront"
-        )}
-        {renderUploadBox(
-          "Upload Aadhaar Back",
-          aadhaarBack,
-          "aadhaarBack"
-        )}
+        {renderUploadBox("Upload Aadhaar Front", aadhaarFront, "aadhaarFront")}
+        {renderUploadBox("Upload Aadhaar Back", aadhaarBack, "aadhaarBack")}
       </div>
 
       {/* PAN Section */}
@@ -511,11 +532,7 @@ const {
         />
       </div>
       <div className="mt-4">
-        {renderUploadBox(
-          "Upload PAN Card",
-          panImage,
-          "pan"
-        )}
+        {renderUploadBox("Upload PAN Card", panImage, "pan")}
       </div>
 
       {/* Bank Section */}
@@ -580,7 +597,9 @@ const {
               value={field.value ?? ""}
               onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                 const selectedCountry = e.target.value;
-                const countryCode = countries.find(c => c.name === selectedCountry)?.isoCode;
+                const countryCode = countries.find(
+                  (c) => c.name === selectedCountry
+                )?.isoCode;
                 field.onChange(selectedCountry);
                 if (countryCode) {
                   setBankStates(State.getStatesOfCountry(countryCode));
@@ -590,7 +609,7 @@ const {
                 setValue("kycData.bankDetails.state", "");
                 setValue("kycData.bankDetails.city", "");
               }}
-              options={countries.map(c => c.name)}
+              options={countries.map((c) => c.name)}
               error={errors.kycData?.bankDetails?.country}
             />
           )}
@@ -609,7 +628,7 @@ const {
                 field.onChange(selectedState);
                 setValue("kycData.bankDetails.city", ""); // Reset city when state changes
               }}
-              options={bankStates.map(s => s.name)}
+              options={bankStates.map((s) => s.name)}
               error={errors.kycData?.bankDetails?.state}
               disabled={!bankStates.length}
             />
@@ -625,7 +644,7 @@ const {
               label="City"
               value={field.value ?? ""}
               onChange={field.onChange}
-              options={bankCities.map(c => c.name)}
+              options={bankCities.map((c) => c.name)}
               error={errors.kycData?.bankDetails?.city}
               disabled={!bankCities.length}
             />

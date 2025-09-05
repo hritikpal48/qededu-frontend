@@ -4,17 +4,8 @@ import { ProductPriceSection } from "./ProductPriceSection";
 import { TimeRangeSelector } from "./TimeRangeSelector";
 import { FundamentalsCard } from "./FundamentalsCard";
 import SkeletonLoader from "@/components/ui/SkeletonLoader";
-import {
-  BuySellBox,
-  CreateAlert,
-  DownloadApp,
-  ValuationMeter,
-} from "./RightShareSidebar";
-import { useSearchParams } from "next/navigation";
-import {
-  useFetchStockBySlug,
-  useFetchStockDetails,
-} from "@/services/stock.service";
+import { BuySellBox } from "./RightShareSidebar";
+import { useFetchStockBySlug } from "@/services/stock.service";
 import { useFetchStockChart } from "@/services/myshare.service";
 import { ChartRange } from "@/types/myshareType";
 import CommonHighChart from "@/components/CommonHighCharts";
@@ -27,14 +18,20 @@ const ShareDetailPage = ({ slug }: ShareDetailPageProps) => {
   const [range, setRange] = useState<ChartRange>(ChartRange.MAX);
 
   // ✅ Fetch stock data
-  const { data: stockData, isLoading: stockLoading, refetch: stockRefetch } = 
-    useFetchStockBySlug(slug);
+  const {
+    data: stockData,
+    isLoading: stockLoading,
+    refetch: stockRefetch,
+  } = useFetchStockBySlug(slug);
 
   // ✅ Fetch chart data with proper dependency
-  const { data: chartData, isLoading: chartLoading, refetch: chartRefetch } =
-    useFetchStockChart(stockData?._id, range);
+  const {
+    data: chartData,
+    isLoading: chartLoading,
+    refetch: chartRefetch,
+  } = useFetchStockChart(stockData?._id, range);
 
-  console.log('Chart Data:', chartData);
+  console.log("Chart Data:", chartData);
 
   // ✅ Refetch data when slug or range changes
   useEffect(() => {
@@ -50,19 +47,19 @@ const ShareDetailPage = ({ slug }: ShareDetailPageProps) => {
   }, [stockData?._id, range, chartRefetch]);
 
   // ✅ Calculate price change from chart data
-  const calculatePriceChange = () => {
-    if (!chartData?.stats) return "No change data";
-    
-    const { changeAbs, changePct } = chartData.stats;
-    const symbol = changeAbs >= 0 ? "↑" : "↓";
-    const color = changeAbs >= 0 ? "text-green-600" : "text-red-600";
-    
-    return (
-      <span className={color}>
-        {symbol} {Math.abs(changeAbs)} ({Math.abs(changePct).toFixed(2)}%)
-      </span>
-    );
-  };
+  // const calculatePriceChange = () => {
+  //   if (!chartData?.stats) return "No change data";
+
+  //   const { changeAbs, changePct } = chartData.stats;
+  //   const symbol = changeAbs >= 0 ? "↑" : "↓";
+  //   const color = changeAbs >= 0 ? "text-green-600" : "text-red-600";
+
+  //   return (
+  //     <span className={color}>
+  //       {symbol} {Math.abs(changeAbs)} ({Math.abs(changePct).toFixed(2)}%)
+  //     </span>
+  //   );
+  // };
 
   // ✅ Loading state
   if (stockLoading) {
@@ -124,10 +121,7 @@ const ShareDetailPage = ({ slug }: ShareDetailPageProps) => {
         </div>
 
         {/* ✅ Time Range Selector */}
-        <TimeRangeSelector 
-          selected={range} 
-          onSelect={setRange} 
-        />
+        <TimeRangeSelector selected={range} onSelect={setRange} />
 
         {/* ✅ Company Description */}
         {stockData.about && (
@@ -145,7 +139,7 @@ const ShareDetailPage = ({ slug }: ShareDetailPageProps) => {
         <FundamentalsCard
           data={stockData.fundamentals}
           name={stockData.name}
-          sharePrice={chartData?.stats?.latest || stockData.price || 0} 
+          sharePrice={chartData?.stats?.latest || stockData.price || 0}
         />
       </div>
 
@@ -157,7 +151,7 @@ const ShareDetailPage = ({ slug }: ShareDetailPageProps) => {
           name={stockData.name}
           stockId={stockData._id}
         />
-        
+
         {/* Add other sidebar components here if needed */}
         {/* <CreateAlert />
         <ValuationMeter />

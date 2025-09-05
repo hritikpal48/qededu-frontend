@@ -86,8 +86,7 @@ const AboutPage = () => {
     // type:1 Optional
   });
 
-  const { data: blogData, isLoading: blogLoading, refetch: blogRefetch } = useFetchBlogList(blogParams);
-
+  const { data: blogData } = useFetchBlogList(blogParams);
 
   return (
     <>
@@ -150,7 +149,6 @@ const AboutPage = () => {
             </div>
           ))}
         </div>
-
       </section>
 
       <section className="bg-white text-gray-800">
@@ -229,9 +227,11 @@ const AboutPage = () => {
       <div className="max-w-7xl mx-auto py-10 px-4">
         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
           {Array.isArray(blogData) &&
-            blogData.slice(0, 3).map((post, key) => (
-              <BlogCard blogData={post} key={post._id ?? key} />
-            ))}
+            blogData
+              .slice(0, 3)
+              .map((post, key) => (
+                <BlogCard blogData={post} key={post._id ?? key} />
+              ))}
         </div>
       </div>
     </>

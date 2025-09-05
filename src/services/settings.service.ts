@@ -1,11 +1,6 @@
 import HttpService from "./http.service";
 import { useQueryHook } from "@/hooks/useMutationHook";
-import {
-  FaqData,
-  ProcessData,
-  MediaData,
-  SettingData,
-} from "@/types/settingsType";
+import { FaqData, ProcessData, SettingData } from "@/types/settingsType";
 
 // ========================
 // Get Fqa API

@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, useMemo } from "react";
 import Image from "@/components/ui/Image";
 import Link from "next/link";
 import { FaCircleArrowUp, FaCircleArrowDown } from "react-icons/fa6";
@@ -51,8 +50,6 @@ const StockTable = ({
   totalPage,
   loading,
 }: Props) => {
-
-
   return (
     <section className="bg-[#f7f7f7] py-12 px-4 md:px-10 rounded-lg">
       <div className="max-w-7xl mx-auto">

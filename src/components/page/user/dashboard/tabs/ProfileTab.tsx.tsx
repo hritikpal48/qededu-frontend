@@ -29,7 +29,7 @@ export default function ProfileTab({
 }: Props) {
   const [isEditMode, setIsEditMode] = useState(false);
 
-  const handleCancel = () => setIsEditMode(false);
+  // const handleCancel = () => setIsEditMode(false);
 
   const editFormDefaultValues = {
     fname: userProfile?.fname ?? "",

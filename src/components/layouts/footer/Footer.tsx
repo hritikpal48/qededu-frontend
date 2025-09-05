@@ -3,20 +3,14 @@
 import Image from "@/components/ui/Image";
 import Link from "next/link";
 import {
-  FaFacebookF,
   FaInstagram,
   FaTwitter,
-  FaLinkedinIn,
-  FaTelegramPlane,
   FaMapMarkerAlt,
   FaEnvelope,
   FaFacebook,
   FaLinkedin,
   FaTelegram,
 } from "react-icons/fa";
-import appstore from "../../../../public/images/app-store-apple.png";
-import playstore from "../../../../public/images/google-store.png";
-import whatsapp from "../../../../public/images/whats.webp";
 // Define menu links as objects
 import { SettingData } from "@/types/settingsType";
 import { IconType } from "react-icons";

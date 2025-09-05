@@ -1,7 +1,4 @@
-import Image from "next/image";
-import AppImages from "@/config/constant/app.images";
 import BlogDetails from "@/components/page/blog/blogDetails";
-
 
 type PageProps = {
   params: Promise<{
@@ -15,9 +12,6 @@ export default async function Page({ params }: PageProps) {
   return <BlogDetails slug={slug} />;
 }
 
-
-
-  
 //   return (
 //     <div className="min-h-screen bg-gray-50">
 //       <section className="max-w-7xl mx-auto px-2 py-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
