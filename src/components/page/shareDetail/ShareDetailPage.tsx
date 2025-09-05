@@ -10,11 +10,7 @@ import {
   DownloadApp,
   ValuationMeter,
 } from "./RightShareSidebar";
-import { useSearchParams } from "next/navigation";
-import {
-  useFetchStockBySlug,
-  useFetchStockDetails,
-} from "@/services/stock.service";
+import {useFetchStockBySlug} from "@/services/stock.service";
 import { useFetchStockChart } from "@/services/myshare.service";
 import { ChartRange } from "@/types/myshareType";
 import CommonHighChart from "@/components/CommonHighCharts";
@@ -105,7 +101,7 @@ const ShareDetailPage = ({ slug }: ShareDetailPageProps) => {
         {/* ✅ Price Section */}
         <ProductPriceSection
           name={stockData.name}
-          price={chartData?.stats?.latest || stockData.price || 0}
+          price={stockData.price || 0}
           // change={calculatePriceChange()}
           change="↑ 20 (1.62%)"
         />
