@@ -7,9 +7,9 @@ import Link from "next/link";
 import { useFetchBlogList } from "@/services/blog.service";
 import { BlogList, GetBlogListApiParams } from "@/types/blogType";
 import { BLOG_TYPE } from "@/utils/constant";
-import SkeletonLoader from "@/components/ui/SkeletonLoader";
 import { environmentVariables } from "@/config/app.config";
 import { useMediaDetails } from "@/services/settings.service";
+import Skeleton from "@/components/ui/SkeletonLoader";
 
 const Page = () => {
   const [blogParams] = useState<GetBlogListApiParams>({
@@ -19,7 +19,7 @@ const Page = () => {
   });
 
   const { data, isLoading } = useFetchBlogList(blogParams);
-  const { data:inMedia, isLoading:inMediaLoader } = useMediaDetails();
+  const { data: inMedia, isLoading: inMediaLoader } = useMediaDetails();
 
   const mediaPosts: BlogList = Array.isArray(data) ? data : [];
 
@@ -44,15 +44,16 @@ const Page = () => {
           </span>
         </h2>
 
-     {inMediaLoader ? (
-          <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              <SkeletonLoader />
+        {/* Description Loader */}
+        {inMediaLoader ? (
+          <div className="mt-6 flex justify-center">
+            <Skeleton className="h-6 w-2/3" />
           </div>
-           ) : (
-        <p className="text-[18px] text-gray-600 mt-2 max-w-3xl mx-auto">
-          {inMedia?.description}
-        </p>
-           )}
+        ) : (
+          <p className="text-[18px] text-gray-600 mt-2 max-w-3xl mx-auto">
+            {inMedia?.description}
+          </p>
+        )}
 
         <h2 className="inline-block mt-4 text-green-600 font-semibold text-[32px] py-5">
           Check Our Recent Media Coverage
@@ -61,7 +62,17 @@ const Page = () => {
         {/* Media Coverage Grid */}
         {isLoading ? (
           <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              <SkeletonLoader />
+            {Array.from({ length: 6 }).map((_, idx) => (
+              <div
+                key={idx}
+                className="p-6 border border-gray-200 rounded-xl shadow-sm flex flex-col"
+              >
+                <Skeleton className="h-4 w-1/2 mb-4" />
+                <Skeleton className="h-20 w-full mb-4" />
+                <Skeleton className="h-4 w-full mb-2" />
+                <Skeleton className="h-4 w-3/4" />
+              </div>
+            ))}
           </div>
         ) : (
           <div>
@@ -106,14 +117,14 @@ const Page = () => {
             </div>
 
             {/* View All Button */}
-              <div className="mt-10 flex justify-center">
-                <Link
-                  href="/blog"
-                  className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-full font-medium transition inline-block cursor-pointer"
-                >
-                  View All Media
-                </Link>
-              </div>
+            <div className="mt-10 flex justify-center">
+              <Link
+                href="/blog"
+                className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-full font-medium transition inline-block cursor-pointer"
+              >
+                View All Media
+              </Link>
+            </div>
           </div>
         )}
       </div>
