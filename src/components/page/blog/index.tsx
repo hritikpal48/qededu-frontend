@@ -4,6 +4,7 @@ import BlogCard from "@/components/ui/card/Blogcard";
 import { BlogRespone, BlogList } from "@/types/blogType";
 
 interface BlogPageProps {
+  title?:string|undefined
   blogData?: BlogList | BlogRespone; // Accept both formats
   blogLoading: boolean;
   isHomePage: boolean; // To differentiate between home and blog page
@@ -13,6 +14,7 @@ interface BlogPageProps {
 }
 
 const BlogPage: React.FC<BlogPageProps> = ({ 
+  title,
   blogData, 
   blogLoading, 
   isHomePage = false,
@@ -28,7 +30,7 @@ const BlogPage: React.FC<BlogPageProps> = ({
     return (
       <div className="max-w-7xl mx-auto py-10 px-4">
         <h2 className="text-4xl font-bold text-center pb-10">
-          Unlisted Shares in News
+          {title||"Unlisted Shares in News"}
         </h2>
         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
           {/* Loading skeleton */}

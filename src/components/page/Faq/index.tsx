@@ -6,9 +6,8 @@ import { FaMinus, FaPlus } from "react-icons/fa";
 import Link from "next/link";
 import { useFaqDetails } from "@/services/settings.service";
 import SkeletonLoader from "@/components/ui/SkeletonLoader";
+import { environmentVariables } from "@/config/app.config";
 
-const customLoader = ({ src }: { src: string }) =>
-  src.startsWith("http") ? src : `${src}`;
 
 const categoryLabels: Record<string, string> = {
   about: "About Unlisted/Pre-IPO Shares",
@@ -20,26 +19,30 @@ const FaqPage = () => {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
   const { data, isLoading, isError } = useFaqDetails();
+  console.log('data', data)
 
   // ✅ Categorize FAQs dynamically and sort "about" first
-const categorizedFaqs = useMemo(() => {
-  // ✅ Safe check: agar data array nahi hai to empty object return karo
-  if (!Array.isArray(data)) return { grouped: {}, orderedCategories: [] };
+  const categorizedFaqs = useMemo(() => {
+    // ✅ Safe check: agar data ya data.faq array nahi hai to empty object return karo
+    if (!data || !Array.isArray(data.faq)) {
+      return { grouped: {}, orderedCategories: [] };
+    }
 
-  const grouped: Record<string, any[]> = {};
-  data.forEach((faq) => {
-    if (!grouped[faq.category]) grouped[faq.category] = [];
-    grouped[faq.category].push(faq);
-  });
+    const grouped: Record<string, typeof data.faq> = {};
 
-  const orderedCategories = Object.keys(grouped).sort((a, b) => {
-    if (a === "about") return -1;
-    if (b === "about") return 1;
-    return a.localeCompare(b);
-  });
+    data.faq.forEach((faq) => {
+      if (!grouped[faq.category]) grouped[faq.category] = [];
+      grouped[faq.category].push(faq);
+    });
 
-  return { grouped, orderedCategories };
-}, [data]);
+    const orderedCategories = Object.keys(grouped).sort((a, b) => {
+      if (a === "about") return -1; // ✅ Pehle "about" category show ho
+      if (b === "about") return 1;
+      return a.localeCompare(b); // ✅ Baaki alphabetically sort ho
+    });
+
+    return { grouped, orderedCategories };
+  }, [data]);
 
   // ✅ Set default active category (about first)
   React.useEffect(() => {
@@ -59,27 +62,33 @@ const categorizedFaqs = useMemo(() => {
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
           <div>
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
-              Got Questions?
+              {data?.title || "Got Questions?"}
             </h2>
             <div className="mt-4 text-gray-600 text-sm">
               {isLoading ? (
                 <SkeletonLoader />
               ) : (
+
                 <div
-                  className="px-6 py-3"
+                  className="text-base leading-relaxed text-gray-800 [&>p]:mb-4 [&>h1]:text-2xl [&>h1]:font-bold [&>h1]:mb-4 [&>h2]:text-xl [&>h2]:font-bold [&>h2]:mb-3 [&>h3]:text-lg [&>h3]:font-bold [&>h3]:mb-2 [&>ul]:list-disc [&>ul]:list-inside [&>ul]:mb-4 [&>ol]:list-decimal [&>ol]:list-inside [&>ol]:mb-4 [&>strong]:font-bold [&>a]:text-blue-600 [&>a]:underline"
                   dangerouslySetInnerHTML={{ __html: data?.description || "" }}
                 />
+
+                // <div
+                //   className="px-6 py-3"
+                //   dangerouslySetInnerHTML={{ __html: data?.description || "" }}
+                // />
               )}
             </div>
           </div>
 
           <div className="flex justify-center">
             <Image
-              src={AppImages.faq.faqBanner}
+              src={`${environmentVariables.UPLOAD_URL}/setting/${data?.image}` || AppImages.faq.faqBanner}
               alt="FAQ Banner"
               width={500}
               height={500}
-              loader={customLoader}
+
               className="rounded-lg"
             />
           </div>
@@ -102,11 +111,10 @@ const categorizedFaqs = useMemo(() => {
                       setActiveCategory(cat);
                       setOpenQuestion(null);
                     }}
-                    className={`px-6 py-2 rounded-full font-medium transition ${
-                      activeCategory === cat
+                    className={`px-6 py-2 rounded-full font-medium transition ${activeCategory === cat
                         ? "bg-green-600 text-white"
                         : "bg-white text-gray-700 hover:bg-gray-100"
-                    }`}
+                      }`}
                   >
                     {categoryLabels[cat] ?? cat}
                   </button>
@@ -151,7 +159,7 @@ const categorizedFaqs = useMemo(() => {
                 Didn’t find your answer?
               </h4>
               <p className="mb-5">
-                Talk to a Qed Edu executive and get instant clarity.
+                Talk to a Unlisted Edge executive and get instant clarity.
               </p>
               <Link
                 href="/contact-us"

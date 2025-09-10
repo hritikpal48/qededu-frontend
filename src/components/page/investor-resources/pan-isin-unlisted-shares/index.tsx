@@ -1,11 +1,24 @@
 "use client";
 import Link from "next/link";
 import StockList from "../../home/StockList";
+import { useFetchInvRelation } from "@/services/settings.service";
+import Skeleton from "@/components/ui/SkeletonLoader";
 
 const PanUnlistedShare = () => {
+    const { data, isLoading } = useFetchInvRelation();
+  
   return (
     <>
-      <div className="bg-white px-4 md:px-10 py-12 max-w-7xl mx-auto">
+    <section className="py-5">
+
+                <div
+                                                className="text-base leading-relaxed text-gray-800 [&>p]:mb-4 [&>h1]:text-2xl [&>h1]:font-bold [&>h1]:mb-4 [&>h2]:text-xl [&>h2]:font-bold [&>h2]:mb-3 [&>h3]:text-lg [&>h3]:font-bold [&>h3]:mb-2 [&>ul]:list-disc [&>ul]:list-inside [&>ul]:mb-4 [&>ol]:list-decimal [&>ol]:list-inside [&>ol]:mb-4 [&>strong]:font-bold [&>a]:text-blue-600 [&>a]:underline"
+
+                                dangerouslySetInnerHTML={{ __html: data?.description || "" }}
+                            />
+    </section>
+
+      {/* <div className="bg-white px-4 md:px-10 py-12 max-w-7xl mx-auto">
         <h1 className="text-2xl md:text-4xl font-bold text-center text-green-700 mb-2">
           PAN & ISIN of Unlisted Shares
         </h1>
@@ -29,7 +42,7 @@ const PanUnlistedShare = () => {
             </li>
           </ul>
         </div>
-      </div>
+      </div> */}
 
       {/* <StockList /> */}
 

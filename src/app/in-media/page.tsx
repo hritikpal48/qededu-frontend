@@ -8,7 +8,7 @@ import { useFetchBlogList } from "@/services/blog.service";
 import { BlogList, GetBlogListApiParams } from "@/types/blogType";
 import { BLOG_TYPE } from "@/utils/constant";
 import { environmentVariables } from "@/config/app.config";
-import { useMediaDetails } from "@/services/settings.service";
+import { useFetchMedia } from "@/services/settings.service";
 import Skeleton from "@/components/ui/SkeletonLoader";
 
 const Page = () => {
@@ -19,7 +19,7 @@ const Page = () => {
   });
 
   const { data, isLoading } = useFetchBlogList(blogParams);
-  const { data: inMedia, isLoading: inMediaLoader } = useMediaDetails();
+  const { data: inMedia, isLoading: inMediaLoader } = useFetchMedia();
 
   const mediaPosts: BlogList = Array.isArray(data) ? data : [];
 
@@ -29,8 +29,8 @@ const Page = () => {
         {/* Banner */}
         <div className="flex justify-center mb-6">
           <Image
-            src={mediaBanner}
-            alt="Qed Edu in Media"
+            src={`${environmentVariables.UPLOAD_URL}/setting/${inMedia?.image}`|| mediaBanner}
+            alt="Unlisted Edge in Media"
             width={500}
             height={500}
             className="rounded-xl shadow-lg"
@@ -38,7 +38,7 @@ const Page = () => {
         </div>
 
         <h2 className="text-2xl md:text-5xl py-5 font-extrabold text-gray-800 flex justify-center items-center">
-          Qed Edu – In Media{" "}
+         {inMedia?.heading || "Unlisted Edge – In Media"}
           <span className="ml-1 text-green-600">
             <IoShieldCheckmarkSharp />
           </span>
@@ -56,7 +56,7 @@ const Page = () => {
         )}
 
         <h2 className="inline-block mt-4 text-green-600 font-semibold text-[32px] py-5">
-          Check Our Recent Media Coverage
+         {inMedia?.title || "Check Our Recent Media Coverage"}
         </h2>
 
         {/* Media Coverage Grid */}

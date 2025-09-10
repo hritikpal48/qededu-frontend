@@ -1,9 +1,25 @@
 "use client";
 
+import { HomeData } from "@/types/settingsType";
 import Link from "next/link";
 import { FaFileAlt, FaPlayCircle, FaToggleOn, FaSearch } from "react-icons/fa";
 
-const InfoSection = () => {
+interface InfoSectionProps {
+  data?: Pick<HomeData, "sectionh2" | "sectionh2Title" | "sectionh2Desc">; 
+  isLoading: boolean;
+}
+
+const InfoSection = ({ data, isLoading }: InfoSectionProps) => {
+  if (isLoading) {
+    return (
+      <section className="heroHomeBanner relative bg-white py-12 px-4 md:px-10 overflow-hidden">
+        <div className="max-w-7xl mx-auto text-center">
+          <p className="text-gray-500">Loading...</p>
+        </div>
+      </section>
+    );
+  }
+
   const options = [
     {
       title: "Unlisted Shares",
@@ -34,17 +50,16 @@ const InfoSection = () => {
       href: "/",
     },
   ];
+
   return (
     <div className="bg-[#f7f7f7]">
       <div className="text-black py-16 px-4 md:px-10 max-w-7xl mx-auto">
         <h1 className="text-3xl md:text-5xl font-bold mb-4 leading-tight text-center">
-          India’s #1 Dealer for Buying Unlisted Shares, Pre IPO Shares & Rarely
-          Traded Shares
+          {data?.sectionh2 || "India’s #1 Dealer for Buying Unlisted Shares, Pre IPO Shares & Rarely Traded Shares"}
         </h1>
         <p className="text-gray-600 mb-10 text-base md:text-lg max-w-3xl mx-auto text-center">
-          Unlisted Arena is India’s Leading Dealer which enables all class
-          investors to buy or sell Unlisted Shares, Pre-IPO Shares & Rarely
-          Traded Shares
+          {data?.sectionh2Title || 
+            "Unlisted Arena is India’s Leading Dealer which enables all class investors to buy or sell Unlisted Shares, Pre-IPO Shares & Rarely Traded Shares"}
         </p>
 
         <div className="grid md:grid-cols-2 gap-10 items-start">
@@ -63,35 +78,44 @@ const InfoSection = () => {
             ))}
           </div>
 
-          {/* Right Content - Info & CTA */}
+          {/* Right Content - Render from API */}
           <div>
-            <h2 className="text-2xl font-semibold leading-snug">
-              At <span className="text-green-600 font-bold">Qed Edu</span> —
-              access the world of Pre-IPO and Unlisted shares easily like never
-              before!
-            </h2>
-            <p className="text-base md:text-lg mt-3">
-              Our platform bridges the gap between retail investors and
-              promising private market opportunities. We prioritize transparency
-              and reliability, ensuring that every investment listed meets a
-              high standard of due diligence.
-            </p>
-            <p className="text-base md:text-lg mt-3">
-              Gain early access to high-growth companies and diversify your
-              portfolio with alternative assets that have the potential for
-              long-term value creation. With Qed Edu, you're always ahead of the
-              curve.
-            </p>
-            <p className="text-base md:text-lg mt-3">
-              Start your journey today — because smart investing is not just
-              about access, it's about making informed choices with the right
-              platform by your side.
-            </p>
-            <div className="mt-6">
-              <button className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-full font-medium transition cursor-pointer">
-                View Unlisted Shares
-              </button>
-            </div>
+            {data?.sectionh2Desc ? (
+              <div
+                             className="text-base leading-relaxed text-gray-800 [&>p]:mb-4 [&>h1]:text-2xl [&>h1]:font-bold [&>h1]:mb-4 [&>h2]:text-xl [&>h2]:font-bold [&>h2]:mb-3 [&>h3]:text-lg [&>h3]:font-bold [&>h3]:mb-2 [&>ul]:list-disc [&>ul]:list-inside [&>ul]:mb-4 [&>ol]:list-decimal [&>ol]:list-inside [&>ol]:mb-4 [&>strong]:font-bold [&>a]:text-blue-600 [&>a]:underline"
+                dangerouslySetInnerHTML={{ __html: data.sectionh2Desc }}
+              />
+            ) : (
+              <>
+                <h2 className="text-2xl font-semibold leading-snug">
+                  At <span className="text-green-600 font-bold">Unlisted Edge </span> —
+                  access the world of Pre-IPO and Unlisted shares easily like never
+                  before!
+                </h2>
+                <p className="text-base md:text-lg mt-3">
+                  Our platform bridges the gap between retail investors and
+                  promising private market opportunities. We prioritize transparency
+                  and reliability, ensuring that every investment listed meets a
+                  high standard of due diligence.
+                </p>
+                <p className="text-base md:text-lg mt-3">
+                  Gain early access to high-growth companies and diversify your
+                  portfolio with alternative assets that have the potential for
+                  long-term value creation. With Unlisted Edge, you're always ahead of the
+                  curve.
+                </p>
+                <p className="text-base md:text-lg mt-3">
+                  Start your journey today — because smart investing is not just
+                  about access, it's about making informed choices with the right
+                  platform by your side.
+                </p>
+                <div className="mt-6">
+                  <button className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-full font-medium transition cursor-pointer">
+                    View Unlisted Shares
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>

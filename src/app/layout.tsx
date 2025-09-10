@@ -21,7 +21,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Qed Edu",
+  title: "Unlisted Edge",
   description: "unlisted share",
 };
 

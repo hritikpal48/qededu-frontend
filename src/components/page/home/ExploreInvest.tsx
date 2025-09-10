@@ -1,35 +1,38 @@
 "use client";
 
 import Image from "@/components/ui/Image";
+import { environmentVariables } from "@/config/app.config";
 import AppImages from "@/config/constant/app.images";
-const exploreCards = [
-  {
-    image: AppImages.explore.explore1,
-    title: "Track Unlisted Shares/Pre IPO Shares Details",
-    description:
-      "All the details regarding Unlisted Shares/Pre IPO Shares at your fingertips.",
-  },
-  {
-    image: AppImages.explore.explore2,
-    title: "Sectoral Analysis of Unlisted & Pre IPO Companies",
-    description:
-      "In-depth view of sector-wise grouping across unlisted & Pre IPO Companies.",
-  },
-  // {
-  //   image: explore3,
-  //   title: "Price Chart of Unlisted Shares/Pre IPO Shares",
-  //   description:
-  //     "Analyse multiple charts & historical data to track unlisted & Pre IPO Share price movement.",
-  // },
-  // {
-  //   image: explore4,
-  //   title: "Shareholding Pattern of Unlisted & Pre IPO Companies",
-  //   description:
-  //     "Study the shareholding pattern & understand key stakeholders in Unlisted/Pre IPO Companies.",
-  // },
-];
 
-const ExploreInvest = () => {
+interface ExploreInvestType {
+  data?: {
+    image?: string;
+    image2?: string;
+  };
+  isLoading: boolean;
+}
+
+const ExploreInvest: React.FC<ExploreInvestType> = ({ data, isLoading }) => {
+  // ✅ Create dynamic cards with fallback images
+  const exploreCards = [
+    {
+      image: data?.image
+        ? `${environmentVariables.UPLOAD_URL}/setting/${data.image}`
+        : AppImages.explore.explore1,
+      title: "Track Unlisted Shares/Pre IPO Shares Details",
+      description:
+        "All the details regarding Unlisted Shares/Pre IPO Shares at your fingertips.",
+    },
+    {
+      image: data?.image2
+        ? `${environmentVariables.UPLOAD_URL}/setting/${data.image2}`
+        : AppImages.explore.explore2,
+      title: "Sectoral Analysis of Unlisted & Pre IPO Companies",
+      description:
+        "In-depth view of sector-wise grouping across unlisted & Pre IPO Companies.",
+    },
+  ];
+
   return (
     <section className="bg-black text-white py-25 px-4 text-center">
       <div className="mb-15">
@@ -39,8 +42,8 @@ const ExploreInvest = () => {
         <p className="text-white mx-auto text-4xl">
           <i>Unlisted Arena simplifies your investments in Unlisted Shares</i>
         </p>
-
       </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-7xl mx-auto mb-10">
         {exploreCards.map((card, idx) => (
           <div

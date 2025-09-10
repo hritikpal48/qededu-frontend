@@ -1,4 +1,5 @@
 "use client";
+import { useFetchInvestor } from "@/services/settings.service";
 import Link from "next/link";
 
 const resources = [
@@ -39,15 +40,20 @@ const resources = [
 ];
 
 const InvestorResources = () => {
+
+    const { data, isLoading } = useFetchInvestor();
+
+
+  
   return (
     <>
       <div className="bg-white min-h-screen px-4 md:px-10 py-12 max-w-7xl mx-auto">
         <h1 className="text-2xl md:text-4xl font-semibold text-center text-green-700 mb-2">
-          Investor Resources
+          {data?.heading || "Investor Resources"}
         </h1>
         <div className="w-12 h-1 bg-gray-300 rounded mx-auto mb-8" />
         <p className="text-center text-gray-700 text-[18px] mb-12">
-          Welcome to our Investor Resources page, your go-to destination for
+          {data?.description || `Welcome to our Investor Resources page, your go-to destination for
           valuable information and resources on unlisted shares. As leading
           unlisted share brokers and dealers in India, our platform offers
           comprehensive guides, forms, and documents to help you buy and sell
@@ -57,7 +63,8 @@ const InvestorResources = () => {
           to providing you with the latest insights and tools to help you make
           informed investment decisions. Browse our collection of resources and
           start your journey towards unlocking the potential of unlisted shares
-          today.
+          today.`}
+          
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

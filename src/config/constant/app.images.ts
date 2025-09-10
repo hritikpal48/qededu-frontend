@@ -37,7 +37,7 @@ const AppImages = {
     },
     process: {
         processBg: "/images/processBg.jpg",
-        processTerm: "/processTerm.jpg"
+        processTerm: "/images/processTerm.jpg"
     },
     coins: {
         comlist1: "/images/companylist/comlist1.png",

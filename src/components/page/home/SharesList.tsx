@@ -14,6 +14,7 @@ interface StockItem {
 interface SharesListProps {
   data: StockItem[];
   isLoading: boolean;
+  title: string|undefined;
 }
 const ShareCard = ({
   image,
@@ -55,7 +56,7 @@ const ShareCard = ({
 </div>
   );
 };
-const SharesList = ({ data, isLoading, isHomePage }: SharesListProps & { isHomePage?: boolean }) => {
+const SharesList = ({ data, isLoading, isHomePage, title }: SharesListProps & { isHomePage?: boolean }) => {
   const [tab, setTab] = useState<"all" | "offerings">("all");
   // Filter data based on tab
   const filteredData = useMemo(() => {
@@ -76,7 +77,7 @@ const SharesList = ({ data, isLoading, isHomePage }: SharesListProps & { isHomeP
   return (
     <section className="max-w-7xl mx-auto px-4 pt-10 pb-25">
       <h2 className="text-4xl font-bold text-center mb-4">
-        Latest Unlisted Shares
+        {title || "Latest Unlisted Shares"}
       </h2>
       {/* Tabs */}
       <div className="flex justify-center gap-8 mb-8 text-sm font-medium">

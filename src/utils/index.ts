@@ -100,3 +100,23 @@ export const getClientIp = async (): Promise<string> => {
     return "0.0.0.0";
   }
 };
+
+export const getYouTubeEmbedUrl = (url: string): string | null => {
+  try {
+    const parsedUrl = new URL(url);
+    const videoId = parsedUrl.searchParams.get("v");
+    if (videoId) {
+      return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1`;
+    }
+
+    // Handle share links like youtu.be/VIDEO_ID
+    if (parsedUrl.hostname === "youtu.be") {
+      return `https://www.youtube.com/embed/${parsedUrl.pathname.slice(
+        1
+      )}?autoplay=1&mute=1`;
+    }
+  } catch (e) {
+    console.error("Invalid YouTube URL:", url);
+  }
+  return null;
+};

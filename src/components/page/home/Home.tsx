@@ -12,11 +12,12 @@ import { GetStockListApiParams, StockData } from "@/types/stock";
 import { useState, useMemo, useCallback } from "react";
 import { BlogData, GetBlogListApiParams } from "@/types/blogType";
 import { useFetchBlogList } from "@/services/blog.service";
-import { useSettingsDetails } from "@/services/settings.service";
-import { SettingData } from "@/types/settingsType";
+import { useFetchHome } from "@/services/settings.service";
 
 const Home = () => {
   // SharesList ke liye params (type: 1)
+  const { data: homeData, isLoading: homeLoading } = useFetchHome();
+
   const [sharesParams, setSharesParams] = useState<GetStockListApiParams>({
     page: 1,
     limit: 10,
@@ -39,7 +40,6 @@ const Home = () => {
     type: BLOG_TYPE.NEWS,
   });
 
-  const { data: settings, isLoading: SettingsLoading } = useSettingsDetails();
   // SharesList ke liye API call
   const {
     data: sharesData,
@@ -78,21 +78,70 @@ const Home = () => {
   return (
     <>
       <HeroBanner
-        data={settings ?? ({} as SettingData)}
-        isLoading={SettingsLoading}
+        data={
+          homeData
+            ? {
+              heading1: homeData.heading1,
+              subTitle1: homeData.subTitle1,
+              youtube: homeData.youtube,
+            }
+            : undefined
+        }
+        isLoading={homeLoading}
+      />;
+
+      <InfoSection
+        data={
+          homeData
+            ? {
+              sectionh2: homeData.sectionh2,
+              sectionh2Title: homeData.sectionh2Title,
+              sectionh2Desc: homeData.sectionh2Desc,
+            }
+            : undefined
+        }
+        isLoading={homeLoading}
       />
 
-      <InfoSection />
-
       <SharesList
+        title={homeData ? homeData.sectionh3 : undefined}
         data={sharesData?.data ?? []}
         isLoading={sharesLoading}
         isHomePage={true}
       />
 
-      <ExploreInvest />
-      <ProcessSteps />
+      <ExploreInvest 
+                data={
+          homeData
+            ? {
+              image: homeData.image,
+              image2: homeData.image2,
+            }
+            : undefined
+        }
+        isLoading={homeLoading}
+      
+      />
+      <ProcessSteps
+        data={
+          homeData
+            ? {
+              title: homeData.sectionh4,
+              subTitle: homeData.sectionh4Title,
+            }
+            : undefined
+        }
+        isLoading={homeLoading}
+      />
       <StockList
+        homeData={
+          homeData
+            ? {
+              title: homeData.sectionh5,
+              subTitle: homeData.sectionh5Title,
+            }
+            : undefined
+        }
         data={stockData?.data ?? []}
         loading={stockLoading}
         page={stockParams.page}
@@ -103,6 +152,7 @@ const Home = () => {
       />
 
       <BlogPage
+       title={homeData ? homeData.sectionh6 : undefined}
         blogData={blogDataFilter}
         blogLoading={blogLoading}
         isHomePage={true}

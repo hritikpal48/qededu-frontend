@@ -11,6 +11,8 @@ import { GetStockListApiParams } from "@/types/stock";
 import { useFetchStockList } from "@/services/stock.service";
 import { useDebounce } from "@/hooks/useDebounce";
 import TextInput from "@/components/ui/input/TextInput";
+import { useFetchUnlisted } from "@/services/settings.service";
+import { environmentVariables } from "@/config/app.config";
 
 // Form validation schema
 interface SearchFormData {
@@ -19,6 +21,9 @@ interface SearchFormData {
 
 const UnlistedSharesPage = () => {
   // React Hook Form setup
+
+  const { data, isLoading } = useFetchUnlisted();
+
   const {
     register,
     watch,
@@ -43,10 +48,10 @@ const UnlistedSharesPage = () => {
     type: 1,
   });
 
-  const { 
-    data: stockData, 
-    isLoading: isStockLoading, 
-    refetch: refetchStocks 
+  const {
+    data: stockData,
+    isLoading: isStockLoading,
+    refetch: refetchStocks
   } = useFetchStockList(stockParams);
 
   // Blog list state and API
@@ -56,9 +61,9 @@ const UnlistedSharesPage = () => {
     keyword: "",
   });
 
-  const { 
-    data: blogData, 
-    isLoading: isBlogLoading 
+  const {
+    data: blogData,
+    isLoading: isBlogLoading
   } = useFetchBlogList(blogParams);
 
   // Handlers for pagination
@@ -75,7 +80,7 @@ const UnlistedSharesPage = () => {
   // Auto-search with debounce
   useEffect(() => {
     const trimmedSearch = debouncedSearch.trim();
-    
+
     setStockParams(prev => ({
       ...prev,
       keyword: trimmedSearch,
@@ -93,7 +98,7 @@ const UnlistedSharesPage = () => {
   // Manual search form submission
   const onSearchSubmit = (data: SearchFormData) => {
     const keyword = data.searchQuery.trim();
-    
+
     setStockParams(prev => ({
       ...prev,
       keyword,
@@ -125,19 +130,26 @@ const UnlistedSharesPage = () => {
       <section className="max-w-7xl mx-auto pt-10 pb-3 bg-white text-gray-800">
         <div className="text-center px-2 md:px-0">
           <h1 className="text-[25px] md:text-[30px] mb-3 font-bold text-center">
-            Unlisted Shares Price List
+            {data?.heading || "Unlisted Shares Price List"}
           </h1>
-          
-          <p className="pb-5 text-center text-gray-600 md:text-[20px] text-[16px]">
-            You can easily find unlisted shares price list in India that are
-            available <br /> for trading. Buy and sell unlisted shares at best
-            prices with us.
+
+          <p className="text-center text-[#4b4b4b] mb-8">
+            {data?.title ? (
+              data.title
+            ) : (
+              <>
+                You can easily find unlisted shares price list in India that are available
+                <br />
+                for trading. Buy and sell unlisted shares at best prices with us.
+              </>
+            )}
           </p>
+
 
           {/* Hero Image */}
           <div className="text-center flex justify-center overflow-hidden">
             <Image
-              src={AppImages.share.shareBanner}
+              src={`${environmentVariables.UPLOAD_URL}/setting/${data?.image}` || AppImages.share.shareBanner}
               alt="Unlisted Shares Banner"
               width={350}
               height={350}
@@ -146,7 +158,7 @@ const UnlistedSharesPage = () => {
 
           {/* Search Form */}
           <div className="text-center py-10">
-            <form 
+            <form
               onSubmit={handleSubmit(onSearchSubmit)}
               className="flex flex-col items-center gap-4"
             >
@@ -160,7 +172,7 @@ const UnlistedSharesPage = () => {
                     error={errors.searchQuery}
                     className="w-80"
                   />
-                  
+
                   {/* Clear Button */}
                   {searchQuery && (
                     <button
@@ -228,7 +240,7 @@ const UnlistedSharesPage = () => {
               No shares found
             </h3>
             <p className="text-gray-600 mb-4">
-              We couldn't find any shares matching "{stockParams.keyword}". 
+              We couldn't find any shares matching "{stockParams.keyword}".
               Try searching with different keywords.
             </p>
             <div className="flex gap-2 justify-center">

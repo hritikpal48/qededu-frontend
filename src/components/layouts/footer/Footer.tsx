@@ -45,7 +45,7 @@ const unlistedZoneLinks = [
 ];
 
 const Footer = ({ data, isLoading }: FooterProps) => {
-  console.log("datatest", data);
+  // console.log("datatest", data);
   const socialIcons = [
     { icon: FaFacebook, url: data.facebook },
     { icon: FaTwitter, url: data.twitter },
@@ -168,7 +168,7 @@ const Footer = ({ data, isLoading }: FooterProps) => {
 
       {/* Copyright */}
       <div className="border-t border-white/10 mt-10 pt-4 text-center text-sm text-gray-400">
-        © 2018–2025 <span className="text-white">QED edu</span>. All Rights
+        © 2018–2025 <span className="text-white">Unlisted Edge</span>. All Rights
         Reserved.
       </div>
     </footer>

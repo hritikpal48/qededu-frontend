@@ -4,6 +4,10 @@ import StockTable from "@/components/ui/table/StockListTable";
 import { StockData } from "@/types/stock";
 
 type StockListProps = {
+    homeData?: {
+    title: string|undefined;
+    subTitle: string|undefined;
+  };
   data: StockData[];          // rows to display
   loading: boolean;
   page: number;               // current page (1-based)
@@ -14,6 +18,7 @@ type StockListProps = {
 };
 
 export default function StockList({
+  homeData,
   data,
   loading,
   page,
@@ -24,6 +29,7 @@ export default function StockList({
 }: StockListProps) {
   return (
     <StockTable
+      homeData={homeData}
       data={data ?? []}
       page={page}
       perPage={perPage}

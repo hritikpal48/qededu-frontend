@@ -9,6 +9,10 @@ import { TableLoadingBody } from "./TableSkeleton";
 import { environmentVariables } from "@/config/app.config";
 
 type Props = {
+      homeData?: {
+    title: string|undefined;
+    subTitle: string|undefined;
+  };
   data: StockData[];
   page: number;
   setPage: (page: number) => void;
@@ -42,6 +46,7 @@ const GainLossBadge = ({ value }: { value: number }) => {
 };
 
 const StockTable = ({
+  homeData,
   data,
   page,
   perPage,
@@ -55,11 +60,10 @@ const StockTable = ({
       <div className="max-w-7xl mx-auto">
         {/* Heading */}
         <h2 className="text-4xl font-bold text-center mb-2">
-          Past IPO Performance
+          {homeData?.title || "Past IPO Performance"}
         </h2>
         <p className="text-center text-gray-600 mb-8 text-lg">
-          Explore the Historical IPO Performance of Unlisted Shares to Inform
-          Your Investment Strategy Today.
+          {homeData?.subTitle || "Explore the Historical IPO Performance of Unlisted Shares to Inform Your Investment Strategy Today."}
         </p>
         <div className="overflow-x-auto bg-white rounded-xl shadow">
           <table className="min-w-full divide-y divide-gray-200 text-nowrap">

@@ -1,4 +1,5 @@
 "use client";
+import { useFetchInvResources } from "@/services/settings.service";
 import React, { useState } from "react";
 
 interface Broker {
@@ -199,16 +200,25 @@ const brokers: Broker[] = [
 
 const DifferentBrokers = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const { data, isLoading } = useFetchInvResources();
+
 
   return (
     <>
       <section className="bg-white px-4  max-w-7xl mx-auto md:px-10 py-12 ">
+
+<div
+  className="text-base leading-relaxed text-gray-800 [&>p]:mb-4 [&>h1]:text-2xl [&>h1]:font-bold [&>h1]:mb-4 [&>h2]:text-xl [&>h2]:font-bold [&>h2]:mb-3 [&>h3]:text-lg [&>h3]:font-bold [&>h3]:mb-2 [&>ul]:list-disc [&>ul]:list-inside [&>ul]:mb-4 [&>ol]:list-decimal [&>ol]:list-inside [&>ol]:mb-4 [&>strong]:font-bold [&>a]:text-blue-600 [&>a]:underline"
+  dangerouslySetInnerHTML={{ __html: data?.description || "" }}
+/>
+        
+
         {/* Broker Accordion */}
-        <h1 className="text-2xl md:text-4xl font-bold text-green-700 pb-10">
+        {/* <h1 className="text-2xl md:text-4xl font-bold text-green-700 pb-10">
           How to get Client Master List (CML/CMR) from different brokers?
-        </h1>
+        </h1> */}
         {/* Introductory Content */}
-        <div className="mb-10 space-y-6">
+        {/* <div className="mb-10 space-y-6">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 mb-2">
               What is Client Master List/ Client Master Report (CMR/CML)?
@@ -256,12 +266,12 @@ const DifferentBrokers = () => {
               (CMR/CML) from different demat brokers in India.
             </p>
           </div>
-        </div>
+        </div> */}
       </section>
 
       <section className="py-10 bg-[#F7F7F7] px-4">
         <div className="space-y-3 max-w-7xl mx-auto">
-          {brokers.map((broker, index) => (
+          {data?.faq.map((item, index) => (
             <div
               key={index}
               className="bg-white shadow-sm rounded-md overflow-hidden"
@@ -271,16 +281,23 @@ const DifferentBrokers = () => {
                 className="w-full text-left px-6 py-5 bg-gray-50 hover:bg-gray-100 text-gray-800 font-semibold flex justify-between items-center"
               >
                 <span className="text-gray-800 font-semibold">
-                  How to get Client Master List (CML/CMR) from {broker.name}?
+                   {item.question}?
                 </span>
                 <span className="text-gray-800 text-3xl font-bold">
                   {openIndex === index ? "−" : "+"}
                 </span>
               </button>
               {openIndex === index && (
-                <div className="px-4 py-3 text-gray-600 text-sm bg-white">
-                  {broker.content}
-                </div>
+
+                <div
+                className="text-base leading-relaxed text-gray-800 [&>p]:mb-4 [&>h1]:text-2xl [&>h1]:font-bold [&>h1]:mb-4 [&>h2]:text-xl [&>h2]:font-bold [&>h2]:mb-3 [&>h3]:text-lg [&>h3]:font-bold [&>h3]:mb-2 [&>ul]:list-disc [&>ul]:list-inside [&>ul]:mb-4 [&>ol]:list-decimal [&>ol]:list-inside [&>ol]:mb-4 [&>strong]:font-bold [&>a]:text-blue-600 [&>a]:underline"
+                dangerouslySetInnerHTML={{ __html:  item?.answer  || "" }}
+              />
+
+
+                // <div className="px-4 py-3 text-gray-600 text-sm bg-white" dangerouslySetInnerHTML={{ __html: item?.answer || "" }}>
+                //   {/* {item.answer} */}
+                // </div>
               )}
             </div>
           ))}

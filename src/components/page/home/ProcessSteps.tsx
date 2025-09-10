@@ -4,35 +4,55 @@ interface ProcessStep {
   description: string;
 }
 
-const ProcessSteps: React.FC = () => {
-  const steps: ProcessStep[] = [
-    {
-      id: 1,
-      title: "Contact Us",
-      description: "Connect with our RMs and Get Best Unlisted Share Prices.",
-    },
-    {
-      id: 2,
-      title: "Deal Processing",
-      description:
-        "First, the buyer sends payment to our bank Then UnlistedZone team starts processing.",
-    },
-    {
-      id: 3,
-      title: "Deal Completion",
-      description:
-        "After Getting the payment our Team Transfer Shares with 24 hrs.",
-    },
-  ];
+const steps: ProcessStep[] = [
+  {
+    id: 1,
+    title: "Contact Us",
+    description: "Connect with our RMs and Get Best Unlisted Share Prices.",
+  },
+  {
+    id: 2,
+    title: "Deal Processing",
+    description:
+      "First, the buyer sends payment to our bank Then UnlistedZone team starts processing.",
+  },
+  {
+    id: 3,
+    title: "Deal Completion",
+    description:
+      "After Getting the payment our Team Transfer Shares with 24 hrs.",
+  },
+];
+interface ProcessStepType {
+  data?: {
+    title: string|undefined;
+    subTitle: string|undefined;
+  };
+  isLoading: boolean;
+}
+
+
+const ProcessSteps: React.FC<ProcessStepType> = ({ data, isLoading }) => {
+
+    if (isLoading) {
+    return (
+      <section className="heroHomeBanner relative bg-white py-12 px-4 md:px-10 overflow-hidden">
+        <div className="max-w-7xl mx-auto text-center">
+          <p className="text-gray-500">Loading...</p>
+        </div>
+      </section>
+    );
+  }
+  
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-20">
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold text-center mb-2">
-          Process to Buy Unlisted Shares
+          {data?.title || "Process to Buy Unlisted Shares"}
         </h1>
         <p className="text-center text-gray-600 mb-8 text-[20px]">
-          Recommended for those interested in dealing with unlisted shares.
+          {data?.subTitle || "Recommended for those interested in dealing with unlisted shares."}
         </p>
       </div>
 

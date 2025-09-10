@@ -1,6 +1,6 @@
-# Qed Edu
+# Unlisted Edge
 
-Qed Edu is a web-based portal designed to serve as a marketplace for unlisted company shares — those not listed on traditional stock exchanges. The platform enables users to:
+Unlisted Edgeis a web-based portal designed to serve as a marketplace for unlisted company shares — those not listed on traditional stock exchanges. The platform enables users to:
 
 - View and analyze detailed information on unlisted companies.
 - Access real-time market data and share details.
@@ -56,4 +56,4 @@ Initial development phase for frontend UI.
 ---
 
 ## 📬 Contact
-For more information, please contact the Qed Edu team.
+For more information, please contact the Unlisted Edgeteam.

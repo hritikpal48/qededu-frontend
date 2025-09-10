@@ -1,45 +1,39 @@
 "use client";
-import { SettingData } from "@/types/settingsType";
+
+import { HomeData } from "@/types/settingsType";
+import { getYouTubeEmbedUrl } from "@/utils";
 import Link from "next/link";
 
-interface SettingsListProps {
-  data: SettingData;
+interface HeroBannerProps {
+  data?: Pick<HomeData, "heading1" | "subTitle1" | "youtube">; // ✅ Only required fields
   isLoading: boolean;
 }
 
-// Helper to extract video ID from YouTube URL
-const getYouTubeEmbedUrl = (url: string): string | null => {
-  try {
-    const parsedUrl = new URL(url);
-    const videoId = parsedUrl.searchParams.get("v");
-    if (videoId) {
-      return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1`;
-    }
-
-    // Handle share links like youtu.be/VIDEO_ID
-    if (parsedUrl.hostname === "youtu.be") {
-      return `https://www.youtube.com/embed/${parsedUrl.pathname.slice(
-        1
-      )}?autoplay=1&mute=1`;
-    }
-  } catch (e) {
-    console.error("Invalid YouTube URL:", url);
+const HeroBanner = ({ data, isLoading }: HeroBannerProps) => {
+  if (isLoading) {
+    return (
+      <section className="heroHomeBanner relative bg-white py-12 px-4 md:px-10 overflow-hidden">
+        <div className="max-w-7xl mx-auto text-center">
+          <p className="text-gray-500">Loading...</p>
+        </div>
+      </section>
+    );
   }
-  return null;
-};
 
-const HeroBanner = ({ data, isLoading }: SettingsListProps) => {
   const embedUrl = getYouTubeEmbedUrl(data?.youtube || "");
 
   return (
     <section className="heroHomeBanner relative bg-white py-12 px-4 md:px-10 overflow-hidden">
       <div className="max-w-7xl mx-auto relative z-10">
+        {/* Heading */}
         <h1 className="text-2xl md:text-4xl font-bold text-center text-black mb-4">
-          Buy Or Sell Unlisted Shares, Pre IPO Shares, ESOP
+          {data?.heading1 || "Buy Or Sell Unlisted Shares, Pre IPO Shares, ESOP"}
         </h1>
+
+        {/* Subtitle */}
         <p className="text-center text-[#4b4b4b] mb-8">
-          You can easily find list of unlisted shares which are available for
-          trading, buy and sell Unlisted Shares at best prices.
+          {data?.subTitle1 ||
+            "You can easily find list of unlisted shares which are available for trading, buy and sell Unlisted Shares at best prices."}
         </p>
 
         {/* Video Thumbnail or Image */}
