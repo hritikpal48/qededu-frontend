@@ -231,7 +231,7 @@ export default function BlogDetails({ slug }: BlogDetailsProps) {
                                 Details
                             </h2>
                             <div
-                                className="text-gray-700 leading-relaxed"
+                  className="text-base leading-relaxed text-gray-800 [&>p]:mb-4 [&>h1]:text-2xl [&>h1]:font-bold [&>h1]:mb-4 [&>h2]:text-xl [&>h2]:font-bold [&>h2]:mb-3 [&>h3]:text-lg [&>h3]:font-bold [&>h3]:mb-2 [&>ul]:list-disc [&>ul]:list-inside [&>ul]:mb-4 [&>ol]:list-decimal [&>ol]:list-inside [&>ol]:mb-4 [&>strong]:font-bold [&>a]:text-blue-600 [&>a]:underline"
                                 dangerouslySetInnerHTML={{ __html: blogData?.description || "" }}
                             />
                         </section>
