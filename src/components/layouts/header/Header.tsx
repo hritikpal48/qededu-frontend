@@ -77,14 +77,14 @@ const Header = ({ logo }: { logo: string }) => {
           <div className="flex items-center space-x-2">
             {/* Logo (conditionally rendered if available) */}
             {logo && (
-              <Image
-                src={`${environmentVariables.UPLOAD_URL}/setting/${logo}`}
-                alt="Logo"
-                width={110}
-                height={100}
-                // className="h-30 w-30 object-contain"
-              />
-            )}
+  <Image
+    src="/assets/images/logo.png"
+    alt="Logo"
+    width={110}
+    height={100}
+    priority
+  />
+)}
 
             {/* Text next to the logo */}
             {/* <div className="text-white font-bold text-2xl flex items-center">
